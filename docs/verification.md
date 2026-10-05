@@ -52,3 +52,7 @@ curl -f http://localhost:3000/api/health
 `npm run types:local` regenera el contrato TypeScript desde las migraciones ejecutadas en PostgreSQL local de prueba; no pretende describir un proyecto remoto ya aplicado. Después de conectar el proyecto se puede contrastar con los tipos generados por Supabase CLI.
 
 Los artefactos de QA de navegador se guardan en `artifacts/ui` y están excluidos de Git y Docker. Los resultados JSON registran pantallas, anchos y flujos probados.
+
+## Revisión del error 502
+
+Se arrancó el servidor standalone de producción local con PORT=80 y HOSTNAME=0.0.0.0: el log mostró ambas direcciones en puerto 80, lsof confirmó TCP *:80 y /api/health respondió HTTP 200. Dockerfile ya usa este puerto. Se corrigió también npm start para escuchar explícitamente en 0.0.0.0:80. Esta prueba local no demuestra el puerto del contenedor remoto. El dominio público devolvió 502. En Dokploy, servicio cloudmarket-privacyaudit-e0n5t6, los logs mostraron npm start con --hostname 127.0.0.1 y puerto 80; el dominio apunta correctamente al puerto 80. El bind al loopback del contenedor impide acceso desde el proxy. Se publica el cambio de npm start a 0.0.0.0:80; el usuario realizará el redespliegue.
