@@ -1,0 +1,10 @@
+node_modules
+.next
+.git
+.env*
+*.docx
+docs/references
+artifacts
+*.tsbuildinfo
+supabase/.temp
+supabase/.branches

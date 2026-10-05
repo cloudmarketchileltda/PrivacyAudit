@@ -1,0 +1,12 @@
+node_modules/
+.next/
+.env*
+!.env.example
+*.tsbuildinfo
+supabase/.temp/
+supabase/.branches/
+artifacts/
+.DS_Store
+
+# Documento maestro local; no forma parte del código publicado.
+PrivacyAudit.docx
