@@ -46,7 +46,7 @@ Los controles son ejemplos de gestión pendientes de revisión jurídica. No se 
 - El servidor de producción local compilado respondió HTTP 200 en login y healthcheck y redirigió `/processing` anónimo a `/login` con HTTP 307. No equivale a un despliegue de fase 3 en Dokploy.
 - Advisor de seguridad actual: sin hallazgos de RLS para tratamientos; advierte que la protección de contraseñas filtradas de Auth está desactivada. Pendiente de revisión de configuración: [guía de Supabase](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection). Advisor de rendimiento: solo once avisos informativos de índices sin uso, incluidos los dos nuevos; no hay advertencias de FK sin índice ni de initplan RLS.
 
-Pendientes operativos: redesplegar la web y probar el nuevo módulo con sesiones reales de consultor y cliente. La publicación en GitHub se comprueba en la revisión de cierre siguiente. Recuperación por correo y renovación de sesión siguen pendientes. Docker no se ejecutó localmente. IA, notificaciones externas y fases 4–8 no se implementaron.
+Pendientes operativos: redesplegar la web y probar el nuevo módulo con sesiones reales de consultor y cliente. La publicación en GitHub quedó comprobada en la revisión de cierre siguiente. Recuperación por correo y renovación de sesión siguen pendientes. Docker no se ejecutó localmente. IA, notificaciones externas y fases 4–8 no se implementaron.
 
 ## Reproducción
 
@@ -76,6 +76,7 @@ Se contrastó el documento maestro con el módulo implementado. Fase 3 correspon
 
 Se revisaron CRUD, archivo/reactivación, validación en servidor, FK, identidad inmutable, búsqueda, orden, filtros, paginación y acceso por organización. Las rutas de edición verifican permisos y las acciones comprueban que la organización esté activa; RLS también protege operaciones directas. No se encontraron funcionalidades principales faltantes en el alcance de fase 3.
 
+- Se publicó la implementación en `https://github.com/cloudmarketchileltda/PrivacyAudit`, rama `main`, commit `e1f422123fe144782b539e8b6d28362fe1cc6c66`. Después del push, `git ls-remote origin refs/heads/main` coincidió con el SHA local y el árbol de trabajo estaba limpio.
 - Con Node 24.19.0 pasaron lint, TypeScript, las diez pruebas automatizadas y build de producción.
 - `npm run test:ui` pasó nuevamente: 137 comprobaciones de pantalla/viewport y flujos críticos, con Node 20.20.2 y el adaptador PGlite aislado. Se inspeccionaron las nuevas capturas del formulario en móvil y escritorio; no se detectaron defectos de disposición. No equivale a Supabase Auth/PostgREST reales.
 - Se volvió a identificar el proyecto PrivacyAudit `pbihajfbbcbbdvoqpggy`, ACTIVE_HEALTHY. Las cuatro migraciones locales coinciden con el historial remoto; tratamientos tiene RLS y políticas SELECT, INSERT, UPDATE y DELETE.
