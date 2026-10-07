@@ -17,6 +17,7 @@ const tables = new Set([
   'audit_logs',
   'evidence',
   'comments',
+  'notifications',
 ]);
 const functions = new Set([
   'register_consultant',
@@ -32,6 +33,11 @@ const functions = new Set([
   'submit_task',
   'finding_progress',
   'finalize_evidence',
+  'dashboard_summary',
+  'read_notifications',
+  'purge_audit_logs',
+  'record_audit_export',
+  'record_evidence_download',
 ]);
 function identifier(value: string) {
   if (!/^[a-z_]+$/.test(value)) throw new Error('Invalid identifier');
@@ -181,6 +187,10 @@ export async function startFixture(port = 54331) {
           json(response, 400, { error: 'invalid_grant', error_description: 'Invalid credentials' });
           return;
         }
+        await db.query('update auth.users set last_sign_in_at=clock_timestamp() where id=$1', [id]);
+        await db.query(`insert into auth.audit_log_entries(payload) values($1::json)`, [
+          JSON.stringify({ action: 'login', actor_id: id }),
+        ]);
         json(response, 200, {
           access_token: tokenFor(id),
           refresh_token: `fixture-${id}`,
@@ -201,6 +211,9 @@ export async function startFixture(port = 54331) {
         return;
       }
       if (url.pathname === '/auth/v1/logout') {
+        await db.query(`insert into auth.audit_log_entries(payload) values($1::json)`, [
+          JSON.stringify({ action: 'logout', actor_id: uid(request) }),
+        ]);
         response.writeHead(204);
         response.end();
         return;
@@ -316,6 +329,9 @@ export async function startFixture(port = 54331) {
             filters.push(`${identifier(key)} is not null`);
           else if (op === 'eq') filters.push(`${identifier(key)}=${param(match)}`);
           else if (op === 'neq') filters.push(`${identifier(key)}<>${param(match)}`);
+          else if (op === 'gte') filters.push(`${identifier(key)}>=${param(match)}`);
+          else if (op === 'lte') filters.push(`${identifier(key)}<=${param(match)}`);
+          else if (op === 'gt') filters.push(`${identifier(key)}>${param(match)}`);
           else if (op === 'lt') filters.push(`${identifier(key)}<${param(match)}`);
           else if (op === 'not' && rest[0] === 'in') {
             const entries = rest

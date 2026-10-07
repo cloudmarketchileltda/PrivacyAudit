@@ -23,7 +23,7 @@ export function Navigation({ admin }: { admin: boolean }) {
     ['/evidence', 'Evidencias', FolderOpen],
     ['/action-plan', 'Plan de acción', ListChecks],
     ['/controls', 'Catálogo de controles', ListChecks],
-    ...(admin ? [['/users', 'Usuarios', Users] as const] : []),
+    ...(admin ? [['/administration', 'Administración', Users] as const] : []),
     ['/account', 'Mi cuenta', UserRound],
   ] as const;
   return (

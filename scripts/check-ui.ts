@@ -1,3 +1,4 @@
+import { checkPhase6Flow } from './phase6-ui-flow';
 import { checkEvidenceFlow } from './evidence-ui-flow';
 import { chromium } from '@playwright/test';
 import { spawn } from 'node:child_process';
@@ -376,6 +377,7 @@ try {
   await page.getByLabel('Buscar', { exact: true }).fill('UI-001');
   await page.getByRole('button', { name: 'Filtrar', exact: true }).click();
   await page.getByRole('link', { name: 'Control creado desde navegador', exact: true }).waitFor();
+  await checkPhase6Flow(page, base, fixture, results);
   assert.deepEqual(errors, []);
   await writeFile(
     'artifacts/ui/results.json',

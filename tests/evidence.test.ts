@@ -117,7 +117,17 @@ test('Fase 5: archivos privados, versiones, revisión y comentarios con aislamie
       db.query(`update evidence set uploaded_at=now() where id=$1`, [initial.id]),
     );
     await db.query(`select finalize_evidence($1)`, [initial.id]);
+    await db.query(`select record_evidence_download($1)`, [initial.id]);
+    assert.equal(
+      (await db.query(`select * from audit_logs where action='DOWNLOAD'`)).rows.length,
+      1,
+    );
     await db.query(`select finalize_evidence($1)`, [initial.id]);
+    await db.query(`select record_evidence_download($1)`, [initial.id]);
+    assert.equal(
+      (await db.query(`select * from audit_logs where action='DOWNLOAD'`)).rows.length,
+      2,
+    );
     assert.equal(
       (
         await db.query(`update storage.objects set metadata='{}' where name=$1 returning id`, [
@@ -185,6 +195,11 @@ test('Fase 5: archivos privados, versiones, revisión y comentarios con aislamie
       ]),
     );
     await identity(db, ids.a);
+    assert.equal(
+      (await db.query(`select * from notifications where event_type='EVIDENCE_UPLOADED'`)).rows
+        .length,
+      1,
+    );
     await assert.rejects(
       db.query(`update evidence set review_status='CHANGES_REQUESTED' where id=$1`, [initial.id]),
     );
@@ -205,6 +220,11 @@ test('Fase 5: archivos privados, versiones, revisión y comentarios con aislamie
     );
     await identity(db, ids.client);
     await assert.rejects(reserve({ previous: initial.id }));
+    assert.equal(
+      (await db.query(`select * from notifications where event_type='EVIDENCE_CHANGES_REQUESTED'`))
+        .rows.length,
+      1,
+    );
     const corrected = await reserve({ control, finding: f, task, previous: initial.id });
     await assert.rejects(reserve({ control, finding: f, task, previous: initial.id }));
     await upload(corrected.path);
@@ -218,13 +238,28 @@ test('Fase 5: archivos privados, versiones, revisión y comentarios con aislamie
       [a, f],
     );
     assert.equal(
-      (await db.query(`select * from audit_logs where entity_type='evidence'`)).rows.length,
+      (
+        await db.query(
+          `select * from audit_logs where entity_type='evidence' and action<>'DOWNLOAD'`,
+        )
+      ).rows.length,
       3,
     );
     await db.query(`select submit_task($1,'WAITING_REVIEW')`, [task]);
     await identity(db, ids.a);
     await assert.rejects(db.query(`update tasks set status='DONE' where id=$1`, [task]));
     await db.query(`update evidence set review_status='ACCEPTED' where id=$1`, [corrected.id]);
+    await db.exec('reset role');
+    assert.equal(
+      (
+        await db.query(
+          `select * from notifications where recipient_id=$1 and event_type='EVIDENCE_ACCEPTED'`,
+          [ids.client],
+        )
+      ).rows.length,
+      1,
+    );
+    await identity(db, ids.a);
     await db.query(`update tasks set status='DONE' where id=$1`, [task]);
     await assert.rejects(reserve({ task }));
     await db.query(`update tasks set status='WAITING_REVIEW' where id=$1`, [hidden]);

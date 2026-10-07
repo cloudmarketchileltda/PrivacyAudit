@@ -93,33 +93,48 @@ export interface Database {
       audit_logs: {
         Row: {
           id: string;
-          organization_id: string;
+          organization_id: string | null;
           actor_id: string | null;
           action: string;
           entity_type: string;
           entity_id: string;
           metadata: Json;
           created_at: string;
+          organization_ref: string | null;
+          organization_name: string;
+          actor_name: string;
+          actor_role: string;
+          actor_ref: string | null;
         };
         Insert: {
           id?: string;
-          organization_id: string;
+          organization_id?: string | null;
           actor_id?: string | null;
           action: string;
           entity_type: string;
           entity_id: string;
           metadata?: Json;
           created_at?: string;
+          organization_ref?: string | null;
+          organization_name?: string;
+          actor_name?: string;
+          actor_role?: string;
+          actor_ref?: string | null;
         };
         Update: {
           id?: string;
-          organization_id?: string;
+          organization_id?: string | null;
           actor_id?: string | null;
           action?: string;
           entity_type?: string;
           entity_id?: string;
           metadata?: Json;
           created_at?: string;
+          organization_ref?: string | null;
+          organization_name?: string;
+          actor_name?: string;
+          actor_role?: string;
+          actor_ref?: string | null;
         };
         Relationships: [];
       };
@@ -339,6 +354,51 @@ export interface Database {
           created_at?: string;
           updated_at?: string;
           closed_at?: string | null;
+        };
+        Relationships: [];
+      };
+      notifications: {
+        Row: {
+          id: string;
+          recipient_id: string;
+          organization_id: string;
+          task_id: string | null;
+          finding_id: string | null;
+          evidence_id: string | null;
+          event_type: string;
+          title: string;
+          message: string;
+          event_key: string;
+          read_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          recipient_id: string;
+          organization_id: string;
+          task_id?: string | null;
+          finding_id?: string | null;
+          evidence_id?: string | null;
+          event_type: string;
+          title: string;
+          message: string;
+          event_key: string;
+          read_at?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          recipient_id?: string;
+          organization_id?: string;
+          task_id?: string | null;
+          finding_id?: string | null;
+          evidence_id?: string | null;
+          event_type?: string;
+          title?: string;
+          message?: string;
+          event_key?: string;
+          read_at?: string | null;
+          created_at?: string;
         };
         Relationships: [];
       };
@@ -664,6 +724,10 @@ export interface Database {
         Returns: string;
       };
       create_organization: { Args: { payload: Json }; Returns: string };
+      dashboard_summary: {
+        Args: { search?: string; org_status?: string; attention?: string; page?: number };
+        Returns: Json;
+      };
       finalize_evidence: { Args: { item: string }; Returns: undefined };
       finding_progress: { Args: { finding: string }; Returns: Json };
       invite_client: { Args: { org: string; target_email: string }; Returns: string };
@@ -675,6 +739,13 @@ export interface Database {
         };
         Returns: undefined;
       };
+      purge_audit_logs: {
+        Args: { before_time: string; reason: string; confirmation: string };
+        Returns: number;
+      };
+      read_notifications: { Args: { notification?: string }; Returns: undefined };
+      record_audit_export: { Args: { filters: Json; record_count: number }; Returns: undefined };
+      record_evidence_download: { Args: { evidence: string }; Returns: undefined };
       register_consultant: { Args: Record<string, never>; Returns: undefined };
       revoke_invitation: { Args: { invitation_id: string }; Returns: undefined };
       set_user_role: {

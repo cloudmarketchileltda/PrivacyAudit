@@ -10,7 +10,9 @@
 
 6. Fase 4 autorizada el 6 de octubre de 2026: hallazgos asociados a evaluación y control histórico, tareas asignadas, revisión por consultor, plan de acción y trazabilidad. Verificar RLS, formularios y build. Fase 4 implementada.
 
-7. Fase 5 autorizada el 7 de octubre de 2026: evidencias, Storage privado, comentarios y revisión; verificar RLS de archivos y registros, recorridos de navegador y build. Detenerse antes de fase 6.
+7. Fase 5 autorizada el 7 de octubre de 2026: evidencias, Storage privado, comentarios y revisión; verificar RLS de archivos y registros, recorridos de navegador y build. Fase 5 implementada.
+
+8. Fase 6 autorizada el 7 de octubre de 2026: dashboard operativo, métricas, filtros, notificaciones internas y auditoría administrativa ampliada solicitada por el usuario. Fase 6 implementada; fases 7 y 8 pendientes.
 
 ## Decisiones
 
@@ -29,7 +31,7 @@
 
 ## Límite
 
-La entrega anterior terminaba en fase 4: incorpora tratamientos, hallazgos, tareas, plan de acción y trazabilidad de estos nuevos flujos. La entrega anterior no incluía evidencias ni Storage. La fase 5 los incorpora; informes, IA y notificaciones siguen pendientes. En fases anteriores, los comentarios de consultor pertenecían a la respuesta de control; fase 5 añade conversaciones independientes en hallazgos, tareas y evidencias. El cliente puede agregar su comentario al control mediante una RPC limitada a ese campo; no puede editar estados ni comentarios del consultor. La entidad independiente de comentarios se incorpora en fase 5.
+La entrega anterior terminaba en fase 4: incorpora tratamientos, hallazgos, tareas, plan de acción y trazabilidad de estos nuevos flujos. La entrega anterior no incluía evidencias ni Storage. La fase 5 los incorpora; fase 6 incorpora notificaciones internas y auditoría ampliada. Informes e IA siguen pendientes. En fases anteriores, los comentarios de consultor pertenecían a la respuesta de control; fase 5 añade conversaciones independientes en hallazgos, tareas y evidencias. El cliente puede agregar su comentario al control mediante una RPC limitada a ese campo; no puede editar estados ni comentarios del consultor. La entidad independiente de comentarios se incorpora en fase 5.
 
 Los tratamientos usan FK a organización y autor; la organización no puede borrarse mientras conserve tratamientos. Nombre, finalidad y al menos una categoría de titulares y datos son obligatorios. Base de licitud propuesta seleccionable con explicación editable, sin validación jurídica automática. Responsable interno, sistemas, destinatarios y proveedores son texto en esta fase, como permite el maestro; no representan nuevas entidades relacionadas.
 
@@ -37,11 +39,11 @@ Estados de tratamiento: DRAFT, ACTIVE y ARCHIVED. El consultor puede archivar y 
 
 ## Acuerdos para la continuación
 
-El 5 de octubre de 2026 el usuario acordó continuar el MVP incrementalmente según las fases 3–8 del documento maestro y posteriormente autorizó iniciar fase 3. El 6 de octubre de 2026 el usuario autorizó continuar con fase 4 pese al pendiente de validación con sesiones reales, que se conserva explícitamente. El 7 de octubre de 2026 el usuario autorizó fase 5. Las fases 6–8 siguen pendientes.
+El 5 de octubre de 2026 el usuario acordó continuar el MVP incrementalmente según las fases 3–8 del documento maestro y posteriormente autorizó iniciar fase 3. El 6 de octubre de 2026 el usuario autorizó continuar con fase 4 pese al pendiente de validación con sesiones reales, que se conserva explícitamente. El 7 de octubre de 2026 el usuario autorizó fase 5. El usuario autorizó completar fase 6 con auditoría administrativa ampliada; las fases 7–8 siguen pendientes.
 
 - Orden previsto: tratamientos; hallazgos, tareas y plan de acción; evidencias y revisión; dashboard y notificaciones internas; informe PDF; cierre con auditoría, seguridad, demo y revisión UX.
 - La IA queda aplazada hasta después de completar y validar el MVP. No implementar ahora asistentes de redacción, recomendaciones generadas ni integraciones con modelos.
-- Las notificaciones operativas externas quedan fuera por ahora: WhatsApp, email de tareas o evidencias, SMS y otros canales externos. Las notificaciones dentro de la aplicación siguen previstas para fase 6. Se conservan los correos de autenticación para confirmación y recuperación de contraseña.
+- Las notificaciones operativas externas quedan fuera por ahora: WhatsApp, email de tareas o evidencias, SMS y otros canales externos. Las notificaciones dentro de la aplicación se implementan en fase 6. Se conservan los correos de autenticación para confirmación y recuperación de contraseña.
 - Verificar permisos y aislamiento en cada fase, incluyendo Storage al incorporar evidencias. Incorporar trazabilidad de acciones relevantes junto con los flujos de hallazgos y evidencias; completar su revisión en fase 8.
 - Se revisaron los pendientes de fases 1 y 2: login y healthcheck públicos responden HTTP 200, siete tablas existentes con RLS y una cuenta remota confirmada con sesión. Recuperación por correo, renovación e aislamiento con JWT reales permanecen pendientes. No considerar una prueba local ni la existencia de una sesión como verificación completa de esos flujos.
 
@@ -55,7 +57,7 @@ El 5 de octubre de 2026 el usuario acordó continuar el MVP incrementalmente seg
 - Tareas comienzan TODO. El cliente asignado puede pasar a IN_PROGRESS o WAITING_REVIEW mediante una RPC limitada a estado; no puede modificar asignación, prioridad, título ni aprobar. El consultor puede aprobar una tarea en revisión (DONE) o devolverla con observaciones obligatorias. Reabrir tarea elimina completed_at.
 - Cerrar un hallazgo exige justificación y todas sus tareas aprobadas. Aceptar riesgo requiere justificación explícita y puede conservar tareas pendientes. Ambos estados bloquean cambios de tareas hasta reabrir. El trigger de tareas bloquea el hallazgo para serializar escrituras con el cierre.
 - Se conservan hallazgos y tareas: no se ofrece borrado permanente. Se corrigen por edición/reapertura o se cierran con justificación. FK RESTRICT protege referencias e historial.
-- `audit_logs` se introduce para la trazabilidad autorizada de hallazgos y tareas: eventos generados por triggers, actor real y cambios de estado, prioridad, responsable, observaciones y justificación. Los usuarios no escriben ni alteran el log. La actividad de hallazgos y tareas la consultan gestores autorizados; fase 5 permite además a los clientes consultar la actividad de evidencias autorizadas. El resto de eventos de auditoría del maestro y su revisión final siguen en fase 8. Comentarios independientes y evidencias se incorporan en fase 5.
+- `audit_logs` se introduce para la trazabilidad autorizada de hallazgos y tareas: eventos generados por triggers, actor real y cambios de estado, prioridad, responsable, observaciones y justificación. Los usuarios no escriben ni alteran el log. La actividad de hallazgos y tareas la consultan gestores autorizados; fase 5 permite además a los clientes consultar la actividad de evidencias autorizadas. La fase 6 amplía los eventos y ofrece administración/exportación/borrado por petición del usuario; su revisión final sigue en fase 8. Comentarios independientes y evidencias se incorporan en fase 5.
 
 ## Decisiones de fase 5
 
@@ -69,4 +71,16 @@ El 5 de octubre de 2026 el usuario acordó continuar el MVP incrementalmente seg
 - Comentarios independientes, inmutables y con exactamente una FK a hallazgo, tarea o evidencia. Se conservan los comentarios anteriores de respuesta de control. La UI muestra los últimos 100 comentarios cronológicamente.
 - La app descarga mediante una ruta autenticada, con RLS también en Storage, respuesta sin caché y Content-Disposition attachment. No crea URLs públicas ni firmadas reutilizables.
 - Aceptar evidencia no cambia automáticamente control, tarea ni hallazgo. Aprobar tarea o cerrar hallazgo exige que las últimas entregas confirmadas asociadas estén aceptadas; las versiones anteriores sustituidas se conservan. Aceptar riesgo mantiene su excepción explícita y justificada.
-- Se reutiliza `audit_logs` con eventos de carga confirmada, revisión y comentario. Los clientes leen únicamente actividad de evidencias autorizadas, además de sus comentarios; no obtienen acceso global al log. El conjunto completo de auditoría permanece en fase 8.
+- Se reutiliza `audit_logs` con eventos de carga confirmada, revisión y comentario. Los clientes leen únicamente actividad de evidencias autorizadas, además de sus comentarios; no obtienen acceso global al log. Fase 6 amplía la captura y agrega auditoría administrativa; la revisión final permanece en fase 8.
+
+## Decisiones de fase 6
+
+- `dashboard_summary` es una RPC SECURITY INVOKER: agrega datos con RLS y pagina organizaciones en SQL. Filtros de búsqueda/estado/atención afectan métricas y tabla. No hay límite implícito de 1.000 registros para totales. Los controles se agregan sobre la evaluación más reciente por organización; tareas de cliente conservan su alcance personal; últimas entregas confirmadas evitan contar versiones sustituidas. No se introduce score legal.
+- `notifications` pertenece a un destinatario y tiene FK a organización y contexto (tarea/hallazgo/evidencia). Solo triggers privados generan eventos; usuarios únicamente consultan y marcan lectura mediante RPC limitada. La política exige destinatario actual y acceso actual al contexto; los avisos antiguos dejan de ser visibles tras pérdida de membresía/asignación.
+- Los avisos incluyen asignación, revisión/devolución/aprobación de tarea, carga/revisión de evidencia y revisión de hallazgo. Se excluye al actor de sus propios avisos transaccionales. Los destinatarios gestores son miembros CONSULTANT con rol global compatible; SUPER_ADMIN no recibe automáticamente todos los avisos del sistema.
+- Supabase Cron ejecuta el worker de vencimientos cada 15 minutos. Usa fecha America/Santiago, organiza destinatarios por membresía y deduplica tarea/fecha/responsable con índice único y lock transaccional. No depende de visitas al dashboard. No hay canal externo.
+- Auditoría ampliada mediante triggers después de mutaciones y funciones acotadas para descargas/exportación. Mantiene compatibilidad con los historiales de fases 4 y 5. Referencias históricas de organización/actor y snapshot de nombre/rol, conservadas al eliminar entidades vacías. Campos modificados/valores operativos seleccionados, sin secretos ni documentos completos. Eventos previos ausentes no se reconstruyen.
+- Auth tiene captura propia de cuentas creadas, cambios de last_sign_in_at y actualizaciones de credencial, y sesiones eliminadas; no copia hashes. El stream opcional de auditoría Auth complementa esos eventos cuando está habilitado. Una sesión eliminada se denomina sesión terminada, sin afirmar que siempre fue un logout humano. El login SQL de prueba no equivale a una sesión emitida por GoTrue.
+- Auditoría administrativa exclusiva de SUPER_ADMIN, con filtros, fechas de Chile y CSV de todos los resultados paginado por UUID, corte temporal y protección de fórmulas. La preparación del archivo se registra; esto no demuestra que el usuario abrió el archivo. Las solicitudes de descarga de la app se registran tras recuperar el blob; no se afirma auditoría de accesos directos al servicio de Storage fuera de la app.
+- El usuario autorizó adelantar parte de la auditoría de fase 8. Ningún usuario tiene escritura directa en `audit_logs`. Una RPC privada con comprobación SUPER_ADMIN borra eventos anteriores a una fecha, con motivo y confirmación explícita. Consulta/exportación filtrada y borrado global por fecha son operaciones distintas, descritas en UI y README. Las constancias del borrado se conservan y registran el número eliminado; eliminación y recibo son atómicos.
+- Las tres migraciones están aplicadas en el proyecto dedicado. Se validaron SQL y permisos remotos con ROLLBACK; quedan pendientes despliegue y recorridos con Auth/Storage reales. La fase 7 y el cierre final de fase 8 no se iniciaron.

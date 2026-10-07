@@ -13,6 +13,8 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
   if (error || !e?.uploaded_at) return new Response('Archivo no disponible.', { status: 404 });
   const { data, error: downloadError } = await db.storage.from('evidence').download(e.file_path);
   if (downloadError || !data) return new Response('Archivo no disponible.', { status: 404 });
+  const { error: auditError } = await db.rpc('record_evidence_download', { evidence: id });
+  if (auditError) return new Response('No se pudo registrar la descarga.', { status: 503 });
   return new Response(await data.arrayBuffer(), {
     headers: {
       'Content-Type': e.mime_type,

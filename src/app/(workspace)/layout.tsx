@@ -1,9 +1,15 @@
 import { ShieldCheck, LogOut } from 'lucide-react';
 import { requireUser } from '@/features/auth/queries';
 import { logout } from '@/features/auth/actions';
+import { NotificationBell } from '@/features/notifications/bell';
 import { Navigation } from '@/components/navigation';
 export default async function Layout({ children }: { children: React.ReactNode }) {
-  const { profile, user } = await requireUser();
+  const { profile, user, db } = await requireUser();
+  const { count, error } = await db
+    .from('notifications')
+    .select('id', { count: 'exact', head: true })
+    .is('read_at', null);
+  if (error) throw error;
   return (
     <div className="lg:grid lg:grid-cols-[240px_minmax(0,1fr)] min-h-screen">
       <aside className="bg-[#152f3c] text-white p-4 lg:p-5 lg:sticky lg:top-0 lg:h-screen flex flex-col">
@@ -20,10 +26,11 @@ export default async function Layout({ children }: { children: React.ReactNode }
       </aside>
       <div className="min-w-0">
         <header className="bg-white border-b border-slate-200 px-5 md:px-9 py-4 flex justify-between items-center gap-4">
-          <p className="text-xs uppercase tracking-[.14em] text-slate-500">
+          <p className="hidden sm:block text-xs uppercase tracking-[.14em] text-slate-500">
             Programa de privacidad
           </p>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 ml-auto">
+            <NotificationBell key={count || 0} initialCount={count || 0} />
             <div className="text-right">
               <p className="text-sm font-semibold truncate max-w-40">
                 {profile.full_name || user.email}

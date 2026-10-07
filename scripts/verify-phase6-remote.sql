@@ -1,0 +1,67 @@
+-- Authorized SQL verification in the identified PrivacyAudit project; no real JWTs or user data retained.
+begin;
+select set_config('phase6_test.manager',gen_random_uuid()::text,true);
+select set_config('phase6_test.client',gen_random_uuid()::text,true);
+select set_config('phase6_test.other',gen_random_uuid()::text,true);
+select set_config('phase6_test.admin',gen_random_uuid()::text,true);
+select set_config('phase6_test.unused',gen_random_uuid()::text,true);
+select set_config('phase6_test.rut',(select n::text||'-'||d from generate_series(99003000,99003100) n cross join unnest(array['0','1','2','3','4','5','6','7','8','9','K']) d where private.valid_rut(n::text||'-'||d) and not exists(select 1 from public.organizations where rut=n::text||'-'||d) limit 1),true);
+insert into auth.users(id,email,email_confirmed_at,raw_user_meta_data) select current_setting('phase6_test.'||actor)::uuid,current_setting('phase6_test.'||actor)||'@example.test',now(),'{"full_name":"Temporary phase 6 check"}'::jsonb from unnest(array['manager','client','other','admin']) actor;
+update public.profiles set role='CONSULTANT' where id in(current_setting('phase6_test.manager')::uuid,current_setting('phase6_test.other')::uuid);
+update public.profiles set role='SUPER_ADMIN' where id=current_setting('phase6_test.admin')::uuid;
+update auth.users set last_sign_in_at=now() where id=current_setting('phase6_test.client')::uuid;
+insert into auth.users(id,email,raw_user_meta_data) values(current_setting('phase6_test.unused')::uuid,current_setting('phase6_test.unused')||'@example.test','{"full_name":"Temporary phase 6 check"}');
+update auth.users set last_sign_in_at=now() where id=current_setting('phase6_test.unused')::uuid;
+delete from auth.users where id=current_setting('phase6_test.unused')::uuid;
+do $$ begin if not exists(select 1 from public.audit_logs where action='AUTH_SIGN_IN' and actor_ref=current_setting('phase6_test.unused')::uuid and actor_id is null and actor_name='Temporary phase 6 check') then raise exception 'Lost historical actor identity';end if;end $$;
+select set_config('request.jwt.claim.sub',current_setting('phase6_test.manager'),true);
+set local role authenticated;
+select set_config('phase6_test.org',public.create_organization(jsonb_build_object('legal_name','Temporary phase 6 check','rut',current_setting('phase6_test.rut')))::text,true);
+select set_config('phase6_test.assessment',public.create_assessment(current_setting('phase6_test.org')::uuid,'Temporary phase 6 assessment')::text,true);
+select set_config('phase6_test.token',public.invite_client(current_setting('phase6_test.org')::uuid,current_setting('phase6_test.client')||'@example.test'),true);
+select set_config('request.jwt.claim.sub',current_setting('phase6_test.client'),true);
+select public.accept_invitation(current_setting('phase6_test.token'));
+select set_config('request.jwt.claim.sub',current_setting('phase6_test.manager'),true);
+with row as(insert into public.findings(organization_id,assessment_id,title,description,severity) values(current_setting('phase6_test.org')::uuid,current_setting('phase6_test.assessment')::uuid,'Temporary phase 6 finding','Authorization check','HIGH') returning id) select set_config('phase6_test.finding',(select id::text from row),true);
+with row as(insert into public.tasks(organization_id,finding_id,title,assigned_to,due_date) values(current_setting('phase6_test.org')::uuid,current_setting('phase6_test.finding')::uuid,'Temporary phase 6 task',current_setting('phase6_test.client')::uuid,current_date-2) returning id) select set_config('phase6_test.task',(select id::text from row),true);
+select set_config('request.jwt.claim.sub',current_setting('phase6_test.client'),true);
+do $$ begin
+ if (select count(*) from public.notifications where organization_id=current_setting('phase6_test.org')::uuid and event_type='TASK_ASSIGNED')<>1 then raise exception 'Missing assignment alert';end if;
+ begin delete from public.audit_logs; raise exception 'Client deleted log' using errcode='P0002';exception when insufficient_privilege then null;end;
+ begin perform public.purge_audit_logs(now(),'Unauthorized check','BORRAR LOG');raise exception 'Client purged log' using errcode='P0002';exception when insufficient_privilege then null;end;
+ begin update public.notifications set title='Fake';raise exception 'Client altered notification' using errcode='P0002';exception when insufficient_privilege then null;end;
+end $$;
+select public.read_notifications();
+select public.submit_task(current_setting('phase6_test.task')::uuid,'WAITING_REVIEW');
+select set_config('request.jwt.claim.sub',current_setting('phase6_test.manager'),true);
+do $$ declare metrics jsonb;begin
+ if not exists(select 1 from public.notifications where organization_id=current_setting('phase6_test.org')::uuid and event_type='TASK_REVIEW') then raise exception 'Missing review alert';end if;
+ metrics=public.dashboard_summary('Temporary phase 6 check','','overdue',1)->'metrics';
+ if (metrics->>'overdue_tasks')::int<>1 or (metrics->>'high_findings')::int<>1 then raise exception 'Wrong metrics';end if;
+ begin perform public.purge_audit_logs(now(),'Unauthorized check','BORRAR LOG');raise exception 'Consultant purged log' using errcode='P0002';exception when insufficient_privilege then null;end;
+end $$;
+reset role;
+select private.run_due_notifications();
+do $$ begin if private.run_due_notifications()<>0 then raise exception 'Duplicate deadline alerts';end if;end $$;
+select set_config('request.jwt.claim.sub',current_setting('phase6_test.other'),true);
+set local role authenticated;
+do $$ begin if exists(select 1 from public.notifications where organization_id=current_setting('phase6_test.org')::uuid) then raise exception 'Cross tenant notification';end if;end $$;
+select set_config('request.jwt.claim.sub',current_setting('phase6_test.admin'),true);
+do $$ begin
+ if not exists(select 1 from public.audit_logs where action='AUTH_SIGN_IN' and actor_id=current_setting('phase6_test.client')::uuid) then raise exception 'Missing trusted sign-in event';end if;
+ if not exists(select 1 from public.audit_logs where entity_type='organization_members' and organization_ref=current_setting('phase6_test.org')::uuid) then raise exception 'Missing membership audit';end if;
+ begin perform public.purge_audit_logs(now(),'Valid reason',null);raise exception 'Null confirmation accepted' using errcode='P0002';exception when raise_exception then null;end;
+end $$;
+-- No production log is removed even transiently; local tests prove actual removal and counts.
+select public.purge_audit_logs('1900-01-01T00:00:00Z','Temporary retention verification','BORRAR LOG');
+select public.record_audit_export('{"verification":true}',0);
+do $$ begin if not exists(select 1 from public.audit_logs where action='AUDIT_PURGE' and actor_id=auth.uid()) then raise exception 'Missing purge receipt';end if;end $$;
+select set_config('request.jwt.claim.sub',current_setting('phase6_test.manager'),true);
+select public.manage_member(current_setting('phase6_test.org')::uuid,current_setting('phase6_test.client')::uuid,null);
+select set_config('request.jwt.claim.sub',current_setting('phase6_test.client'),true);
+do $$ begin if exists(select 1 from public.notifications where organization_id=current_setting('phase6_test.org')::uuid) then raise exception 'Removed member retained access';end if;end $$;
+set local role anon;
+do $$ begin begin perform 1 from public.notifications;raise exception 'Anonymous notification read' using errcode='P0002';exception when insufficient_privilege then null;end;end $$;
+reset role;
+select 'phase6 SQL authorization, metrics, events and deduplication passed; no real Auth API session test' as result;
+rollback;
