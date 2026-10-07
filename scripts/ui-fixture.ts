@@ -11,6 +11,7 @@ const tables = new Set([
   'controls',
   'assessments',
   'assessment_controls',
+  'processing_activities',
 ]);
 const functions = new Set([
   'register_consultant',
@@ -80,6 +81,17 @@ export async function startFixture(port = 54331) {
     `update organizations set industry='Servicios profesionales',contact_name='María Pérez',contact_email='maria@example.test',privacy_officer='Juan Gómez' where id=$1`,
     [orgA],
   );
+  const activityId = (
+    await db.query<{ id: string }>(
+      `insert into processing_activities(organization_id,name,area,purpose,data_subject_categories,personal_data_categories) values($1,'Gestión de clientes','Comercial','Gestionar relaciones comerciales',array['CLIENTS'],array['CONTACT']) returning id`,
+      [orgA],
+    )
+  ).rows[0].id;
+  for (let index = 1; index <= 20; index++)
+    await db.query(
+      `insert into processing_activities(organization_id,name,purpose,data_subject_categories,personal_data_categories) values($1,$2,'Registro de prueba para paginación',array['CLIENTS'],array['CONTACT'])`,
+      [orgA, `Actividad de prueba ${String(index).padStart(2, '0')}`],
+    );
   const assessment = (
     await db.query<{ id: string }>(
       `select create_assessment($1,'Diagnóstico inicial','Evaluación de prácticas y documentación') id`,
@@ -107,6 +119,10 @@ export async function startFixture(port = 54331) {
   await db.query(`select accept_invitation($1)`, [invite]);
   await identity(db, ids.b);
   const orgB = await org(db, 'Segunda Empresa SpA', '76234567-6');
+  await db.query(
+    `insert into processing_activities(organization_id,name,purpose,data_subject_categories,personal_data_categories) values($1,'Tratamiento privado de B','Actividad aislada',array['EMPLOYEES'],array['EMPLOYMENT'])`,
+    [orgB],
+  );
   await db.exec('reset role');
   const server = createServer(async (request, response) => {
     try {
@@ -287,6 +303,7 @@ export async function startFixture(port = 54331) {
     orgB,
     assessment,
     responseId: responses[0].id,
+    activityId,
     close: async () => {
       await new Promise<void>((resolve) => server.close(() => resolve()));
       await db.close();

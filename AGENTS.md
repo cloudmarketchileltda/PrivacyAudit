@@ -1,6 +1,8 @@
 # Convenciones
 
-Revisar `docs/references/index.md`, `docs/architecture.md` y el documento maestro al continuar. Alcance autorizado actual: fases 1 y 2 solamente. No iniciar fase 3 sin petición del usuario.
+Revisar `docs/references/index.md`, `docs/architecture.md` y el documento maestro al continuar. Alcance autorizado actual: fases 1, 2 y 3. El usuario autorizó iniciar la fase 3 el 5 de octubre de 2026. No iniciar fase 4 sin petición del usuario.
+
+Acuerdo de continuación del 5 de octubre de 2026: IA aplazada hasta completar y validar el MVP; no implementar integraciones ni funciones de IA ahora. Notificaciones operativas externas fuera por ahora (WhatsApp, email, SMS y otros canales); conservar correos de autenticación y prever notificaciones internas en fase 6. Hoja de ruta en `docs/architecture.md`.
 
 Stack: Next.js App Router, TypeScript estricto, Tailwind 4, componentes shadcn/ui, React Hook Form, Zod y Supabase SSR. Server Components por defecto. Validar entradas en servidor y aplicar RLS. Ninguna clave service role en la aplicación. Relaciones con FK y snapshots de controles para preservar historia.
 

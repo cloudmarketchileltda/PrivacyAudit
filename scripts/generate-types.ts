@@ -9,6 +9,7 @@ try {
   );
   const names = new Set(enums.map((e) => e.name));
   function type(name: string) {
+    if (name === '_text') return 'string[]';
     if (names.has(name)) return `Database['public']['Enums']['${name}']`;
     if (['int2', 'int4', 'int8', 'numeric', 'float4', 'float8'].includes(name)) return 'number';
     if (name === 'bool') return 'boolean';
@@ -26,7 +27,7 @@ try {
     `select table_name,column_name,udt_name,is_nullable,column_default from information_schema.columns where table_schema='public' order by table_name,ordinal_position`,
   );
   const tables = [...new Set(columns.map((c) => c.table_name))];
-  let output = `// Generated from actual phase 1 and 2 migrations in PostgreSQL PGlite. Regenerate: npm run types:local.\nexport type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];\nexport interface Database { public: { Tables: {\n`;
+  let output = `// Generated from actual local migrations in PostgreSQL PGlite. Regenerate: npm run types:local.\nexport type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];\nexport interface Database { public: { Tables: {\n`;
   for (const table of tables) {
     const cols = columns.filter((c) => c.table_name === table);
     const fields = (mode: string) =>

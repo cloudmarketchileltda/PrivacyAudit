@@ -185,3 +185,196 @@ test('Fase 2: catálogo, creación atómica, snapshots, estados e aislamiento', 
     await db.close();
   }
 });
+
+test('Fase 3: tratamientos, validación SQL, identidad, archivo y aislamiento', async () => {
+  const db = await database();
+  try {
+    await users(db);
+    await identity(db, ids.a);
+    const a = await org(db, 'Empresa A', '76123456-0');
+    await identity(db, ids.b);
+    const b = await org(db, 'Empresa B', '76234567-6');
+    const create = (organization: string, name = 'Gestión de clientes') =>
+      db.query<{ id: string; created_by: string }>(
+        `insert into processing_activities(organization_id,name,purpose,data_subject_categories,personal_data_categories,created_by,created_at) values($1,$2,'Administrar relaciones comerciales',array['CLIENTS'],array['CONTACT'],$3,'2000-01-01') returning id,created_by`,
+        [organization, name, ids.admin],
+      );
+    const activityB = (await create(b)).rows[0].id;
+    await identity(db, ids.a);
+    const activityA = (await create(a)).rows[0];
+    assert.equal(activityA.created_by, ids.a, 'autor proviene de auth.uid, no del payload');
+    assert.equal(
+      (await db.query(`select * from processing_activities where created_at='2000-01-01'`)).rows
+        .length,
+      0,
+    );
+    await db.query(
+      `update processing_activities set area='Comercial',owner='Responsable de ventas',status='ACTIVE',legal_basis='OTHER',legal_basis_details='Pendiente de revisión jurídica',international_transfer='YES',international_transfer_details='Proveedor en otro país' where id=$1`,
+      [activityA.id],
+    );
+    await assert.rejects(
+      db.query(`update processing_activities set international_transfer_details='' where id=$1`, [
+        activityA.id,
+      ]),
+    );
+    await assert.rejects(
+      db.query(`update processing_activities set legal_basis_details='' where id=$1`, [
+        activityA.id,
+      ]),
+    );
+    await assert.rejects(
+      db.query(
+        `update processing_activities set data_subject_categories=array['INVALID'] where id=$1`,
+        [activityA.id],
+      ),
+    );
+    await assert.rejects(
+      db.query(
+        `update processing_activities set personal_data_categories=array[]::text[] where id=$1`,
+        [activityA.id],
+      ),
+    );
+    await assert.rejects(
+      db.query(
+        `update processing_activities set personal_data_categories=array[null]::text[] where id=$1`,
+        [activityA.id],
+      ),
+    );
+    await assert.rejects(
+      db.query(`update processing_activities set notes=repeat('x',10001) where id=$1`, [
+        activityA.id,
+      ]),
+    );
+    await assert.rejects(
+      db.query(`update processing_activities set organization_id=$1 where id=$2`, [
+        b,
+        activityA.id,
+      ]),
+    );
+    await assert.rejects(
+      db.query(`update processing_activities set created_by=$1 where id=$2`, [
+        ids.admin,
+        activityA.id,
+      ]),
+    );
+    await assert.rejects(
+      db.query(`update processing_activities set id=gen_random_uuid() where id=$1`, [activityA.id]),
+    );
+    await assert.rejects(
+      db.query(`update processing_activities set created_at=now()-interval '1 day' where id=$1`, [
+        activityA.id,
+      ]),
+    );
+    await assert.rejects(
+      db.query(`delete from organizations where id=$1`, [a]),
+      'FK conserva registros',
+    );
+    await db.query(`update processing_activities set status='ARCHIVED' where id=$1`, [
+      activityA.id,
+    ]);
+    assert.equal(
+      (await db.query(`select * from processing_activities where status='ARCHIVED'`)).rows.length,
+      1,
+    );
+    await db.query(`update processing_activities set status='ACTIVE' where id=$1`, [activityA.id]);
+    const token = (
+      await db.query<{ token: string }>(`select invite_client($1,'client@example.test') token`, [a])
+    ).rows[0].token;
+    await identity(db, ids.client);
+    await db.query(`select accept_invitation($1)`, [token]);
+    assert.equal((await db.query(`select * from processing_activities`)).rows.length, 1);
+    assert.equal(
+      (await db.query(`select * from processing_activities where id=$1`, [activityB])).rows.length,
+      0,
+    );
+    await assert.rejects(create(a, 'Creación por cliente'));
+    assert.equal(
+      (
+        await db.query(
+          `update processing_activities set name='Intrusión' where id=$1 returning id`,
+          [activityA.id],
+        )
+      ).rows.length,
+      0,
+    );
+    assert.equal(
+      (await db.query(`delete from processing_activities where id=$1 returning id`, [activityA.id]))
+        .rows.length,
+      0,
+    );
+    await identity(db, ids.b);
+    assert.equal(
+      (await db.query(`select * from processing_activities where id=$1`, [activityA.id])).rows
+        .length,
+      0,
+    );
+    await assert.rejects(create(a, 'Creación por otro consultor'));
+    assert.equal(
+      (
+        await db.query(
+          `update processing_activities set name='Intrusión' where id=$1 returning id`,
+          [activityA.id],
+        )
+      ).rows.length,
+      0,
+    );
+    assert.equal(
+      (await db.query(`delete from processing_activities where id=$1 returning id`, [activityA.id]))
+        .rows.length,
+      0,
+    );
+    await identity(db, ids.admin);
+    assert.equal((await db.query(`select * from processing_activities`)).rows.length, 2);
+    const temporary = (await create(a, 'Registro temporal por administrador')).rows[0];
+    assert.equal(temporary.created_by, ids.admin);
+    assert.equal(
+      (await db.query(`delete from processing_activities where id=$1 returning id`, [temporary.id]))
+        .rows.length,
+      1,
+    );
+    await identity(db, ids.a);
+    await db.query(`update organizations set status='ARCHIVED' where id=$1`, [a]);
+    await assert.rejects(create(a));
+    assert.equal(
+      (
+        await db.query(
+          `update processing_activities set name='Edición archivada' where id=$1 returning id`,
+          [activityA.id],
+        )
+      ).rows.length,
+      0,
+    );
+    assert.equal(
+      (await db.query(`delete from processing_activities where id=$1 returning id`, [activityA.id]))
+        .rows.length,
+      0,
+    );
+    await identity(db, ids.client);
+    assert.equal(
+      (await db.query(`select * from processing_activities where id=$1`, [activityA.id])).rows
+        .length,
+      1,
+      'consulta del archivo',
+    );
+    await identity(db, ids.a);
+    await db.query(`update organizations set status='ACTIVE' where id=$1`, [a]);
+    await db.query(`select manage_member($1,$2,null)`, [a, ids.client]);
+    await identity(db, ids.client);
+    assert.equal(
+      (await db.query(`select * from processing_activities`)).rows.length,
+      0,
+      'retirar membresía retira lectura',
+    );
+    await identity(db, ids.a);
+    assert.equal(
+      (await db.query(`delete from processing_activities where id=$1 returning id`, [activityA.id]))
+        .rows.length,
+      1,
+    );
+    await identity(db, '', 'anon');
+    await assert.rejects(db.query(`select * from processing_activities`));
+    await assert.rejects(create(b));
+  } finally {
+    await db.close();
+  }
+});

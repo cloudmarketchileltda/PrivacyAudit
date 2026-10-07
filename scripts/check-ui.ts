@@ -79,6 +79,11 @@ try {
     `/assessments/${fixture.assessment}/controls/${fixture.responseId}`,
     '/controls',
     '/account',
+    '/processing',
+    `/organizations/${fixture.orgA}/processing`,
+    `/organizations/${fixture.orgA}/processing/new`,
+    `/organizations/${fixture.orgA}/processing/${fixture.activityId}`,
+    `/organizations/${fixture.orgA}/processing/${fixture.activityId}/edit`,
   ];
 
   for (const width of [360, 390, 560, 768, 1024, 1280, 1440]) {
@@ -98,7 +103,13 @@ try {
       results.push({ width, path, overflow });
       if (
         [360, 768, 1440].includes(width) &&
-        ['/dashboard', '/organizations/new', `/assessments/${fixture.assessment}`].includes(path)
+        [
+          '/dashboard',
+          '/organizations/new',
+          `/assessments/${fixture.assessment}`,
+          `/organizations/${fixture.orgA}/processing/new`,
+          `/organizations/${fixture.orgA}/processing/${fixture.activityId}`,
+        ].includes(path)
       )
         await page.screenshot({
           path: `artifacts/ui/${width}-${path.replaceAll('/', '_')}.png`,
@@ -133,6 +144,68 @@ try {
   await page.getByRole('status').filter({ hasText: 'Control actualizado' }).waitFor();
   await page.goto(newAssessment);
   await page.getByText('1 de 52 controles evaluados', { exact: true }).waitFor();
+  // Processing register: actual form, Server Action, SQL and query filters.
+  const processingBase = `${base}/organizations/${fixture.orgA}/processing`;
+  await page.goto(`${processingBase}?sort=name`);
+  assert.equal(await page.locator('tbody tr').count(), 20);
+  await page.getByRole('link', { name: 'Siguiente', exact: true }).click();
+  await page.waitForURL(/sort=name.*page=2/);
+  assert.equal(await page.locator('tbody tr').count(), 1);
+  await page.getByRole('link', { name: 'Gestión de clientes', exact: true }).waitFor();
+  await page.goto(`${processingBase}/new`);
+  await page.getByLabel('Nombre del tratamiento', { exact: true }).fill('Marketing de clientes');
+  await page.getByLabel('Área', { exact: true }).fill('Comercial');
+  await page
+    .getByLabel('Responsable interno (nombre o cargo)', { exact: true })
+    .fill('Encargado comercial');
+  await page
+    .getByLabel('Finalidad del tratamiento', { exact: true })
+    .fill('Gestionar campañas solicitadas por clientes');
+  await page.getByLabel('Clientes', { exact: true }).check();
+  await page.getByLabel('Trabajadores', { exact: true }).check();
+  await page.getByLabel('Contacto', { exact: true }).check();
+  await page.getByLabel('Base de licitud propuesta', { exact: true }).selectOption('OTHER');
+  await page
+    .getByLabel('Explicación de la base de licitud', { exact: true })
+    .fill('Pendiente de revisión por el consultor');
+  await page
+    .getByLabel('¿Realiza transferencias internacionales?', { exact: true })
+    .selectOption('YES');
+  await page.getByRole('button', { name: 'Guardar tratamiento', exact: true }).click();
+  await page.getByText('Describa las transferencias internacionales.', { exact: true }).waitFor();
+  await page
+    .getByLabel('Detalle de transferencias internacionales', { exact: true })
+    .fill('Servicio alojado en otro país');
+  await page.getByRole('button', { name: 'Guardar tratamiento', exact: true }).click();
+  await page.waitForURL(/\/processing\/[a-f0-9-]+$/);
+  const createdProcessing = page.url();
+  await page.getByRole('heading', { name: 'Marketing de clientes', exact: true }).waitFor();
+  await page.getByText('Clientes, Trabajadores', { exact: true }).waitFor();
+  await page.getByRole('link', { name: 'Editar tratamiento', exact: true }).click();
+  await page.getByLabel('Estado', { exact: true }).selectOption('ARCHIVED');
+  await page.getByLabel('Plazo de conservación', { exact: true }).fill('Pendiente de definición');
+  await page.getByRole('button', { name: 'Guardar tratamiento', exact: true }).click();
+  await page.waitForURL(createdProcessing);
+  await page.getByText('Pendiente de definición', { exact: true }).waitFor();
+  await page.goto(`${processingBase}?status=ARCHIVED&transfer=YES&q=Marketing`);
+  await page.getByRole('link', { name: 'Marketing de clientes', exact: true }).waitFor();
+  assert.equal(
+    await page.getByRole('link', { name: 'Gestión de clientes', exact: true }).count(),
+    0,
+  );
+  await page.goto(`${base}/processing`);
+  assert.equal(await page.getByText('Tratamiento privado de B', { exact: true }).count(), 0);
+  await page.goto(createdProcessing);
+  await page.getByText('Eliminar tratamiento', { exact: true }).click();
+  await page.getByLabel('Confirmación', { exact: true }).fill('ELIMINAR');
+  await page.getByRole('button', { name: 'Eliminar definitivamente', exact: true }).click();
+  await page.waitForURL(processingBase);
+  assert.equal(
+    await page.getByRole('link', { name: 'Marketing de clientes', exact: true }).count(),
+    0,
+  );
+  await page.goto(`${base}/organizations/${fixture.orgB}/processing`);
+  await page.getByRole('heading', { name: 'Registro no disponible' }).waitFor();
   await page.goto(`${base}/organizations/${fixture.orgB}`);
   await page.getByRole('heading', { name: 'Registro no disponible' }).waitFor();
   // Client can read but has no editor, and cannot see consultant B's organization.
@@ -143,6 +216,17 @@ try {
   await page.getByLabel('Contraseña', { exact: true }).fill('FixturePassword123');
   await page.getByRole('button', { name: 'Entrar', exact: true }).click();
   await page.waitForURL('**/dashboard');
+  await page.goto(`${base}/organizations/${fixture.orgA}/processing/${fixture.activityId}`);
+  await page.getByRole('heading', { name: 'Gestión de clientes', exact: true }).waitFor();
+  assert.equal(
+    await page.getByRole('link', { name: 'Editar tratamiento', exact: true }).count(),
+    0,
+  );
+  assert.equal(await page.getByText('Eliminar tratamiento', { exact: true }).count(), 0);
+  await page.goto(`${base}/organizations/${fixture.orgA}/processing/${fixture.activityId}/edit`);
+  await page.getByRole('heading', { name: 'Registro no disponible' }).waitFor();
+  await page.goto(`${base}/organizations/${fixture.orgA}/processing/new`);
+  await page.getByRole('heading', { name: 'Registro no disponible' }).waitFor();
   await page.goto(`${base}/assessments/${fixture.assessment}/controls/${fixture.responseId}`);
   await page.getByRole('heading', { name: 'Evaluación del control' }).waitFor();
   assert.equal(
@@ -200,6 +284,12 @@ try {
           'client read only',
           'client comment without evaluation change',
           'admin control create',
+          'processing create with multiple categories and conditional validation',
+          'processing edit and archive',
+          'processing search, status and transfer filters',
+          'processing pagination with stable ordering',
+          'processing confirmed deletion',
+          'processing tenant URL denial and client read only',
         ],
         errors,
       },

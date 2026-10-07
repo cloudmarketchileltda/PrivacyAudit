@@ -1,4 +1,4 @@
-// Generated from actual phase 1 and 2 migrations in PostgreSQL PGlite. Regenerate: npm run types:local.
+// Generated from actual local migrations in PostgreSQL PGlite. Regenerate: npm run types:local.
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 export interface Database {
   public: {
@@ -294,6 +294,90 @@ export interface Database {
         };
         Relationships: [];
       };
+      processing_activities: {
+        Row: {
+          id: string;
+          organization_id: string;
+          name: string;
+          area: string;
+          owner: string;
+          purpose: string;
+          data_subject_categories: string[];
+          personal_data_categories: string[];
+          sensitive_data: Database['public']['Enums']['processing_tristate'];
+          source: string;
+          legal_basis: string;
+          legal_basis_details: string;
+          systems: string;
+          recipients: string;
+          processors: string;
+          international_transfer: Database['public']['Enums']['processing_tristate'];
+          international_transfer_details: string;
+          retention_period: string;
+          retention_criteria: string;
+          security_measures: string;
+          notes: string;
+          status: Database['public']['Enums']['processing_status'];
+          created_by: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          name: string;
+          area?: string;
+          owner?: string;
+          purpose: string;
+          data_subject_categories: string[];
+          personal_data_categories: string[];
+          sensitive_data?: Database['public']['Enums']['processing_tristate'];
+          source?: string;
+          legal_basis?: string;
+          legal_basis_details?: string;
+          systems?: string;
+          recipients?: string;
+          processors?: string;
+          international_transfer?: Database['public']['Enums']['processing_tristate'];
+          international_transfer_details?: string;
+          retention_period?: string;
+          retention_criteria?: string;
+          security_measures?: string;
+          notes?: string;
+          status?: Database['public']['Enums']['processing_status'];
+          created_by?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          organization_id?: string;
+          name?: string;
+          area?: string;
+          owner?: string;
+          purpose?: string;
+          data_subject_categories?: string[];
+          personal_data_categories?: string[];
+          sensitive_data?: Database['public']['Enums']['processing_tristate'];
+          source?: string;
+          legal_basis?: string;
+          legal_basis_details?: string;
+          systems?: string;
+          recipients?: string;
+          processors?: string;
+          international_transfer?: Database['public']['Enums']['processing_tristate'];
+          international_transfer_details?: string;
+          retention_period?: string;
+          retention_criteria?: string;
+          security_measures?: string;
+          notes?: string;
+          status?: Database['public']['Enums']['processing_status'];
+          created_by?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       profiles: {
         Row: {
           id: string;
@@ -356,6 +440,8 @@ export interface Database {
       assessment_status: 'DRAFT' | 'IN_PROGRESS' | 'REVIEW' | 'COMPLETED';
       control_status: 'PENDING' | 'CONFORM' | 'PARTIAL' | 'NON_CONFORM' | 'NOT_APPLICABLE';
       organization_status: 'ACTIVE' | 'ARCHIVED';
+      processing_status: 'DRAFT' | 'ACTIVE' | 'ARCHIVED';
+      processing_tristate: 'YES' | 'NO' | 'UNKNOWN';
       severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
     };
     CompositeTypes: Record<string, never>;

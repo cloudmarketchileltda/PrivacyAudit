@@ -60,10 +60,16 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           </Button>
         )}
       </div>
-      <nav className="flex gap-5 border-b border-slate-200 pb-3 text-sm" aria-label="Organización">
+      <nav
+        className="flex flex-wrap gap-5 border-b border-slate-200 pb-3 text-sm"
+        aria-label="Organización"
+      >
         <span className="font-semibold text-teal-800">Resumen</span>
         <Link href={`/assessments?organization=${id}`} className="hover:underline">
           Evaluaciones
+        </Link>
+        <Link href={`/organizations/${id}/processing`} className="hover:underline">
+          Tratamientos
         </Link>
       </nav>
       <section className="panel">
@@ -194,8 +200,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               Eliminar organización
             </summary>
             <p className="muted my-4">
-              Solo se puede eliminar una organización sin evaluaciones. Para conservar su historial,
-              cambie su estado a archivada.
+              Solo se puede eliminar una organización sin evaluaciones ni tratamientos. Para
+              conservar su historial, cambie su estado a archivada.
             </p>
             <ActionForm
               action={deleteOrganization}

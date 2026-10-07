@@ -1,12 +1,15 @@
 # PrivacyAudit
 
-Aplicación SaaS de gestión y diagnóstico de protección de datos, orientada a consultores y organizaciones chilenas. La implementación de esta entrega cubre únicamente las fases 1 y 2 del documento maestro `PrivacyAudit.docx`. Los resultados de evaluación requieren interpretación jurídica y profesional.
+Aplicación SaaS de gestión y diagnóstico de protección de datos, orientada a consultores y organizaciones chilenas. La implementación de esta entrega cubre las fases 1, 2 y 3 del documento maestro `PrivacyAudit.docx`. Los resultados de evaluación requieren interpretación jurídica y profesional.
 
 ## Alcance
 
 - Fase 1: proyecto Next.js, email y contraseña, confirmación y recuperación, sesiones SSR, perfiles y roles, CRUD de organizaciones, perfil de tratamiento, membresías, invitaciones con enlaces y caducidad, aislamiento mediante RLS y administración básica de usuarios.
 - Fase 2: catálogo global de 52 controles orientativos, edición por SUPER_ADMIN, evaluaciones históricas, copias de controles activos, respuestas con estados y comentarios separados de consultor y cliente, motivo obligatorio de no aplicabilidad, métricas de avance y dashboard de evaluación. Búsqueda, filtros y paginación en tablas de estas fases.
-- Las fases 3–8 quedan pendientes. No hay módulos de tratamientos, hallazgos, tareas, evidencia, storage ni PDF. El perfil de tratamiento de una organización pertenece a fase 1, y no es el registro de actividades de fase 3.
+- Fase 3: registro de actividades de tratamiento por organización, con responsables, finalidad, categorías de titulares y datos, origen, base de licitud propuesta y explicación, sistemas, destinatarios, proveedores, transferencias, conservación, medidas de seguridad y observaciones. Creación, edición, archivo/reactivación y eliminación confirmada por consultores autorizados; consulta por clientes; búsqueda, filtros, orden y paginación.
+- Las fases 4–8 quedan pendientes. No hay módulos de hallazgos, tareas, evidencia, storage ni PDF. El perfil de tratamiento de fase 1 y el registro de actividades de fase 3 son módulos distintos.
+
+Para la continuación acordada el 5 de octubre de 2026, la IA queda aplazada hasta completar y validar el MVP. Las notificaciones operativas externas (WhatsApp, email, SMS y otros canales) quedan fuera por ahora; se mantienen previstas las notificaciones internas de fase 6 y se conservan los correos de autenticación existentes. La hoja de ruta y las condiciones de avance están en `docs/architecture.md`; las fases 4–8 todavía no están implementadas.
 
 ## Requisitos y ejecución
 
@@ -34,6 +37,8 @@ No se requiere service role key en la aplicación.
 ## Configuración de Supabase
 
 El 5 de octubre de 2026 se conectó el proyecto dedicado `pbihajfbbcbbdvoqpggy` (`https://pbihajfbbcbbdvoqpggy.supabase.co`). Las migraciones de fases 1 y 2, el ajuste de rendimiento y los 52 controles ya están aplicados. `.env.local` está configurado y excluido de Git. No vuelva a sobrescribirlo con `.env.example`.
+
+También está aplicada la migración `20261005201508_phase3_processing_activities.sql` en ese mismo proyecto. El código de fase 3 está versionado para su publicación en GitHub. La revisión del 6 de octubre confirmó que el dominio público todavía devuelve HTTP 404 en `/processing`; el redespliegue y la prueba con sesiones reales siguen pendientes. No vuelva a aplicar esa migración manualmente.
 
 Email y contraseña y confirmación de correo están habilitados en Supabase. Site URL es `https://privacyaudit.cloudmarket.cl`, con retorno `https://privacyaudit.cloudmarket.cl/auth/callback**`. Se conservan los retornos `http://localhost:3000/auth/callback**` y `http://127.0.0.1:3000/auth/callback**`, y se configuró el mínimo remoto de diez caracteres. Falta verificar el correo y las sesiones con una cuenta real.
 
@@ -79,6 +84,8 @@ Requiere Docker. `supabase start` y `supabase db reset` aplican el esquema y see
 
 Migraciones reproducibles en `supabase/migrations`. Fase 1 crea `profiles`, `organizations`, `organization_members`, `organization_invitations`; fase 2 crea `controls`, `assessments`, `assessment_controls`. FK, índices, enums y timestamps están versionados.
 
+Fase 3 añade `processing_activities` con categorías múltiples, RLS por operación, FK e índices. Una organización con tratamientos no se elimina: se archiva para conservar sus registros. Los clientes pueden consultarlos, pero no modificarlos. Dentro de una organización activa, abra Resumen → Tratamientos → Nuevo tratamiento; también hay una lista global en Tratamientos. La base de licitud registrada no se valida jurídicamente de forma automática.
+
 - RLS habilitado en todas las tablas públicas, con grants explícitos y permisos por operación.
 - La aplicación verifica `getUser` en servidor; proxy renueva cookies mediante `getClaims`. No se confía en `getSession` ni user_metadata para autorización.
 - Rol global inmutable por los clientes; acceso a organización exige membresía. Funciones privadas verifican auth.uid antes de operaciones privilegiadas.
@@ -110,6 +117,7 @@ src/features/auth/          Sesiones y operaciones de cuenta
 src/features/organizations/  Formularios, validación y acciones
 src/features/controls/       Catálogo y administración
 src/features/assessments/    Evaluaciones, respuestas y métricas
+src/features/processing/     Registro de actividades de tratamiento
 src/lib/supabase/            Clientes de navegador y servidor
 supabase/                   Configuración, migraciones y seed
 scripts/                    Herramientas de verificación

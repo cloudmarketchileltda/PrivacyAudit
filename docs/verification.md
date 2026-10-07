@@ -1,6 +1,6 @@
-# Verificación de las fases 1 y 2
+# Verificación de las fases 1 a 3
 
-Resultados locales y remotos del 5 de octubre de 2026, America/Santiago. El documento maestro permanece sin modificaciones. El alcance implementado termina en fase 2.
+Resultados locales y remotos del 5 de octubre de 2026, America/Santiago. El documento maestro permanece sin modificaciones. La implementación local termina ahora en fase 3; las comprobaciones históricas de fases 1 y 2 se conservan a continuación.
 
 ## Comprobaciones realizadas
 
@@ -35,6 +35,19 @@ Docker no está instalado en este entorno. El primer intento remoto en Dokploy c
 
 Los controles son ejemplos de gestión pendientes de revisión jurídica. No se verificó ni afirmó que cada control represente una obligación legal aplicable.
 
+## Verificación de fase 3
+
+- Antes de continuar, login y healthcheck del dominio público respondieron HTTP 200. El proyecto remoto se identificó como PrivacyAudit (`pbihajfbbcbbdvoqpggy`), ACTIVE_HEALTHY, con siete tablas públicas existentes protegidas por RLS. Se encontró una cuenta confirmada y una sesión; esto no prueba recuperación por correo, renovación ni aislamiento con JWT reales.
+- Se creó con Supabase CLI la migración de tratamientos; se aplicó mediante el conector al proyecto identificado y se alineó el archivo local con la versión remota `20261005201508`. No se modificaron migraciones anteriores. El historial remoto contiene ahora las cuatro versiones presentes localmente.
+- `npm run lint`, `npm run typecheck`, `npm test` y `npm run build` pasaron. Lint, tests y build final se ejecutaron con el runtime Node 24.19.0. Diez tests en total; la prueba nueva de PostgreSQL ejecuta la migración real y verifica creación, edición, archivo, borrado, autor calculado en servidor, identidad inmutable, validación SQL, organización archivada, retirada de membresía, clientes de solo lectura, administrador y denegación entre tenants y a anónimos.
+- `npm run test:ui` pasó con 137 comprobaciones de pantallas y anchos, más flujos críticos. Añade listado global y por organización, alta, detalle y edición en siete anchos (360–1440 px). Comprueba categorías múltiples, validación condicional de transferencias, edición, archivo, búsqueda y filtros, paginación con 21 registros, eliminación confirmada y rutas bloqueadas para otro consultor y para edición de cliente. Se inspeccionaron visualmente capturas de alta y detalle en móvil y alta en escritorio. Este navegador se ejecutó con Node 20.20.2 y el adaptador PostgreSQL aislado existente, no contra Supabase Auth/PostgREST reales.
+- `scripts/verify-phase3-remote.sql` pasó en PostgreSQL remoto: autor no falsificable, lectura y cambios de consultor autorizado, denegación entre tenants en SELECT/INSERT/UPDATE/DELETE, cliente de solo lectura, protección de identidad, organización archivada y rechazo de acceso anónimo. La transacción terminó con ROLLBACK. Se confirmó que permanecían una cuenta y una sesión originales, cero usuarios temporales de la prueba y cero tratamientos de prueba.
+- La Data API real rechazó un SELECT anónimo a `processing_activities` con HTTP 401 / SQLSTATE 42501. RLS de la nueva tabla está habilitado.
+- El servidor de producción local compilado respondió HTTP 200 en login y healthcheck y redirigió `/processing` anónimo a `/login` con HTTP 307. No equivale a un despliegue de fase 3 en Dokploy.
+- Advisor de seguridad actual: sin hallazgos de RLS para tratamientos; advierte que la protección de contraseñas filtradas de Auth está desactivada. Pendiente de revisión de configuración: [guía de Supabase](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection). Advisor de rendimiento: solo once avisos informativos de índices sin uso, incluidos los dos nuevos; no hay advertencias de FK sin índice ni de initplan RLS.
+
+Pendientes operativos: redesplegar la web y probar el nuevo módulo con sesiones reales de consultor y cliente. La publicación en GitHub se comprueba en la revisión de cierre siguiente. Recuperación por correo y renovación de sesión siguen pendientes. Docker no se ejecutó localmente. IA, notificaciones externas y fases 4–8 no se implementaron.
+
 ## Reproducción
 
 ```sh
@@ -56,3 +69,18 @@ Los artefactos de QA de navegador se guardan en `artifacts/ui` y están excluido
 ## Revisión del error 502
 
 Se arrancó el servidor standalone de producción local con PORT=80 y HOSTNAME=0.0.0.0: el log mostró ambas direcciones en puerto 80, lsof confirmó TCP *:80 y /api/health respondió HTTP 200. Dockerfile ya usa este puerto. Se corrigió también npm start para escuchar explícitamente en 0.0.0.0:80. Esta prueba local no demuestra el puerto del contenedor remoto. El dominio público devolvió 502. En Dokploy, servicio cloudmarket-privacyaudit-e0n5t6, los logs mostraron npm start con --hostname 127.0.0.1 y puerto 80; el dominio apunta correctamente al puerto 80. El bind al loopback del contenedor impide acceso desde el proxy. Se publica el cambio de npm start a 0.0.0.0:80; el usuario realizará el redespliegue.
+
+## Revisión de cierre del 6 de octubre de 2026
+
+Se contrastó el documento maestro con el módulo implementado. Fase 3 corresponde a actividades de tratamiento: todos los campos de la sección 11 tienen representación en esquema, formulario y detalle. Incluye categorías múltiples, base propuesta seleccionable y explicación editable, responsables y proveedores como texto, transferencias Sí/No/No determinado y retención editable. No se determina automáticamente la validez jurídica de la base.
+
+Se revisaron CRUD, archivo/reactivación, validación en servidor, FK, identidad inmutable, búsqueda, orden, filtros, paginación y acceso por organización. Las rutas de edición verifican permisos y las acciones comprueban que la organización esté activa; RLS también protege operaciones directas. No se encontraron funcionalidades principales faltantes en el alcance de fase 3.
+
+- Con Node 24.19.0 pasaron lint, TypeScript, las diez pruebas automatizadas y build de producción.
+- `npm run test:ui` pasó nuevamente: 137 comprobaciones de pantalla/viewport y flujos críticos, con Node 20.20.2 y el adaptador PGlite aislado. Se inspeccionaron las nuevas capturas del formulario en móvil y escritorio; no se detectaron defectos de disposición. No equivale a Supabase Auth/PostgREST reales.
+- Se volvió a identificar el proyecto PrivacyAudit `pbihajfbbcbbdvoqpggy`, ACTIVE_HEALTHY. Las cuatro migraciones locales coinciden con el historial remoto; tratamientos tiene RLS y políticas SELECT, INSERT, UPDATE y DELETE.
+- Se volvió a ejecutar `scripts/verify-phase3-remote.sql`: aislamiento entre consultores, cliente de solo lectura, autor e identidad protegidos, bloqueo en organización archivada y denegación anónima. Terminó con ROLLBACK; se confirmaron cero tratamientos y cero usuarios temporales `@example.test`.
+- En el dominio público, `/login` y `/api/health` respondieron HTTP 200, pero `/processing` respondió HTTP 404. Esto demuestra que la nueva ruta no está disponible en ese despliegue; no se afirma validación de fase 3 en producción.
+- Advisor de seguridad: sin hallazgos de RLS; conserva la advertencia documentada de protección de contraseñas filtradas desactivada.
+
+Conclusión: implementación de fase 3 completa y validada en código y PostgreSQL; cierre operativo pendiente de redespliegue y prueba con sesiones reales. GitHub y despliegue son verificaciones distintas. No se inició fase 4 durante esta revisión. Su alcance según el maestro es hallazgos, tareas y plan de acción; IA y notificaciones externas mantienen el aplazamiento acordado.

@@ -6,6 +6,7 @@ import {
   Building2,
   ListChecks,
   ClipboardList,
+  FolderOpen,
   Users,
   UserRound,
 } from 'lucide-react';
@@ -16,6 +17,7 @@ export function Navigation({ admin }: { admin: boolean }) {
     ['/dashboard', 'Dashboard', LayoutDashboard],
     ['/organizations', 'Organizaciones', Building2],
     ['/assessments', 'Evaluaciones', ClipboardList],
+    ['/processing', 'Tratamientos', FolderOpen],
     ['/controls', 'Catálogo de controles', ListChecks],
     ...(admin ? [['/users', 'Usuarios', Users] as const] : []),
     ['/account', 'Mi cuenta', UserRound],

@@ -1,6 +1,6 @@
 # Despliegue en Docker y Dokploy
 
-El usuario realizará el despliegue y la configuración de Cloudflare. Alcance: fases 1 y 2.
+El usuario realizará el despliegue y la configuración de Cloudflare. El código preparado cubre fases 1, 2 y 3.
 
 ## Configuración
 
@@ -29,6 +29,8 @@ APP_URL=https://privacyaudit.cloudmarket.cl
 ```
 
 Supabase ya tiene las tres migraciones versionadas y el seed de 52 controles. Site URL y retorno público de Auth están guardados para este dominio; se conservan retornos locales. No vuelva a aplicar migraciones ni resetee la base por cada despliegue.
+
+El 5 de octubre de 2026 se aplicó también `20261005201508_phase3_processing_activities.sql` mediante el conector Supabase al proyecto PrivacyAudit `pbihajfbbcbbdvoqpggy`. El archivo se generó inicialmente con `supabase migration new` y su versión local se alineó con la asignada por el historial remoto. La CLI local no tenía sesión de gestión. Las cuatro versiones locales coinciden ahora con las remotas. El código de fase 3 está versionado para GitHub. Falta redesplegarlo y probarlo con sesiones reales; la revisión del 6 de octubre obtuvo HTTP 404 en `/processing` del dominio público. La presencia de la nueva tabla no publica las pantallas automáticamente.
 
 ## Verificación después de desplegar
 

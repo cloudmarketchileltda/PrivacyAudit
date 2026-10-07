@@ -50,7 +50,9 @@ export async function deleteOrganization(_: ActionState, data: FormData): Promis
   const { db } = await requireManager(id.data);
   const { error } = await db.from('organizations').delete().eq('id', id.data);
   if (error)
-    return { error: 'La organización tiene evaluaciones. Archívela para conservar su historial.' };
+    return {
+      error: 'La organización tiene registros asociados. Archívela para conservar su historial.',
+    };
   revalidatePath('/organizations');
   redirect('/organizations');
 }
