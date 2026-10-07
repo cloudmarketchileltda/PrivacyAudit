@@ -80,6 +80,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         <Link href={`/tasks?organization=${id}`} className="hover:underline">
           Tareas
         </Link>
+        <Link href={`/evidence?organization=${id}`} className="hover:underline">
+          Evidencias
+        </Link>
       </nav>
       <section className="panel">
         <h2 className="section-title">Información de la empresa</h2>

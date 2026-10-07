@@ -9,3 +9,11 @@ export function formatDate(value: string) {
     timeZone: 'America/Santiago',
   }).format(new Date(value));
 }
+
+export function formatDateTime(value: string) {
+  return new Intl.DateTimeFormat('es-CL', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+    timeZone: 'America/Santiago',
+  }).format(new Date(value));
+}

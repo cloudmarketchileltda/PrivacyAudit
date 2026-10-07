@@ -1,6 +1,6 @@
 # PrivacyAudit
 
-Aplicación SaaS de gestión y diagnóstico de protección de datos, orientada a consultores y organizaciones chilenas. La implementación de esta entrega cubre las fases 1 a 4 del documento maestro `PrivacyAudit.docx`. Los resultados de evaluación requieren interpretación jurídica y profesional.
+Aplicación SaaS de gestión y diagnóstico de protección de datos, orientada a consultores y organizaciones chilenas. La implementación de esta entrega cubre las fases 1 a 5 del documento maestro `PrivacyAudit.docx`. Los resultados de evaluación requieren interpretación jurídica y profesional.
 
 ## Alcance
 
@@ -8,9 +8,10 @@ Aplicación SaaS de gestión y diagnóstico de protección de datos, orientada a
 - Fase 2: catálogo global de 52 controles orientativos, edición por SUPER_ADMIN, evaluaciones históricas, copias de controles activos, respuestas con estados y comentarios separados de consultor y cliente, motivo obligatorio de no aplicabilidad, métricas de avance y dashboard de evaluación. Búsqueda, filtros y paginación en tablas de estas fases.
 - Fase 3: registro de actividades de tratamiento por organización, con responsables, finalidad, categorías de titulares y datos, origen, base de licitud propuesta y explicación, sistemas, destinatarios, proveedores, transferencias, conservación, medidas de seguridad y observaciones. Creación, edición, archivo/reactivación y eliminación confirmada por consultores autorizados; consulta por clientes; búsqueda, filtros, orden y paginación.
 - Fase 4: hallazgos desde controles históricos, tareas correctivas asignadas, envío a revisión por cliente, devolución con observaciones y aprobación por consultor, cierre justificado y plan de acción con filtros y progreso. Incluye historial protegido de cambios.
-- Las fases 5–8 quedan pendientes. No hay evidencias, Storage ni PDF. El perfil de tratamiento de fase 1 y el registro de actividades de fase 3 son módulos distintos.
+- Fase 5: evidencias por organización, control histórico, hallazgo o tarea; archivos privados en Supabase Storage; entregas corregidas sin sobrescribir originales; revisión por consultor, comentarios cronológicos y trazabilidad. Búsqueda, filtros, orden y paginación de evidencias.
+- Las fases 6–8 quedan pendientes. No hay informe PDF. El perfil de tratamiento de fase 1 y el registro de actividades de fase 3 son módulos distintos.
 
-Para la continuación acordada el 5 de octubre de 2026, la IA queda aplazada hasta completar y validar el MVP. Las notificaciones operativas externas (WhatsApp, email, SMS y otros canales) quedan fuera por ahora; se mantienen previstas las notificaciones internas de fase 6 y se conservan los correos de autenticación existentes. La hoja de ruta y las condiciones de avance están en `docs/architecture.md`; las fases 5–8 todavía no están implementadas.
+Para la continuación acordada el 5 de octubre de 2026, la IA queda aplazada hasta completar y validar el MVP. Las notificaciones operativas externas (WhatsApp, email, SMS y otros canales) quedan fuera por ahora; se mantienen previstas las notificaciones internas de fase 6 y se conservan los correos de autenticación existentes. La hoja de ruta y las condiciones de avance están en `docs/architecture.md`; las fases 6–8 todavía no están implementadas.
 
 ## Requisitos y ejecución
 
@@ -119,6 +120,8 @@ src/features/organizations/  Formularios, validación y acciones
 src/features/controls/       Catálogo y administración
 src/features/assessments/    Evaluaciones, respuestas y métricas
 src/features/processing/     Registro de actividades de tratamiento
+src/features/workflow/       Hallazgos, tareas y plan de acción
+src/features/evidence/       Carga, revisión, entregas y comentarios
 src/lib/supabase/            Clientes de navegador y servidor
 supabase/                   Configuración, migraciones y seed
 scripts/                    Herramientas de verificación
@@ -140,3 +143,22 @@ Arquitectura: `docs/architecture.md`. Despliegue Docker y Dokploy: `docs/deploym
 6. Consulte Hallazgos, Tareas y Plan de acción desde la navegación principal o por organización. El plan permite buscar, ordenar y filtrar abiertos, vencidos, alta prioridad, responsable, estado y área.
 
 La migración de fase 4 añade `findings`, `tasks` y `audit_logs`, FK compuestas, enums, índices, RLS y RPC limitadas de envío y progreso. `findings.control_id` apunta a `assessment_controls` para conservar el control histórico. La trazabilidad actual cubre hallazgos y tareas; no representa la auditoría completa de fase 8. Los formularios usan React Hook Form y Zod; las acciones vuelven a validar y autorizar en servidor. La migración `20261007020423_phase4_findings_tasks.sql` ya está aplicada en el proyecto dedicado; no vuelva a aplicarla manualmente. El código de fase 4 requiere redesplegar `main` en Dokploy. Consulte `docs/verification.md` para resultados y pendientes con sesiones reales.
+
+## Uso de fase 5
+
+1. Abra Evidencias → Nueva evidencia y elija una organización activa, o seleccione Adjuntar evidencia en un control histórico, hallazgo o tarea. El cliente solo puede adjuntar a tareas que tiene asignadas; conserva acceso a documentos generales de sus organizaciones y a hallazgos visibles.
+2. Escriba una descripción y seleccione PDF, PNG, JPG, DOCX, XLSX o TXT de hasta 10 MB. La app valida nombre, extensión, MIME y tamaño; el bucket limita MIME y tamaño. Esta validación no constituye análisis antivirus ni revisión del contenido.
+3. La app reserva la entrega, carga directamente a Storage con la sesión del usuario y confirma que existe un objeto con MIME y tamaño compatibles. Solo entonces queda pendiente de revisión. No se usa una service role key.
+4. Si se interrumpe la conexión, abra la entrega incompleta: confirme si el archivo llegó, o descarte esa carga y vuelva a subirlo. No se pueden revisar entregas incompletas. Solo el autor puede descartarlas; las organizaciones archivadas y relaciones cerradas requieren reactivación o reapertura para modificar archivos.
+5. El consultor autorizado descarga y revisa la evidencia: Aceptar, Rechazar o Solicitar cambios. Rechazar y solicitar cambios exigen observaciones. Autor, revisor y fechas se asignan en PostgreSQL y no pueden falsificarse desde el formulario.
+6. Tras un rechazo o solicitud de cambios, el cliente puede Subir nueva entrega. Se conservan el original y su revisión, con enlaces a la entrega anterior y siguiente. Una entrega revisada no se vuelve a editar; cada corrección comienza pendiente de revisión.
+7. Consultor y cliente agregan comentarios en hallazgos, tareas y evidencias autorizados. Se muestran los últimos 100 comentarios en orden cronológico, con autor y fecha; no hay edición ni borrado de comentarios.
+8. Aceptar evidencia no aprueba automáticamente una tarea ni cierra un hallazgo. La aprobación y el cierre siguen siendo decisiones del consultor. Si hay evidencias adjuntas, las últimas entregas confirmadas deben estar aceptadas antes de aprobar la tarea o cerrar el hallazgo. Riesgo aceptado conserva su justificación y sus reglas anteriores.
+
+El bucket `evidence` es privado y organiza cada archivo como `organization_id/evidence_id/file`. El nombre original se conserva como metadata de la evidencia. RLS protege registros, comentarios y objetos, incluidas llamadas directas a Storage; no hay política de sobrescritura. Las descargas de la app verifican sesión y permisos en cada solicitud, fuerzan descarga como adjunto y no usan caché pública ni enlaces públicos. Retirar una membresía elimina acceso a archivos y registros, conservando el historial.
+
+La migración de fase 5 crea `evidence`, `comments`, el enum de revisión, FK compuestas, índices, permisos por operación, funciones limitadas, bucket y políticas de Storage. Extiende `audit_logs` con carga confirmada, revisión y comentarios. Los clientes pueden consultar los eventos de sus evidencias autorizadas; la auditoría completa sigue prevista para fase 8.
+
+Prueba específica de navegador: `npm run test:ui:evidence`. La suite completa `npm run test:ui` incluye el mismo recorrido. El adaptador local ejecuta SQL real y maneja archivos temporales en memoria para probar la app; no sustituye una prueba con Supabase Auth y Storage reales. `npm run test:db` incluye las pruebas de fase 5. Consulte `docs/verification.md` para resultados y pendientes de despliegue.
+
+Las migraciones `20261007105950_phase5_evidence_comments.sql` y `20261007110056_phase5_evidence_indexes.sql` ya están aplicadas en el proyecto dedicado `pbihajfbbcbbdvoqpggy`; no vuelva a aplicarlas manualmente. Se comprobó el bucket privado y el flujo SQL remoto con ROLLBACK, sin conservar usuarios, organizaciones ni objetos temporales. La comprobación de navegador utiliza el adaptador aislado. La entrega de código se publica en la rama `main` de GitHub. Queda pendiente redesplegar en Dokploy y probar carga/descarga con sesiones emitidas por Supabase Auth y archivos reales en Storage.

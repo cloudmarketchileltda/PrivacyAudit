@@ -20,6 +20,7 @@ export function Navigation({ admin }: { admin: boolean }) {
     ['/processing', 'Tratamientos', FolderOpen],
     ['/findings', 'Hallazgos', ListChecks],
     ['/tasks', 'Tareas', ClipboardList],
+    ['/evidence', 'Evidencias', FolderOpen],
     ['/action-plan', 'Plan de acción', ListChecks],
     ['/controls', 'Catálogo de controles', ListChecks],
     ...(admin ? [['/users', 'Usuarios', Users] as const] : []),

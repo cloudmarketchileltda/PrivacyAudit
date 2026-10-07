@@ -9,8 +9,9 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
-    "test:db": "tsx --test tests/database.test.ts tests/workflow.test.ts",
+    "test:db": "tsx --test tests/database.test.ts tests/workflow.test.ts tests/evidence.test.ts",
     "test:ui": "tsx scripts/check-ui.ts",
+    "test:ui:evidence": "tsx scripts/check-evidence-ui.ts",
     "types:local": "tsx scripts/generate-types.ts",
     "format": "prettier --write src tests scripts docs README.md AGENTS.md package.json tsconfig.json next.config.ts eslint.config.mjs postcss.config.mjs components.json compose.yaml"
   },

@@ -123,6 +123,42 @@ export interface Database {
         };
         Relationships: [];
       };
+      comments: {
+        Row: {
+          id: string;
+          organization_id: string;
+          finding_id: string | null;
+          task_id: string | null;
+          evidence_id: string | null;
+          body: string;
+          created_by: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          finding_id?: string | null;
+          task_id?: string | null;
+          evidence_id?: string | null;
+          body: string;
+          created_by?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          organization_id?: string;
+          finding_id?: string | null;
+          task_id?: string | null;
+          evidence_id?: string | null;
+          body?: string;
+          created_by?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       controls: {
         Row: {
           id: string;
@@ -172,6 +208,72 @@ export interface Database {
           requires_evidence?: boolean;
           active?: boolean;
           sort_order?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      evidence: {
+        Row: {
+          id: string;
+          organization_id: string;
+          control_id: string | null;
+          finding_id: string | null;
+          task_id: string | null;
+          previous_evidence_id: string | null;
+          uploaded_by: string;
+          file_path: string;
+          original_filename: string;
+          mime_type: string;
+          file_size: number;
+          description: string;
+          review_status: Database['public']['Enums']['evidence_review_status'];
+          reviewer_comment: string;
+          reviewed_by: string | null;
+          reviewed_at: string | null;
+          uploaded_at: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          control_id?: string | null;
+          finding_id?: string | null;
+          task_id?: string | null;
+          previous_evidence_id?: string | null;
+          uploaded_by?: string;
+          file_path: string;
+          original_filename: string;
+          mime_type: string;
+          file_size: number;
+          description: string;
+          review_status?: Database['public']['Enums']['evidence_review_status'];
+          reviewer_comment?: string;
+          reviewed_by?: string | null;
+          reviewed_at?: string | null;
+          uploaded_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          organization_id?: string;
+          control_id?: string | null;
+          finding_id?: string | null;
+          task_id?: string | null;
+          previous_evidence_id?: string | null;
+          uploaded_by?: string;
+          file_path?: string;
+          original_filename?: string;
+          mime_type?: string;
+          file_size?: number;
+          description?: string;
+          review_status?: Database['public']['Enums']['evidence_review_status'];
+          reviewer_comment?: string;
+          reviewed_by?: string | null;
+          reviewed_at?: string | null;
+          uploaded_at?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -562,6 +664,7 @@ export interface Database {
         Returns: string;
       };
       create_organization: { Args: { payload: Json }; Returns: string };
+      finalize_evidence: { Args: { item: string }; Returns: undefined };
       finding_progress: { Args: { finding: string }; Returns: Json };
       invite_client: { Args: { org: string; target_email: string }; Returns: string };
       manage_member: {
@@ -591,6 +694,7 @@ export interface Database {
       app_role: 'SUPER_ADMIN' | 'CONSULTANT' | 'CLIENT';
       assessment_status: 'DRAFT' | 'IN_PROGRESS' | 'REVIEW' | 'COMPLETED';
       control_status: 'PENDING' | 'CONFORM' | 'PARTIAL' | 'NON_CONFORM' | 'NOT_APPLICABLE';
+      evidence_review_status: 'PENDING_REVIEW' | 'ACCEPTED' | 'REJECTED' | 'CHANGES_REQUESTED';
       finding_status: 'OPEN' | 'IN_PROGRESS' | 'UNDER_REVIEW' | 'CLOSED' | 'ACCEPTED_RISK';
       organization_status: 'ACTIVE' | 'ARCHIVED';
       processing_status: 'DRAFT' | 'ACTIVE' | 'ARCHIVED';

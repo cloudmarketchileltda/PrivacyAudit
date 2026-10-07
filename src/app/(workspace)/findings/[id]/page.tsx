@@ -1,3 +1,5 @@
+import { Attachments } from '@/features/evidence/attachments';
+import { Comments } from '@/features/evidence/comments';
 import { calendarDate } from '@/features/workflow/schemas';
 import Link from 'next/link';
 import { ActivityDescription } from '@/features/workflow/activity';
@@ -175,6 +177,20 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           </ul>
         </section>
       )}
+      <Attachments
+        org={organization.id}
+        kind="finding"
+        item={id}
+        writable={
+          organization.status === 'ACTIVE' && !['CLOSED', 'ACCEPTED_RISK'].includes(f.status)
+        }
+      />
+      <Comments
+        org={organization.id}
+        kind="finding"
+        item={id}
+        writable={organization.status === 'ACTIVE'}
+      />
     </>
   );
 }

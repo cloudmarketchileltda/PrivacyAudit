@@ -1,3 +1,4 @@
+import { Attachments } from '@/features/evidence/attachments';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { z } from '@/lib/validation';
@@ -25,9 +26,10 @@ export default async function Page({
     .single();
   if (error || !data) notFound();
   const response = responseFromRow(data);
-  const [{ data: manager }, { data: assessment }] = await Promise.all([
+  const [{ data: manager }, { data: assessment }, { data: organization }] = await Promise.all([
     db.rpc('can_manage_organization', { org: response.organization_id }),
     db.from('assessments').select('name,status').eq('id', id).single(),
+    db.from('organizations').select('status').eq('id', response.organization_id).single(),
   ]);
   return (
     <>
@@ -129,6 +131,12 @@ export default async function Page({
           )}
         </section>
       </div>
+      <Attachments
+        org={response.organization_id}
+        kind="control"
+        item={response.id}
+        writable={organization?.status === 'ACTIVE'}
+      />
     </>
   );
 }

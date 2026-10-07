@@ -1,3 +1,5 @@
+import { Attachments } from '@/features/evidence/attachments';
+import { Comments } from '@/features/evidence/comments';
 import { calendarDate } from '@/features/workflow/schemas';
 import Link from 'next/link';
 import { ActivityDescription } from '@/features/workflow/activity';
@@ -103,7 +105,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <h2 className="section-title">Actualizar mi tarea</h2>
           <p className="muted mb-4">
             Al terminar su trabajo, envíe la tarea a revisión. La aprobación corresponde al
-            consultor.
+            consultor y requiere aceptar las últimas evidencias adjuntas.
           </p>
           <ActionForm action={submitTask} label="Actualizar mi tarea">
             <input type="hidden" name="task" value={id} />
@@ -117,6 +119,22 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           </ActionForm>
         </section>
       )}
+      <Attachments
+        org={organization.id}
+        kind="task"
+        item={id}
+        writable={
+          organization.status === 'ACTIVE' &&
+          !['CLOSED', 'ACCEPTED_RISK'].includes(finding.status) &&
+          t.status !== 'DONE'
+        }
+      />
+      <Comments
+        org={organization.id}
+        kind="task"
+        item={id}
+        writable={organization.status === 'ACTIVE'}
+      />
     </>
   );
 }

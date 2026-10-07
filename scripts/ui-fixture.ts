@@ -15,6 +15,8 @@ const tables = new Set([
   'findings',
   'tasks',
   'audit_logs',
+  'evidence',
+  'comments',
 ]);
 const functions = new Set([
   'register_consultant',
@@ -29,6 +31,7 @@ const functions = new Set([
   'update_client_comment',
   'submit_task',
   'finding_progress',
+  'finalize_evidence',
 ]);
 function identifier(value: string) {
   if (!/^[a-z_]+$/.test(value)) throw new Error('Invalid identifier');
@@ -152,6 +155,12 @@ export async function startFixture(port = 54331) {
     [orgB],
   );
   await db.exec('reset role');
+  const bucket = (
+    await db.query<{ allowed_mime_types: string[] }>(
+      `select allowed_mime_types from storage.buckets where id='evidence'`,
+    )
+  ).rows[0];
+  const files = new Map<string, { bytes: Buffer; mime: string }>();
   const server = createServer(async (request, response) => {
     try {
       if (request.method === 'OPTIONS') {
@@ -194,6 +203,67 @@ export async function startFixture(port = 54331) {
       if (url.pathname === '/auth/v1/logout') {
         response.writeHead(204);
         response.end();
+        return;
+      }
+      if (url.pathname.startsWith('/storage/v1/object/')) {
+        const id = uid(request);
+        const route = decodeURIComponent(url.pathname.slice('/storage/v1/object/'.length));
+        const downloading = route.startsWith('authenticated/');
+        const key = downloading ? route.slice('authenticated/'.length) : route;
+        const path = key.slice('evidence/'.length);
+        if (!key.startsWith('evidence')) throw new Error('Unknown bucket');
+        const chunks: Buffer[] = [];
+        for await (const chunk of request) chunks.push(Buffer.from(chunk));
+        const bytes = Buffer.concat(chunks);
+        const result = await db.transaction(async (tx) => {
+          await tx.query(`select set_config('request.jwt.claim.sub',$1,true)`, [id]);
+          await tx.exec(id ? 'set local role authenticated' : 'set local role anon');
+          if (request.method === 'GET') {
+            const rows = await tx.query(
+              `select name from storage.objects where bucket_id='evidence' and name=$1`,
+              [path],
+            );
+            if (!rows.rows.length || !files.has(path)) throw new Error('File unavailable');
+            return { kind: 'download', file: files.get(path)! };
+          }
+          if (request.method === 'DELETE') {
+            const payload = JSON.parse(bytes.toString());
+            for (const name of payload.prefixes) {
+              const rows = await tx.query(
+                `delete from storage.objects where bucket_id='evidence' and name=$1 returning name`,
+                [name],
+              );
+              if (rows.rows.length) files.delete(name);
+            }
+            return { kind: 'json', value: [] };
+          }
+          if (request.method === 'POST') {
+            const req = new Request('http://fixture/upload', {
+              method: 'POST',
+              headers: { 'Content-Type': String(request.headers['content-type']) },
+              body: bytes,
+            });
+            const form = await req.formData();
+            const file = [...form.values()].find((v) => v instanceof File) as File | undefined;
+            if (!file || file.size < 1 || file.size > 10485760) throw new Error('Invalid file');
+
+            if (!bucket.allowed_mime_types.includes(file.type)) throw new Error('Invalid MIME');
+            await tx.query(
+              `insert into storage.objects(bucket_id,name,metadata) values('evidence',$1,$2::jsonb)`,
+              [path, JSON.stringify({ size: file.size, mimetype: file.type })],
+            );
+            files.set(path, { bytes: Buffer.from(await file.arrayBuffer()), mime: file.type });
+            return { kind: 'json', value: { Key: `evidence/${path}`, Id: 'fixture' } };
+          }
+          throw new Error('Unsupported Storage method');
+        });
+        if (result.kind === 'download' && result.file) {
+          response.writeHead(200, {
+            'Content-Type': result.file.mime,
+            'Access-Control-Allow-Origin': '*',
+          });
+          response.end(result.file.bytes);
+        } else json(response, 200, result.value);
         return;
       }
       if (!url.pathname.startsWith('/rest/v1/')) {
@@ -241,7 +311,10 @@ export async function startFixture(port = 54331) {
           }
           const [op, ...rest] = value.split('.');
           const match = rest.join('.');
-          if (op === 'eq') filters.push(`${identifier(key)}=${param(match)}`);
+          if (op === 'is' && match === 'null') filters.push(`${identifier(key)} is null`);
+          else if (op === 'not' && match === 'is.null')
+            filters.push(`${identifier(key)} is not null`);
+          else if (op === 'eq') filters.push(`${identifier(key)}=${param(match)}`);
           else if (op === 'neq') filters.push(`${identifier(key)}<>${param(match)}`);
           else if (op === 'lt') filters.push(`${identifier(key)}<${param(match)}`);
           else if (op === 'not' && rest[0] === 'in') {

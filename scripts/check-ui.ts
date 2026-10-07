@@ -1,3 +1,4 @@
+import { checkEvidenceFlow } from './evidence-ui-flow';
 import { chromium } from '@playwright/test';
 import { spawn } from 'node:child_process';
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -83,6 +84,10 @@ try {
     '/findings',
     '/tasks',
     '/action-plan',
+    '/evidence',
+    `/evidence?organization=${fixture.orgA}`,
+    `/evidence/new?organization=${fixture.orgA}&task=${fixture.taskId}`,
+    `/evidence/new?organization=${fixture.orgA}&control=${fixture.responseId}`,
     `/findings/${fixture.findingId}`,
     `/findings/${fixture.findingId}/edit`,
     `/tasks/${fixture.taskId}`,
@@ -348,6 +353,8 @@ try {
   await page.waitForURL(`${base}/findings/${uiFinding}`);
   await page.getByText('1/1 tareas aprobadas', { exact: true }).waitFor();
   assert.equal(await page.getByRole('link', { name: 'Nueva tarea', exact: true }).count(), 0);
+  await checkEvidenceFlow(page, base, fixture, results);
+
   for (const width of [360, 390, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: 1000 });
     for (const path of ['/users', '/controls/new']) {
@@ -382,6 +389,8 @@ try {
           'action plan and task search, overdue and area filters',
           'client assigned task only and editing denial',
           'task submission, consultant return with observations, resubmission, approval and finding closure',
+          'private evidence upload, download, comments, request changes, new delivery and acceptance',
+          'evidence tenant URL and file download denial, status filtering and responsive detail',
           'consultant login',
           'organization create with profile',
           'assessment create with 52 controls',

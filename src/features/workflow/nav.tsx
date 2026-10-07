@@ -11,6 +11,7 @@ export function WorkflowNav({ org }: { org: string }) {
         ['Tratamientos', `/organizations/${org}/processing`],
         ['Hallazgos', `/findings?organization=${org}`],
         ['Plan de acción', `/action-plan?organization=${org}`],
+        ['Evidencias', `/evidence?organization=${org}`],
         ['Tareas', `/tasks?organization=${org}`],
       ].map(([label, href]) => (
         <Link className="hover:underline" key={label} href={href}>

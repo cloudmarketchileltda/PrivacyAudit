@@ -51,7 +51,7 @@ export async function saveWorkflow(_: ActionState, form: FormData): Promise<Acti
     if (error || !data)
       return {
         error:
-          'No se pudo guardar el hallazgo. Verifique responsables, relaciones y aprobación de todas las tareas antes de cerrar.',
+          'No se pudo guardar el hallazgo. Verifique responsables, relaciones y aprobación de todas las tareas y aceptación de las últimas evidencias antes de cerrar.',
       };
     saved = data.id;
   } else {
@@ -70,7 +70,7 @@ export async function saveWorkflow(_: ActionState, form: FormData): Promise<Acti
     if (error || !data)
       return {
         error:
-          'No se pudo guardar la tarea. El hallazgo debe estar abierto; aprobar exige revisión previa y devolver exige observaciones.',
+          'No se pudo guardar la tarea. El hallazgo debe estar abierto; aprobar exige revisión previa y evidencias aceptadas; devolver exige observaciones.',
       };
     saved = data.id;
   }
