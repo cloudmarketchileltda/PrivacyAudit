@@ -38,7 +38,7 @@ No se requiere service role key en la aplicación.
 
 El 5 de octubre de 2026 se conectó el proyecto dedicado `pbihajfbbcbbdvoqpggy` (`https://pbihajfbbcbbdvoqpggy.supabase.co`). Las migraciones de fases 1 y 2, el ajuste de rendimiento y los 52 controles ya están aplicados. `.env.local` está configurado y excluido de Git. No vuelva a sobrescribirlo con `.env.example`.
 
-También está aplicada la migración `20261005201508_phase3_processing_activities.sql` en ese mismo proyecto. El código de fase 3 se publicó en GitHub, rama `main`, el 6 de octubre de 2026 (commit `e1f4221`). La revisión del 6 de octubre confirmó que el dominio público todavía devuelve HTTP 404 en `/processing`; el redespliegue y la prueba con sesiones reales siguen pendientes. No vuelva a aplicar esa migración manualmente.
+También está aplicada la migración `20261005201508_phase3_processing_activities.sql` en ese mismo proyecto. El código de fase 3 se publicó en GitHub, rama `main`, el 6 de octubre de 2026 (commit `e1f4221`). Tras el redespliegue informado por el usuario el 6 de octubre, `/login` y `/api/health` respondieron HTTP 200 y `/processing` redirigió a `/login` con HTTP 307. La prueba del módulo con sesiones reales de consultor y cliente sigue pendiente. No vuelva a aplicar esa migración manualmente.
 
 Email y contraseña y confirmación de correo están habilitados en Supabase. Site URL es `https://privacyaudit.cloudmarket.cl`, con retorno `https://privacyaudit.cloudmarket.cl/auth/callback**`. Se conservan los retornos `http://localhost:3000/auth/callback**` y `http://127.0.0.1:3000/auth/callback**`, y se configuró el mínimo remoto de diez caracteres. Falta verificar el correo y las sesiones con una cuenta real.
 

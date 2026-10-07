@@ -85,3 +85,7 @@ Se revisaron CRUD, archivo/reactivación, validación en servidor, FK, identidad
 - Advisor de seguridad: sin hallazgos de RLS; conserva la advertencia documentada de protección de contraseñas filtradas desactivada.
 
 Conclusión: implementación de fase 3 completa y validada en código y PostgreSQL; cierre operativo pendiente de redespliegue y prueba con sesiones reales. GitHub y despliegue son verificaciones distintas. No se inició fase 4 durante esta revisión. Su alcance según el maestro es hallazgos, tareas y plan de acción; IA y notificaciones externas mantienen el aplazamiento acordado.
+
+## Comprobación posterior al redespliegue del 6 de octubre de 2026
+
+El usuario informó que ya desplegó en Dokploy. Se comprobó el dominio público: `/login` y `/api/health` devolvieron HTTP 200; `/processing` devolvió HTTP 307 con `Location: /login`, en lugar del HTTP 404 de la revisión anterior. La ruta de tratamientos está disponible y requiere autenticación. Esta comprobación pública no verifica el CRUD ni el aislamiento con JWT reales; sigue pendiente el recorrido con sesiones reales de consultor y cliente. El pendiente de redespliegue de la revisión anterior queda resuelto. No se inició fase 4 en esta comprobación.
