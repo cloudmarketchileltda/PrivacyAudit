@@ -1,6 +1,6 @@
 # Convenciones
 
-Revisar `docs/references/index.md`, `docs/architecture.md` y el documento maestro al continuar. Alcance autorizado actual: fases 1, 2 y 3. El usuario autorizó iniciar la fase 3 el 5 de octubre de 2026. No iniciar fase 4 sin petición del usuario.
+Revisar `docs/references/index.md`, `docs/architecture.md` y el documento maestro al continuar. Alcance autorizado actual: fases 1 a 4. El usuario autorizó iniciar la fase 3 el 5 de octubre de 2026 y continuar con fase 4 el 6 de octubre de 2026. No iniciar fase 5 sin petición del usuario.
 
 Acuerdo de continuación del 5 de octubre de 2026: IA aplazada hasta completar y validar el MVP; no implementar integraciones ni funciones de IA ahora. Notificaciones operativas externas fuera por ahora (WhatsApp, email, SMS y otros canales); conservar correos de autenticación y prever notificaciones internas en fase 6. Hoja de ruta en `docs/architecture.md`.
 

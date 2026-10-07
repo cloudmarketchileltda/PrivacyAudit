@@ -12,6 +12,9 @@ const tables = new Set([
   'assessments',
   'assessment_controls',
   'processing_activities',
+  'findings',
+  'tasks',
+  'audit_logs',
 ]);
 const functions = new Set([
   'register_consultant',
@@ -24,6 +27,8 @@ const functions = new Set([
   'can_manage_organization',
   'create_assessment',
   'update_client_comment',
+  'submit_task',
+  'finding_progress',
 ]);
 function identifier(value: string) {
   if (!/^[a-z_]+$/.test(value)) throw new Error('Invalid identifier');
@@ -55,7 +60,11 @@ function json(response: ServerResponse, status: number, value: unknown) {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': '*',
   });
-  response.end(JSON.stringify(value));
+  response.end(
+    JSON.stringify(value, (key, v) =>
+      key === 'due_date' && typeof v === 'string' ? v.slice(0, 10) : v,
+    ),
+  );
 }
 function user(id: string) {
   const name = Object.entries(ids).find(([, value]) => value === id)?.[0] || 'a';
@@ -117,6 +126,25 @@ export async function startFixture(port = 54331) {
   ).rows[0].token;
   await identity(db, ids.client);
   await db.query(`select accept_invitation($1)`, [invite]);
+  await identity(db, ids.a);
+  const findingId = (
+    await db.query<{ id: string }>(
+      `insert into findings(organization_id,assessment_id,control_id,title,description,severity,assigned_to,area,due_date) values($1,$2,$3,'Retención pendiente','Faltan plazos documentados','HIGH',$4,'Comercial','2020-01-01') returning id`,
+      [orgA, assessment, responses[0].id, ids.client],
+    )
+  ).rows[0].id;
+  const taskId = (
+    await db.query<{ id: string }>(
+      `insert into tasks(organization_id,finding_id,title,assigned_to,due_date) values($1,$2,'Preparar política',$3,'2020-01-01') returning id`,
+      [orgA, findingId, ids.client],
+    )
+  ).rows[0].id;
+  const hiddenTaskId = (
+    await db.query<{ id: string }>(
+      `insert into tasks(organization_id,finding_id,title,assigned_to) values($1,$2,'Revisión privada del consultor',$3) returning id`,
+      [orgA, findingId, ids.a],
+    )
+  ).rows[0].id;
   await identity(db, ids.b);
   const orgB = await org(db, 'Segunda Empresa SpA', '76234567-6');
   await db.query(
@@ -214,7 +242,16 @@ export async function startFixture(port = 54331) {
           const [op, ...rest] = value.split('.');
           const match = rest.join('.');
           if (op === 'eq') filters.push(`${identifier(key)}=${param(match)}`);
-          else if (op === 'ilike') filters.push(`${identifier(key)} ilike ${param(match)}`);
+          else if (op === 'neq') filters.push(`${identifier(key)}<>${param(match)}`);
+          else if (op === 'lt') filters.push(`${identifier(key)}<${param(match)}`);
+          else if (op === 'not' && rest[0] === 'in') {
+            const entries = rest
+              .slice(1)
+              .join('.')
+              .replace(/^\(|\)$/g, '')
+              .split(',');
+            filters.push(`${identifier(key)} not in (${entries.map((v) => param(v)).join(',')})`);
+          } else if (op === 'ilike') filters.push(`${identifier(key)} ilike ${param(match)}`);
           else if (op === 'in') {
             const entries = match.replace(/^\(|\)$/g, '').split(',');
             filters.push(`${identifier(key)} in (${entries.map((v) => param(v)).join(',')})`);
@@ -303,6 +340,9 @@ export async function startFixture(port = 54331) {
     orgB,
     assessment,
     responseId: responses[0].id,
+    findingId,
+    taskId,
+    hiddenTaskId,
     activityId,
     close: async () => {
       await new Promise<void>((resolve) => server.close(() => resolve()));

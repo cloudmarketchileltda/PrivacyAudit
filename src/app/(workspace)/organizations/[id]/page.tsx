@@ -71,6 +71,15 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         <Link href={`/organizations/${id}/processing`} className="hover:underline">
           Tratamientos
         </Link>
+        <Link href={`/findings?organization=${id}`} className="hover:underline">
+          Hallazgos
+        </Link>
+        <Link href={`/action-plan?organization=${id}`} className="hover:underline">
+          Plan de acción
+        </Link>
+        <Link href={`/tasks?organization=${id}`} className="hover:underline">
+          Tareas
+        </Link>
       </nav>
       <section className="panel">
         <h2 className="section-title">Información de la empresa</h2>

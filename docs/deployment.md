@@ -1,6 +1,6 @@
 # Despliegue en Docker y Dokploy
 
-El usuario realizará el despliegue y la configuración de Cloudflare. El código preparado cubre fases 1, 2 y 3.
+El usuario realizará el despliegue y la configuración de Cloudflare. El código preparado cubre fases 1 a 4.
 
 ## Configuración
 
@@ -28,7 +28,7 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<misma clave publishable>
 APP_URL=https://privacyaudit.cloudmarket.cl
 ```
 
-Supabase ya tiene las tres migraciones versionadas y el seed de 52 controles. Site URL y retorno público de Auth están guardados para este dominio; se conservan retornos locales. No vuelva a aplicar migraciones ni resetee la base por cada despliegue.
+Supabase conserva las migraciones de fases 1 y 2 y el seed de 52 controles; las migraciones adicionales se documentan a continuación. Site URL y retorno público de Auth están guardados para este dominio; se conservan retornos locales. No vuelva a aplicar migraciones ni resetee la base por cada despliegue.
 
 El 5 de octubre de 2026 se aplicó también `20261005201508_phase3_processing_activities.sql` mediante el conector Supabase al proyecto PrivacyAudit `pbihajfbbcbbdvoqpggy`. El archivo se generó inicialmente con `supabase migration new` y su versión local se alineó con la asignada por el historial remoto. La CLI local no tenía sesión de gestión. Las cuatro versiones locales coinciden ahora con las remotas. El código de fase 3 se publicó en GitHub, rama `main`, el 6 de octubre de 2026 (commit `e1f4221`). El usuario informó el redespliegue el 6 de octubre; la comprobación posterior obtuvo HTTP 200 en login y healthcheck y HTTP 307 hacia `/login` en `/processing`. Sigue pendiente probar el módulo con sesiones reales de consultor y cliente. La presencia de la nueva tabla no publica las pantallas automáticamente.
 
@@ -54,3 +54,9 @@ Docker no está instalado localmente. El primer build remoto compiló Next.js y 
 Para revertir use una imagen anterior. No revierta migraciones ni elimine datos automáticamente. PostgreSQL y Auth viven en Supabase; el contenedor no necesita persistencia de negocio.
 
 Fuentes: https://docs.dokploy.com/docs/core/providers y https://docs.dokploy.com/docs/core/applications/build-type.
+
+## Preparación de fase 4
+
+El 6 de octubre de 2026 se autorizó fase 4. La migración `20261007020423_phase4_findings_tasks.sql` ya está aplicada en el proyecto PrivacyAudit `pbihajfbbcbbdvoqpggy`. Se generó inicialmente con `supabase migration new phase4_findings_tasks`; tras aplicarla por el conector se alineó el nombre local con la versión remota asignada. Las cinco migraciones locales corresponden al historial remoto.
+
+La base de datos está preparada para Hallazgos, Tareas y Plan de acción. Después de publicar el código, redespliegue `main` en Dokploy; no repita ni resetee las migraciones. La presencia de tablas nuevas no despliega las pantallas. Pruebe crear hallazgo desde un control, asignar tarea a un cliente, envío a revisión, devolución con observaciones, reenvío, aprobación y cierre. El cliente no debe editar hallazgos ni aprobar tareas. Evidencias y Storage corresponden a fase 5 y todavía no están disponibles.

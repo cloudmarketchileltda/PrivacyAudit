@@ -7,6 +7,7 @@ import { controlLabels } from '@/features/assessments/model';
 import { ActionForm } from '@/components/forms';
 import { saveClientComment } from '@/features/assessments/actions';
 import { ResponseForm } from '@/features/assessments/response-form';
+import { Button } from '@/components/ui/button';
 import { formatDate } from '@/lib/utils';
 export default async function Page({
   params,
@@ -39,6 +40,15 @@ export default async function Page({
         </p>
         <h1 className="page-title">{response.snapshot.title}</h1>
       </div>
+      {manager && (
+        <Button asChild variant="outline">
+          <Link
+            href={`/organizations/${response.organization_id}/findings/new?control=${response.id}`}
+          >
+            Crear hallazgo desde este control
+          </Link>
+        </Button>
+      )}
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         <section className="panel space-y-6">
           {[

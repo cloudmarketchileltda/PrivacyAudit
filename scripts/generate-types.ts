@@ -23,8 +23,9 @@ try {
     udt_name: string;
     is_nullable: string;
     column_default: string | null;
+    is_identity: string;
   }>(
-    `select table_name,column_name,udt_name,is_nullable,column_default from information_schema.columns where table_schema='public' order by table_name,ordinal_position`,
+    `select table_name,column_name,udt_name,is_nullable,column_default,is_identity from information_schema.columns where table_schema='public' order by table_name,ordinal_position`,
   );
   const tables = [...new Set(columns.map((c) => c.table_name))];
   let output = `// Generated from actual local migrations in PostgreSQL PGlite. Regenerate: npm run types:local.\nexport type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];\nexport interface Database { public: { Tables: {\n`;
@@ -34,7 +35,7 @@ try {
       cols
         .map(
           (c) =>
-            `${c.column_name}${mode === 'Update' || (mode === 'Insert' && (c.column_default !== null || c.is_nullable === 'YES')) ? '?' : ''}: ${type(c.udt_name)}${c.is_nullable === 'YES' ? ' | null' : ''};`,
+            `${c.column_name}${mode === 'Update' || (mode === 'Insert' && (c.column_default !== null || c.is_nullable === 'YES' || c.is_identity === 'YES')) ? '?' : ''}: ${type(c.udt_name)}${c.is_nullable === 'YES' ? ' | null' : ''};`,
         )
         .join('\n');
     output += `${table}: { Row: {${fields('Row')}}; Insert: {${fields('Insert')}}; Update: {${fields('Update')}}; Relationships: [] };\n`;

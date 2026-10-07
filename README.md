@@ -1,15 +1,16 @@
 # PrivacyAudit
 
-Aplicación SaaS de gestión y diagnóstico de protección de datos, orientada a consultores y organizaciones chilenas. La implementación de esta entrega cubre las fases 1, 2 y 3 del documento maestro `PrivacyAudit.docx`. Los resultados de evaluación requieren interpretación jurídica y profesional.
+Aplicación SaaS de gestión y diagnóstico de protección de datos, orientada a consultores y organizaciones chilenas. La implementación de esta entrega cubre las fases 1 a 4 del documento maestro `PrivacyAudit.docx`. Los resultados de evaluación requieren interpretación jurídica y profesional.
 
 ## Alcance
 
 - Fase 1: proyecto Next.js, email y contraseña, confirmación y recuperación, sesiones SSR, perfiles y roles, CRUD de organizaciones, perfil de tratamiento, membresías, invitaciones con enlaces y caducidad, aislamiento mediante RLS y administración básica de usuarios.
 - Fase 2: catálogo global de 52 controles orientativos, edición por SUPER_ADMIN, evaluaciones históricas, copias de controles activos, respuestas con estados y comentarios separados de consultor y cliente, motivo obligatorio de no aplicabilidad, métricas de avance y dashboard de evaluación. Búsqueda, filtros y paginación en tablas de estas fases.
 - Fase 3: registro de actividades de tratamiento por organización, con responsables, finalidad, categorías de titulares y datos, origen, base de licitud propuesta y explicación, sistemas, destinatarios, proveedores, transferencias, conservación, medidas de seguridad y observaciones. Creación, edición, archivo/reactivación y eliminación confirmada por consultores autorizados; consulta por clientes; búsqueda, filtros, orden y paginación.
-- Las fases 4–8 quedan pendientes. No hay módulos de hallazgos, tareas, evidencia, storage ni PDF. El perfil de tratamiento de fase 1 y el registro de actividades de fase 3 son módulos distintos.
+- Fase 4: hallazgos desde controles históricos, tareas correctivas asignadas, envío a revisión por cliente, devolución con observaciones y aprobación por consultor, cierre justificado y plan de acción con filtros y progreso. Incluye historial protegido de cambios.
+- Las fases 5–8 quedan pendientes. No hay evidencias, Storage ni PDF. El perfil de tratamiento de fase 1 y el registro de actividades de fase 3 son módulos distintos.
 
-Para la continuación acordada el 5 de octubre de 2026, la IA queda aplazada hasta completar y validar el MVP. Las notificaciones operativas externas (WhatsApp, email, SMS y otros canales) quedan fuera por ahora; se mantienen previstas las notificaciones internas de fase 6 y se conservan los correos de autenticación existentes. La hoja de ruta y las condiciones de avance están en `docs/architecture.md`; las fases 4–8 todavía no están implementadas.
+Para la continuación acordada el 5 de octubre de 2026, la IA queda aplazada hasta completar y validar el MVP. Las notificaciones operativas externas (WhatsApp, email, SMS y otros canales) quedan fuera por ahora; se mantienen previstas las notificaciones internas de fase 6 y se conservan los correos de autenticación existentes. La hoja de ruta y las condiciones de avance están en `docs/architecture.md`; las fases 5–8 todavía no están implementadas.
 
 ## Requisitos y ejecución
 
@@ -106,7 +107,7 @@ npm run build
 npm start
 ```
 
-Las pruebas usan PostgreSQL embebido PGlite para ejecutar las migraciones SQL reales, roles `anon` y `authenticated` y una función `auth.uid()` de prueba. Comprueban aislamiento entre consultores y clientes, denegaciones de escritura, escalación de roles, invitaciones y creación de evaluaciones. No sustituyen una prueba de Supabase Auth, PostgREST, correo o conectividad del proyecto remoto. Consulte `docs/verification.md` para resultados y pendientes reales.
+Las pruebas usan PostgreSQL embebido PGlite para ejecutar las migraciones SQL reales, roles `anon` y `authenticated` y una función `auth.uid()` de prueba. Comprueban aislamiento entre consultores y clientes, denegaciones de escritura, escalación de roles, invitaciones, creación de evaluaciones, tratamientos y el flujo de hallazgos y tareas de fase 4. No sustituyen una prueba de Supabase Auth, PostgREST, correo o conectividad del proyecto remoto. Consulte `docs/verification.md` para resultados y pendientes reales.
 
 ## Estructura
 
@@ -128,3 +129,14 @@ docs/                      Arquitectura, referencias y despliegue
 El contenedor escucha en el puerto **80**. En Dokploy seleccione Dockerfile y configure el dominio hacia el puerto interno 80. Desarrollo local con `npm run dev` conserva el puerto 3000.
 
 Arquitectura: `docs/architecture.md`. Despliegue Docker y Dokploy: `docs/deployment.md`. El documento maestro permanece sin modificaciones.
+
+## Uso de fase 4
+
+1. En el detalle de un control, el consultor selecciona Crear hallazgo desde este control. También puede crear un hallazgo desde el resumen de una organización y seleccionar evaluación; el control es opcional.
+2. Registra descripción, recomendación, severidad, área, responsable y fecha objetivo. Solo se admiten responsables miembros de la misma organización.
+3. En el detalle del hallazgo crea una o más tareas y las asigna a miembros del cliente. El cliente solo ve sus tareas y puede iniciarlas o enviarlas a revisión.
+4. El consultor edita una tarea en revisión para aprobarla o devolverla con observaciones. El progreso cuenta tareas aprobadas; enviar a revisión no equivale a aprobación.
+5. Cierra el hallazgo con justificación cuando todas sus tareas estén aprobadas, o acepta el riesgo con una justificación explícita. Reabrir permite nuevas acciones. Hallazgos y tareas se conservan, sin borrado permanente.
+6. Consulte Hallazgos, Tareas y Plan de acción desde la navegación principal o por organización. El plan permite buscar, ordenar y filtrar abiertos, vencidos, alta prioridad, responsable, estado y área.
+
+La migración de fase 4 añade `findings`, `tasks` y `audit_logs`, FK compuestas, enums, índices, RLS y RPC limitadas de envío y progreso. `findings.control_id` apunta a `assessment_controls` para conservar el control histórico. La trazabilidad actual cubre hallazgos y tareas; no representa la auditoría completa de fase 8. Los formularios usan React Hook Form y Zod; las acciones vuelven a validar y autorizar en servidor. La migración `20261007020423_phase4_findings_tasks.sql` ya está aplicada en el proyecto dedicado; no vuelva a aplicarla manualmente. El código de fase 4 requiere redesplegar `main` en Dokploy. Consulte `docs/verification.md` para resultados y pendientes con sesiones reales.

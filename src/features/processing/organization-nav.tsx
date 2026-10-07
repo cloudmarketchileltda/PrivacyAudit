@@ -18,6 +18,15 @@ export function ProcessingNav({ id }: { id: string }) {
       >
         Tratamientos
       </Link>
+      <Link href={`/findings?organization=${id}`} className="hover:underline">
+        Hallazgos
+      </Link>
+      <Link href={`/action-plan?organization=${id}`} className="hover:underline">
+        Plan de acción
+      </Link>
+      <Link href={`/tasks?organization=${id}`} className="hover:underline">
+        Tareas
+      </Link>
     </nav>
   );
 }

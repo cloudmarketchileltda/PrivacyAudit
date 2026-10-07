@@ -90,6 +90,39 @@ export interface Database {
         };
         Relationships: [];
       };
+      audit_logs: {
+        Row: {
+          id: string;
+          organization_id: string;
+          actor_id: string | null;
+          action: string;
+          entity_type: string;
+          entity_id: string;
+          metadata: Json;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          actor_id?: string | null;
+          action: string;
+          entity_type: string;
+          entity_id: string;
+          metadata?: Json;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          organization_id?: string;
+          actor_id?: string | null;
+          action?: string;
+          entity_type?: string;
+          entity_id?: string;
+          metadata?: Json;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
       controls: {
         Row: {
           id: string;
@@ -141,6 +174,69 @@ export interface Database {
           sort_order?: number;
           created_at?: string;
           updated_at?: string;
+        };
+        Relationships: [];
+      };
+      findings: {
+        Row: {
+          id: string;
+          organization_id: string;
+          assessment_id: string;
+          control_id: string | null;
+          code: number;
+          title: string;
+          description: string;
+          recommendation: string;
+          area: string;
+          severity: Database['public']['Enums']['severity'];
+          status: Database['public']['Enums']['finding_status'];
+          assigned_to: string | null;
+          due_date: string | null;
+          closure_note: string;
+          created_by: string;
+          created_at: string;
+          updated_at: string;
+          closed_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          assessment_id: string;
+          control_id?: string | null;
+          code?: number;
+          title: string;
+          description: string;
+          recommendation?: string;
+          area?: string;
+          severity?: Database['public']['Enums']['severity'];
+          status?: Database['public']['Enums']['finding_status'];
+          assigned_to?: string | null;
+          due_date?: string | null;
+          closure_note?: string;
+          created_by?: string;
+          created_at?: string;
+          updated_at?: string;
+          closed_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          organization_id?: string;
+          assessment_id?: string;
+          control_id?: string | null;
+          code?: number;
+          title?: string;
+          description?: string;
+          recommendation?: string;
+          area?: string;
+          severity?: Database['public']['Enums']['severity'];
+          status?: Database['public']['Enums']['finding_status'];
+          assigned_to?: string | null;
+          due_date?: string | null;
+          closure_note?: string;
+          created_by?: string;
+          created_at?: string;
+          updated_at?: string;
+          closed_at?: string | null;
         };
         Relationships: [];
       };
@@ -405,6 +501,57 @@ export interface Database {
         };
         Relationships: [];
       };
+      tasks: {
+        Row: {
+          id: string;
+          organization_id: string;
+          finding_id: string;
+          title: string;
+          description: string;
+          assigned_to: string | null;
+          status: Database['public']['Enums']['task_status'];
+          priority: Database['public']['Enums']['severity'];
+          due_date: string | null;
+          reviewer_comment: string;
+          created_by: string;
+          created_at: string;
+          updated_at: string;
+          completed_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          finding_id: string;
+          title: string;
+          description?: string;
+          assigned_to?: string | null;
+          status?: Database['public']['Enums']['task_status'];
+          priority?: Database['public']['Enums']['severity'];
+          due_date?: string | null;
+          reviewer_comment?: string;
+          created_by?: string;
+          created_at?: string;
+          updated_at?: string;
+          completed_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          organization_id?: string;
+          finding_id?: string;
+          title?: string;
+          description?: string;
+          assigned_to?: string | null;
+          status?: Database['public']['Enums']['task_status'];
+          priority?: Database['public']['Enums']['severity'];
+          due_date?: string | null;
+          reviewer_comment?: string;
+          created_by?: string;
+          created_at?: string;
+          updated_at?: string;
+          completed_at?: string | null;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: {
@@ -415,6 +562,7 @@ export interface Database {
         Returns: string;
       };
       create_organization: { Args: { payload: Json }; Returns: string };
+      finding_progress: { Args: { finding: string }; Returns: Json };
       invite_client: { Args: { org: string; target_email: string }; Returns: string };
       manage_member: {
         Args: {
@@ -430,6 +578,10 @@ export interface Database {
         Args: { target: string; new_role: Database['public']['Enums']['app_role'] };
         Returns: undefined;
       };
+      submit_task: {
+        Args: { task: string; new_status: Database['public']['Enums']['task_status'] };
+        Returns: undefined;
+      };
       update_client_comment: {
         Args: { response_id: string; comment_text: string };
         Returns: undefined;
@@ -439,10 +591,12 @@ export interface Database {
       app_role: 'SUPER_ADMIN' | 'CONSULTANT' | 'CLIENT';
       assessment_status: 'DRAFT' | 'IN_PROGRESS' | 'REVIEW' | 'COMPLETED';
       control_status: 'PENDING' | 'CONFORM' | 'PARTIAL' | 'NON_CONFORM' | 'NOT_APPLICABLE';
+      finding_status: 'OPEN' | 'IN_PROGRESS' | 'UNDER_REVIEW' | 'CLOSED' | 'ACCEPTED_RISK';
       organization_status: 'ACTIVE' | 'ARCHIVED';
       processing_status: 'DRAFT' | 'ACTIVE' | 'ARCHIVED';
       processing_tristate: 'YES' | 'NO' | 'UNKNOWN';
       severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+      task_status: 'TODO' | 'IN_PROGRESS' | 'WAITING_REVIEW' | 'DONE';
     };
     CompositeTypes: Record<string, never>;
   };

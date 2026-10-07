@@ -80,6 +80,15 @@ try {
     '/controls',
     '/account',
     '/processing',
+    '/findings',
+    '/tasks',
+    '/action-plan',
+    `/findings/${fixture.findingId}`,
+    `/findings/${fixture.findingId}/edit`,
+    `/tasks/${fixture.taskId}`,
+    `/tasks/${fixture.taskId}/edit`,
+    `/tasks/new?finding=${fixture.findingId}`,
+    `/organizations/${fixture.orgA}/findings/new`,
     `/organizations/${fixture.orgA}/processing`,
     `/organizations/${fixture.orgA}/processing/new`,
     `/organizations/${fixture.orgA}/processing/${fixture.activityId}`,
@@ -105,6 +114,9 @@ try {
         [360, 768, 1440].includes(width) &&
         [
           '/dashboard',
+          `/findings/${fixture.findingId}`,
+          `/tasks/${fixture.taskId}`,
+          `/organizations/${fixture.orgA}/findings/new`,
           '/organizations/new',
           `/assessments/${fixture.assessment}`,
           `/organizations/${fixture.orgA}/processing/new`,
@@ -144,6 +156,45 @@ try {
   await page.getByRole('status').filter({ hasText: 'Control actualizado' }).waitFor();
   await page.goto(newAssessment);
   await page.getByText('1 de 52 controles evaluados', { exact: true }).waitFor();
+  // Phase 4: create a finding from a historical control and an assigned corrective task.
+  await page.goto(`${base}/assessments/${fixture.assessment}/controls/${fixture.responseId}`);
+  await page.getByRole('link', { name: 'Crear hallazgo desde este control', exact: true }).click();
+  await page
+    .getByLabel('Título del hallazgo', { exact: true })
+    .fill('Hallazgo creado desde navegador');
+  await page
+    .getByLabel('Descripción', { exact: true })
+    .fill('Faltan criterios aprobados de conservación');
+  await page
+    .getByLabel('Recomendación', { exact: true })
+    .fill('Documentar los plazos y responsables');
+  await page
+    .getByLabel('Responsable', { exact: true })
+    .selectOption('10000000-0000-4000-8000-000000000003');
+  await page.getByLabel('Área', { exact: true }).fill('Comercial');
+  await page.getByLabel('Fecha objetivo', { exact: true }).fill('2020-01-01');
+  await page.getByRole('button', { name: 'Guardar hallazgo', exact: true }).click();
+  await page.waitForURL(/\/findings\/[a-f0-9-]+$/);
+  const uiFinding = page.url().split('/').at(-1)!;
+  await page.getByRole('link', { name: 'Nueva tarea', exact: true }).click();
+  await page.getByLabel('Título de la tarea', { exact: true }).fill('Tarea UI cliente');
+  await page.getByLabel('Descripción', { exact: true }).fill('Preparar borrador de política');
+  await page.getByRole('button', { name: 'Guardar tarea', exact: true }).click();
+  await page.waitForURL(/\/tasks\/[a-f0-9-]+$/);
+  const uiTask = page.url().split('/').at(-1)!;
+  await page.goto(`${base}/findings/${uiFinding}/edit`);
+  await page.getByLabel('Estado', { exact: true }).selectOption('CLOSED');
+  await page
+    .getByLabel('Justificación de cierre o riesgo aceptado', { exact: true })
+    .fill('Revisión final');
+  await page.getByRole('button', { name: 'Guardar hallazgo', exact: true }).click();
+  await page.getByRole('alert').filter({ hasText: 'aprobación de todas las tareas' }).waitFor();
+  await page.goto(
+    `${base}/action-plan?organization=${fixture.orgA}&overdue=yes&open=yes&area=Comercial`,
+  );
+  await page.getByRole('link', { name: /Hallazgo creado desde navegador/ }).waitFor();
+  await page.goto(`${base}/tasks?organization=${fixture.orgA}&status=TODO&overdue=yes&q=Tarea UI`);
+  await page.getByRole('link', { name: 'Tarea UI cliente', exact: true }).waitFor();
   // Processing register: actual form, Server Action, SQL and query filters.
   const processingBase = `${base}/organizations/${fixture.orgA}/processing`;
   await page.goto(`${processingBase}?sort=name`);
@@ -216,6 +267,20 @@ try {
   await page.getByLabel('Contraseña', { exact: true }).fill('FixturePassword123');
   await page.getByRole('button', { name: 'Entrar', exact: true }).click();
   await page.waitForURL('**/dashboard');
+  await page.goto(`${base}/tasks`);
+  assert.equal(
+    await page.getByRole('link', { name: 'Revisión privada del consultor', exact: true }).count(),
+    0,
+  );
+  await page.goto(`${base}/tasks/${fixture.hiddenTaskId}`);
+  await page.getByRole('heading', { name: 'Registro no disponible' }).waitFor();
+  await page.goto(`${base}/tasks/${uiTask}/edit`);
+  await page.getByRole('heading', { name: 'Registro no disponible' }).waitFor();
+  await page.goto(`${base}/findings/${uiFinding}/edit`);
+  await page.getByRole('heading', { name: 'Registro no disponible' }).waitFor();
+  await page.goto(`${base}/tasks/${uiTask}`);
+  await page.getByRole('button', { name: 'Actualizar mi tarea', exact: true }).click();
+  await page.getByRole('status').filter({ hasText: 'Tarea enviada a revisión' }).waitFor();
   await page.goto(`${base}/organizations/${fixture.orgA}/processing/${fixture.activityId}`);
   await page.getByRole('heading', { name: 'Gestión de clientes', exact: true }).waitFor();
   assert.equal(
@@ -245,6 +310,44 @@ try {
   await page.getByLabel('Contraseña', { exact: true }).fill('FixturePassword123');
   await page.getByRole('button', { name: 'Entrar', exact: true }).click();
   await page.waitForURL('**/dashboard');
+  // Consultant return, client resubmission, approval and finding closure.
+  await page.goto(`${base}/tasks/${uiTask}/edit`);
+  await page.getByLabel('Estado', { exact: true }).selectOption('TODO');
+  await page.getByRole('button', { name: 'Guardar tarea', exact: true }).click();
+  await page.getByRole('alert').filter({ hasText: 'devolver exige observaciones' }).waitFor();
+  await page
+    .getByLabel('Observaciones del consultor', { exact: true })
+    .fill('Agregar responsables y plazos');
+  await page.getByRole('button', { name: 'Guardar tarea', exact: true }).click();
+  await page.waitForURL(`${base}/tasks/${uiTask}`);
+  await page.getByRole('button', { name: 'Cerrar sesión' }).click();
+  await page.waitForURL('**/login');
+  await page.getByLabel('Email', { exact: true }).fill('client@example.test');
+  await page.getByLabel('Contraseña', { exact: true }).fill('FixturePassword123');
+  await page.getByRole('button', { name: 'Entrar', exact: true }).click();
+  await page.waitForURL('**/dashboard');
+  await page.goto(`${base}/tasks/${uiTask}`);
+  await page.getByRole('button', { name: 'Actualizar mi tarea', exact: true }).click();
+  await page.getByRole('status').filter({ hasText: 'Tarea enviada a revisión' }).waitFor();
+  await page.getByRole('button', { name: 'Cerrar sesión' }).click();
+  await page.waitForURL('**/login');
+  await page.getByLabel('Email', { exact: true }).fill('admin@example.test');
+  await page.getByLabel('Contraseña', { exact: true }).fill('FixturePassword123');
+  await page.getByRole('button', { name: 'Entrar', exact: true }).click();
+  await page.waitForURL('**/dashboard');
+  await page.goto(`${base}/tasks/${uiTask}/edit`);
+  await page.getByLabel('Estado', { exact: true }).selectOption('DONE');
+  await page.getByRole('button', { name: 'Guardar tarea', exact: true }).click();
+  await page.waitForURL(`${base}/tasks/${uiTask}`);
+  await page.goto(`${base}/findings/${uiFinding}/edit`);
+  await page.getByLabel('Estado', { exact: true }).selectOption('CLOSED');
+  await page
+    .getByLabel('Justificación de cierre o riesgo aceptado', { exact: true })
+    .fill('Acciones revisadas y aprobadas');
+  await page.getByRole('button', { name: 'Guardar hallazgo', exact: true }).click();
+  await page.waitForURL(`${base}/findings/${uiFinding}`);
+  await page.getByText('1/1 tareas aprobadas', { exact: true }).waitFor();
+  assert.equal(await page.getByRole('link', { name: 'Nueva tarea', exact: true }).count(), 0);
   for (const width of [360, 390, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: 1000 });
     for (const path of ['/users', '/controls/new']) {
@@ -275,6 +378,10 @@ try {
         screens: results.length,
         checks: results,
         flows: [
+          'finding from historical control, task assignment and closure blocked with pending tasks',
+          'action plan and task search, overdue and area filters',
+          'client assigned task only and editing denial',
+          'task submission, consultant return with observations, resubmission, approval and finding closure',
           'consultant login',
           'organization create with profile',
           'assessment create with 52 controls',

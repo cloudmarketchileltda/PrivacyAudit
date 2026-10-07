@@ -1,6 +1,6 @@
-# Verificación de las fases 1 a 3
+# Verificación de las fases 1 a 4
 
-Resultados locales y remotos del 5 de octubre de 2026, America/Santiago. El documento maestro permanece sin modificaciones. La implementación local termina ahora en fase 3; las comprobaciones históricas de fases 1 y 2 se conservan a continuación.
+Resultados locales y remotos del 5 de octubre de 2026, America/Santiago. El documento maestro permanece sin modificaciones. Las comprobaciones iniciales cubren fases 1 a 3; la revisión de fase 4 se incorpora al final y las comprobaciones históricas de fases 1 y 2 se conservan a continuación.
 
 ## Comprobaciones realizadas
 
@@ -89,3 +89,21 @@ Conclusión: implementación de fase 3 completa y validada en código y PostgreS
 ## Comprobación posterior al redespliegue del 6 de octubre de 2026
 
 El usuario informó que ya desplegó en Dokploy. Se comprobó el dominio público: `/login` y `/api/health` devolvieron HTTP 200; `/processing` devolvió HTTP 307 con `Location: /login`, en lugar del HTTP 404 de la revisión anterior. La ruta de tratamientos está disponible y requiere autenticación. Esta comprobación pública no verifica el CRUD ni el aislamiento con JWT reales; sigue pendiente el recorrido con sesiones reales de consultor y cliente. El pendiente de redespliegue de la revisión anterior queda resuelto. No se inició fase 4 en esta comprobación.
+
+## Fase 4 autorizada el 6 de octubre de 2026
+
+El usuario autorizó continuar con hallazgos, tareas y plan de acción manteniendo pendientes las pruebas con sesiones reales. Se releyeron las secciones 12–14 del maestro y se conservaron los límites sobre IA, canales externos y fase 5.
+
+- Con Node 24.19.0 pasaron lint, TypeScript, las 12 pruebas de `npm test`, las cuatro pruebas de `npm run test:db` y el build final de producción.
+- `npm run test:ui` pasó con 200 comprobaciones de pantalla/viewport y flujos críticos. Cubre creación desde control histórico, asignación, filtros de búsqueda/estado/área/vencidos, permisos de cliente, bloqueo de cierre con pendientes, devolución con observaciones, reenvío, aprobación y cierre. Incluye el reintento tras validación de servidor sin pérdida de campos. El adaptador normaliza DATE como PostgREST; no simula el formato de timestamps para fechas objetivo.
+- Se inspeccionaron capturas de alta de hallazgo en móvil y detalle en escritorio. Los campos de fase 4 conservan valores ante errores de servidor y solo se habilitan tras inicializar su estado; las fechas objetivo se presentan sin desplazamiento de zona horaria.
+- El servidor de producción local respondió HTTP 200 en login y healthcheck y redirigió `/findings`, `/tasks` y `/action-plan` a `/login` con HTTP 307. No equivale al redespliegue remoto.
+- Migración generada con Supabase CLI y probada en PGlite. Añade hallazgos, tareas, actividad protegida, FK compuestas al control histórico, enums, índices, grants y RLS. La base asigna autores, códigos y timestamps; no se admiten reasignaciones de identidad ni responsables de otra organización.
+- El cliente solo consulta sus tareas y cambia su estado mediante una RPC acotada. Enviar a revisión no aprueba ni cierra; aprobar exige revisión previa y devolver exige observaciones. Cerrar hallazgo exige justificación y todas las tareas aprobadas. Riesgo aceptado requiere justificación; reabrir permite corregir.
+- Se comprobó el aislamiento entre empresas en lectura, escritura y RPC; retirada de membresía, organización archivada, autor inmutable, denegación anónima, referencias de evaluación/control y registro de actividad no editable.
+- `scripts/verify-phase4-remote.sql` se probó primero localmente y después en PostgreSQL remoto del proyecto PrivacyAudit `pbihajfbbcbbdvoqpggy`. Pasó envío, devolución, reenvío, aprobación, progreso y cierre; terminó con ROLLBACK. Se conservaron la cuenta original y cero organizaciones; quedaron cero hallazgos, tareas, logs y usuarios temporales.
+- Las cinco migraciones locales coinciden con el historial remoto. La versión de fase 4 es `20261007020423`, alineada con el conector después de su aplicación. Todas las tablas nuevas tienen RLS.
+- La Data API real rechazó SELECT anónimo en `findings`, `tasks` y `audit_logs` con HTTP 401 / SQLSTATE 42501.
+- Advisor de seguridad: sin nuevos hallazgos de RLS; conserva el aviso de protección de contraseñas filtradas de Auth desactivada. Rendimiento: solo avisos informativos de índices todavía sin uso; sin advertencias de FK sin índice ni initplan RLS.
+
+No se afirma despliegue de fase 4 ni prueba con Supabase Auth/PostgREST usando sesiones reales. El navegador automatizado utiliza el adaptador PGlite aislado existente; no es un entorno remoto ni se incorpora a la aplicación. No se implementaron evidencias, Storage, comentarios independientes, IA, notificaciones ni fase 5. La trazabilidad actual cubre hallazgos y tareas, y no equivale a toda la auditoría prevista en fase 8.
