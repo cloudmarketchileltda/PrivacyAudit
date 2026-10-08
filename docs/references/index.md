@@ -11,6 +11,8 @@ Consultadas el 4 de octubre de 2026 (America/Santiago).
 
 No se recibieron referencias visuales. El diseño se deriva de los requisitos B2B del maestro.
 
+Revisadas para footer y páginas legales el 8 de octubre de 2026: maestro, reglas, configuración, arquitectura y guías locales Next.js `layouts-and-pages.md` y `link.md`. Enlace oficial verificado: [Ley 21.719 — Biblioteca del Congreso Nacional](https://www.bcn.cl/leychile/navegar?idNorma=1209272). El usuario confirmó Facebook, Instagram, LinkedIn y YouTube con enlaces genéricos hasta aportar perfiles reales. Las páginas legales incorporan textos iniciales que se modificarán posteriormente.
+
 Revisadas para fase 3 el 5 de octubre de 2026: documentación local de Next.js sobre páginas y Server Actions; changelog actual de Supabase y guía RLS. La migración declara grants explícitos y políticas por operación, sin depender de la exposición automática de tablas.
 
 Revisadas para fase 4 el 6 de octubre de 2026: se releen las secciones 12–14 del maestro y la documentación local de Next.js de páginas y mutaciones. Se consultan el changelog de Supabase y la guía RLS actuales: no hay cambios aplicables que exijan nuevas dependencias para este flujo; se mantienen grants explícitos, RLS por operación y funciones privilegiadas privadas con autorización. El usuario autoriza fase 4; IA y canales externos continúan aplazados.

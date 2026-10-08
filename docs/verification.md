@@ -1,5 +1,12 @@
 # Verificación de las fases 1 a 6
 
+## Navegación, footer y páginas legales — 8 de octubre de 2026
+
+- Lint y TypeScript correctos. Build de producción y 26 pruebas existentes aprobadas con Node 24.21.0; las pruebas de base de datos usan PGlite local.
+- Comprobación puntual en navegador con backend aislado: 21 combinaciones de páginas públicas y anchos 360, 768 y 1440 px; un solo footer por página, cuatro redes, enlace oficial BCN, páginas legales accesibles sin sesión, navegación desde el footer y logo del workspace que vuelve al dashboard desde Mi cuenta. Sin desbordamiento del documento ni errores de navegador. No equivale a una sesión Auth remota.
+- Capturas `artifacts/ui/dashboard-footer.png` y `artifacts/ui/privacy-policy.png` revisadas visualmente. Redes genéricas confirmadas por el usuario; textos legales iniciales pendientes de datos del operador y modificaciones posteriores.
+- Sin cambios SQL ni publicación remota. Pendiente redesplegar Next.js para ver esta entrega en producción.
+
 Resultados locales y remotos del 5 de octubre de 2026, America/Santiago. El documento maestro permanece sin modificaciones. Las comprobaciones iniciales cubren fases 1 a 3; la revisión de fase 4 se incorpora al final y las comprobaciones históricas de fases 1 y 2 se conservan a continuación.
 
 ## Comprobaciones realizadas

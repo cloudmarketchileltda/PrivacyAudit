@@ -11,6 +11,25 @@ const actionStyles = {
 } as const;
 
 export const generalConfig = {
+  site: {
+    homeHref: '/',
+    legalLinks: [
+      { href: '/politicas-de-privacidad', label: 'Políticas de Privacidad' },
+      { href: '/terminos-y-condiciones', label: 'Términos y condiciones' },
+      { href: '/aviso-legal', label: 'Aviso Legal' },
+    ],
+    privacyLaw: {
+      href: 'https://www.bcn.cl/leychile/navegar?idNorma=1209272',
+      label: 'Nueva ley de privacidad',
+    },
+    // Sustituir por los perfiles oficiales cuando estén definidos.
+    socialLinks: [
+      { id: 'facebook', label: 'Facebook', href: 'https://www.facebook.com/' },
+      { id: 'instagram', label: 'Instagram', href: 'https://www.instagram.com/' },
+      { id: 'linkedin', label: 'LinkedIn', href: 'https://www.linkedin.com/' },
+      { id: 'youtube', label: 'YouTube', href: 'https://www.youtube.com/' },
+    ],
+  },
   buttons: {
     // Azul: acción general / rol. Verde: edición / guardado. Rojo: eliminación.
     variants: {

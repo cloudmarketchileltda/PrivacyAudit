@@ -1,5 +1,9 @@
 # PrivacyAudit
 
+### Footer y páginas legales
+
+El logo del menú vuelve al home (`/`, con el dashboard como destino del sistema configurado). El footer compartido aparece en todas las páginas y contiene Facebook, Instagram, LinkedIn, YouTube, tres páginas públicas con textos iniciales —`/politicas-de-privacidad`, `/terminos-y-condiciones`, `/aviso-legal`— y un enlace al [texto oficial de la Ley 21.719 en BCN](https://www.bcn.cl/leychile/navegar?idNorma=1209272). Los destinos se editan en `src/config/general.ts`, sección `site`; las redes usan URLs genéricas aprobadas por el usuario hasta recibir los perfiles reales. Los textos se mantienen en `src/app/(legal)` y quedan pendientes de completar con los datos del operador. Este cambio de frontend requiere redesplegar Next.js para verse en producción.
+
 Aplicación SaaS de gestión y diagnóstico de protección de datos, orientada a consultores y organizaciones chilenas. La implementación de esta entrega cubre las fases 1 a 6 del documento maestro `PrivacyAudit.docx`. Los resultados de evaluación requieren interpretación jurídica y profesional.
 
 ## Alcance

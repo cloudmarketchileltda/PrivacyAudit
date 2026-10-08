@@ -107,6 +107,8 @@ La eliminación exige confirmación escrita `ELIMINAR CUENTA`; se protegen las c
 
 ## Reglas y configuración general
 
+Navegación y footer, 8 de octubre de 2026: el logo del workspace enlaza al home. El layout raíz incluye `SiteFooter` en todas las páginas, incluidas autenticación y páginas públicas legales. El grupo `(legal)` ofrece `/politicas-de-privacidad`, `/terminos-y-condiciones` y `/aviso-legal` sin exigir sesión. `generalConfig.site` reúne home, enlaces legales, cuatro redes genéricas confirmadas por el usuario y el destino oficial BCN de la Ley 21.719. Los textos son iniciales y dejan explícitos los datos del operador pendientes; no modifican reglas de acceso o conservación.
+
 Desde el 8 de octubre de 2026, `docs/system-and-business-rules.md` consolida las reglas vigentes y `AGENTS.md` obliga a consultarlo antes de trabajar sobre operaciones, SQL o despliegues. Las comprobaciones ejecutables permanecen en servidor y base de datos; no se interpreta el documento como código de autorización.
 
 `src/config/general.ts` centraliza estilos/tamaños de botones, configuración del viewport de las grillas, paginación y límites de búsqueda. `Button`, `ActionForm`, `Pagination`, las consultas paginadas y el layout consumen esos valores. Las variables CSS de cuentas/auditoría se generan en el layout; las clases de estilos se conservan completas para que Tailwind las detecte. No contiene secretos. El tamaño de página sigue siendo 20, como las RPC SQL; modificar ese contrato requiere una migración coordinada. Esta entrega no cambia políticas de negocio ni requiere migración o despliegue de Functions.

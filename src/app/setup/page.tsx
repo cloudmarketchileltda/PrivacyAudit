@@ -3,7 +3,7 @@ import { ShieldCheck, Database, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 export default function Page() {
   return (
-    <main className="min-h-screen grid place-items-center p-5">
+    <main className="flex-1 grid place-items-center p-5">
       <div className="max-w-2xl w-full">
         <div className="flex gap-2 items-center text-xl font-semibold mb-8">
           <ShieldCheck className="text-teal-800" />

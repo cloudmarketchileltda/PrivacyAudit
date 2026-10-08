@@ -1,4 +1,5 @@
 import { gridCssVariables } from '@/config/general';
+import { SiteFooter } from '@/components/site-footer';
 import type { CSSProperties } from 'react';
 import type { Metadata } from 'next';
 import './globals.css';
@@ -10,7 +11,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es">
-      <body style={gridCssVariables as CSSProperties}>{children}</body>
+      <body className="flex min-h-screen flex-col" style={gridCssVariables as CSSProperties}>
+        {children}
+        <SiteFooter />
+      </body>
     </html>
   );
 }

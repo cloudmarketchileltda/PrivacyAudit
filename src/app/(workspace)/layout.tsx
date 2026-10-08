@@ -1,4 +1,6 @@
 import { ShieldCheck, LogOut } from 'lucide-react';
+import Link from 'next/link';
+import { generalConfig } from '@/config/general';
 import { requireUser } from '@/features/auth/queries';
 import { logout } from '@/features/auth/actions';
 import { NotificationBell } from '@/features/notifications/bell';
@@ -11,12 +13,17 @@ export default async function Layout({ children }: { children: React.ReactNode }
     .is('read_at', null);
   if (error) throw error;
   return (
-    <div className="lg:grid lg:grid-cols-[240px_minmax(0,1fr)] min-h-screen">
+    <div className="flex-1 lg:grid lg:grid-cols-[240px_minmax(0,1fr)]">
       <aside className="bg-[#152f3c] text-white p-4 lg:p-5 lg:sticky lg:top-0 lg:h-screen flex flex-col">
-        <div className="flex gap-2 items-center text-xl font-semibold mb-5 lg:mb-10">
-          <ShieldCheck className="text-teal-300" />
+        <Link
+          href={generalConfig.site.homeHref}
+          aria-label="PrivacyAudit — Ir al inicio"
+          title="Ir al inicio"
+          className="flex gap-2 items-center rounded-md text-xl font-semibold mb-5 lg:mb-10"
+        >
+          <ShieldCheck aria-hidden="true" className="text-teal-300" />
           PrivacyAudit
-        </div>
+        </Link>
         <Navigation admin={profile.role === 'SUPER_ADMIN'} />
         <div className="mt-5 lg:mt-auto text-xs text-slate-400 lg:pt-8">
           Gestión de protección de datos
