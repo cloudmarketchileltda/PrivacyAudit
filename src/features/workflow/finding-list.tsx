@@ -1,3 +1,4 @@
+import { pageRange } from '@/config/general';
 import { calendarDate } from '@/features/workflow/schemas';
 import Link from 'next/link';
 import { requireUser } from '@/features/auth/queries';
@@ -40,7 +41,7 @@ export async function FindingList({
     params.sort === 'due_date' ? 'due_date' : params.sort === 'title' ? 'title' : 'updated_at';
   query = query.order(sort, { ascending: sort !== 'updated_at', nullsFirst: false }).order('id');
   const [{ data, count, error }, { data: orgs, error: orgError }, members] = await Promise.all([
-    query.range((page - 1) * 20, page * 20 - 1),
+    query.range(...pageRange(page)),
     db.from('organizations').select('id,legal_name').order('legal_name'),
     assignees(scope?.organization.id),
   ]);

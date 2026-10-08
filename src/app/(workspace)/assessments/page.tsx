@@ -1,3 +1,4 @@
+import { pageRange } from '@/config/general';
 import Link from 'next/link';
 import { requireUser } from '@/features/auth/queries';
 import { Button } from '@/components/ui/button';
@@ -24,7 +25,7 @@ export default async function Page({
   if (params.organization) query = query.eq('organization_id', params.organization);
   const [{ data, count, error }, { data: organizations, error: orgError }, responses] =
     await Promise.all([
-      query.range((page - 1) * 20, page * 20 - 1),
+      query.range(...pageRange(page)),
       db.from('organizations').select('id,legal_name').order('legal_name'),
       allResponses(db),
     ]);

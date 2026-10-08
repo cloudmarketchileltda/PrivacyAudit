@@ -1,3 +1,4 @@
+import { pageRange } from '@/config/general';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { requireUser } from '@/features/auth/queries';
@@ -36,7 +37,7 @@ export async function ProcessingList({
   const transfer = z.enum(optionKeys(tristateLabels)).safeParse(params.transfer);
   if (transfer.success) query = query.eq('international_transfer', transfer.data);
   const [{ data, count, error }, { data: organizations, error: orgError }] = await Promise.all([
-    query.range((page - 1) * 20, page * 20 - 1),
+    query.range(...pageRange(page)),
     session.db.from('organizations').select('id,legal_name').order('legal_name'),
   ]);
   if (error || orgError) throw new Error('No se pudo cargar el registro de tratamientos.');

@@ -1,22 +1,19 @@
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
+import { generalConfig } from '@/config/general';
 import { cn } from '@/lib/utils';
 const variants = cva(
   'inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
-      variant: {
-        default: 'bg-blue-700 text-white hover:bg-blue-800',
-        role: 'bg-blue-700 text-white hover:bg-blue-800',
-        edit: 'bg-green-700 text-white hover:bg-green-800',
-        outline: 'border border-slate-300 bg-white hover:bg-slate-50',
-        destructive: 'bg-red-700 text-white hover:bg-red-800',
-        ghost: 'hover:bg-slate-100',
-      },
-      size: { default: 'h-10 px-4', sm: 'h-8 px-3', lg: 'h-12 px-6', icon: 'h-9 w-9 shrink-0' },
+      variant: generalConfig.buttons.variants,
+      size: generalConfig.buttons.sizes,
     },
-    defaultVariants: { variant: 'default', size: 'default' },
+    defaultVariants: {
+      variant: generalConfig.buttons.defaultVariant,
+      size: generalConfig.buttons.defaultSize,
+    },
   },
 );
 export function Button({

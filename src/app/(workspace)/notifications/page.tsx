@@ -1,3 +1,4 @@
+import { pageRange } from '@/config/general';
 import Link from 'next/link';
 import { requireUser } from '@/features/auth/queries';
 import { markRead } from '@/features/notifications/actions';
@@ -25,7 +26,7 @@ export default async function Page({
   if (z.uuid().safeParse(params.organization).success)
     query = query.eq('organization_id', params.organization!);
   const [{ data, count, error }, { data: orgs, error: orgError }] = await Promise.all([
-    query.range((page - 1) * 20, page * 20 - 1),
+    query.range(...pageRange(page)),
     db.from('organizations').select('id,legal_name').order('legal_name'),
   ]);
   if (error || orgError) throw error || orgError;

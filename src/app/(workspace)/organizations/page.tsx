@@ -1,3 +1,4 @@
+import { pageRange } from '@/config/general';
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
 import { requireUser } from '@/features/auth/queries';
@@ -23,7 +24,7 @@ export default async function Page({
   if (q) query = query.or(`legal_name.ilike.%${q}%,rut.ilike.%${q}%,trade_name.ilike.%${q}%`);
   if (['ACTIVE', 'ARCHIVED'].includes(params.status || ''))
     query = query.eq('status', params.status as Organization['status']);
-  const { data, count, error } = await query.range((page - 1) * 20, page * 20 - 1);
+  const { data, count, error } = await query.range(...pageRange(page));
   if (error) throw error;
   return (
     <>

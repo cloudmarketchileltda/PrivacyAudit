@@ -1,4 +1,5 @@
 'use client';
+import { generalConfig } from '@/config/general';
 import { useActionState } from 'react';
 import { Button } from '@/components/ui/button';
 export type ActionState = { error?: string; success?: string; link?: string };
@@ -7,12 +8,12 @@ export function ActionForm({
   action,
   children,
   label = 'Guardar',
-  variant = 'edit',
+  variant = generalConfig.buttons.formVariant,
 }: {
   action: FormAction;
   children?: React.ReactNode;
   label?: string;
-  variant?: 'default' | 'outline' | 'destructive' | 'edit' | 'role';
+  variant?: React.ComponentProps<typeof Button>['variant'];
 }) {
   const [state, formAction, pending] = useActionState(action, {});
   return (

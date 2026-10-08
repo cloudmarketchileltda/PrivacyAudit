@@ -1,3 +1,4 @@
+import { pageRange } from '@/config/general';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { requireUser } from '@/features/auth/queries';
@@ -40,7 +41,7 @@ export default async function Page({
   const { data, error, count } = await query
     .order(sort, { ascending: sort === 'original_filename' || p.sort === 'oldest' })
     .order('id')
-    .range((page - 1) * 20, page * 20 - 1);
+    .range(...pageRange(page));
   if (error) throw new Error('No se pudieron cargar las evidencias.');
   const orgIds = [...new Set(data.map((e) => e.organization_id))];
   const { data: orgs, error: orgError } = orgIds.length

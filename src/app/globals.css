@@ -69,36 +69,35 @@ select {
   }
 }
 
-/* Shared administrative viewport: sticky header + ten fixed-height rows. */
-.ten-row-grid {
-  --grid-row-height: 4rem;
-  --grid-header-height: 2.75rem;
-  max-height: calc(var(--grid-header-height) + 10 * var(--grid-row-height));
+/* Values come from src/config/general.ts through the root layout. */
+.scroll-grid {
+  --grid-row-height: var(--accounts-row-height);
+  max-height: calc(var(--grid-header-height) + var(--grid-visible-rows) * var(--grid-row-height));
   overflow: auto;
   scrollbar-gutter: stable;
 }
-.ten-row-grid .data-table {
+.scroll-grid .data-table {
   table-layout: fixed;
-  min-width: 760px;
+  min-width: var(--accounts-min-width);
 }
-.ten-row-grid thead {
+.scroll-grid thead {
   position: sticky;
   top: 0;
   z-index: 1;
 }
-.ten-row-grid th {
+.scroll-grid th {
   height: var(--grid-header-height);
 }
-.ten-row-grid td {
+.scroll-grid td {
   height: var(--grid-row-height);
   padding-top: 0;
   padding-bottom: 0;
 }
 .audit-grid {
-  --grid-row-height: 5.5rem;
+  --grid-row-height: var(--audit-row-height);
 }
 .audit-grid .data-table {
-  min-width: 1150px;
+  min-width: var(--audit-min-width);
 }
 .grid-text {
   overflow: hidden;

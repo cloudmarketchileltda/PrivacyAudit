@@ -237,3 +237,17 @@ Aplicar `20261008012856_fix_admin_account_provisioning.sql` y desplegar la versi
 Las tablas de cuentas y log tienen diez filas visibles como máximo y scroll interno con encabezado fijo. Conservan paginación de 20 resultados y filtros. Las acciones comparten variantes de `Button`: azul (`default`/`role`), verde para modificar/guardar (`edit`) y rojo para eliminar (`destructive`).
 
 La migración `20261008120939_admin_account_management.sql` ya está aplicada en PrivacyAudit y `admin-manage-user` versión 1 está activa. Falta redesplegar Next.js y verificar edición/borrado con sesiones reales. La clave Auth Admin permanece exclusivamente en Supabase Functions. Consulte `docs/deployment.md`.
+
+## Reglas y configuración general
+
+Antes de implementar o modificar una operación, ejecutar SQL, aplicar migraciones o desplegar, consulte **[Reglas del sistema y del negocio](docs/system-and-business-rules.md)**. `AGENTS.md` exige esta revisión. El documento reúne permisos, eliminación de cuentas con historial asociado, membresías, estados de trabajo, evidencias y auditoría, e indica dónde se aplican y prueban las reglas. La autorización se sigue comprobando en servidor, RLS, RPC, triggers y FK; la aplicación no interpreta Markdown durante una solicitud.
+
+La configuración compartida está en **[src/config/general.ts](src/config/general.ts)**:
+
+- `actionStyles`: azul para acción general/rol, verde para modificar/guardar y rojo para eliminar. `Button` consume esas variantes; las clases Tailwind deben escribirse completas.
+- `buttons`: variantes y tamaños, valores predeterminados y variante de formularios.
+- `grids.visibleRows`: diez filas visibles de cuentas y auditoría; `headerHeight`, `accounts` y `audit` definen alturas y anchos. El layout convierte estos valores en variables CSS.
+- `grids.pageSize`: 20 registros por página, usados por las consultas, cortes y paginación. Las RPC de cuentas, membresías y dashboard también aplican 20 en SQL; cambiar este contrato exige una migración coordinada.
+- `grids.maxPageNumber` y `search.maxLength`: límites compartidos del frontend, con equivalentes en RPC SQL que también deben revisarse al cambiarlos.
+
+Las modificaciones de presentación requieren build y redespliegue de Next.js. Este archivo es público y puede importarse en el navegador; nunca debe contener secretos. `src/lib/config.ts` mantiene las utilidades del entorno y las URL. El documento maestro y la arquitectura conservan el alcance y las decisiones de implementación.

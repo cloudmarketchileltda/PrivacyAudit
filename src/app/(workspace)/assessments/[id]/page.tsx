@@ -1,3 +1,4 @@
+import { pageRange } from '@/config/general';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { z } from '@/lib/validation';
@@ -176,7 +177,7 @@ export default async function Page({
             </tr>
           </thead>
           <tbody>
-            {filtered.slice((page - 1) * 20, page * 20).map((r) => (
+            {filtered.slice(pageRange(page)[0], pageRange(page)[1] + 1).map((r) => (
               <tr key={r.id}>
                 <td className="font-mono whitespace-nowrap">{r.snapshot.code}</td>
                 <td>

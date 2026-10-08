@@ -1,3 +1,4 @@
+import { pageRange } from '@/config/general';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { requireUser } from '@/features/auth/queries';
@@ -21,7 +22,7 @@ export default async function Page({
       auditQuery(db, params)
         .order('created_at', { ascending: false })
         .order('id')
-        .range((page - 1) * 20, page * 20 - 1),
+        .range(...pageRange(page)),
       db.from('organizations').select('id,legal_name').order('legal_name'),
       db.from('profiles').select('id,full_name').order('full_name'),
     ]);
@@ -117,7 +118,7 @@ export default async function Page({
         </Link>
       </form>
       <div
-        className="table-wrap ten-row-grid audit-grid"
+        className="table-wrap scroll-grid audit-grid"
         role="region"
         aria-label="Eventos de auditoría"
         // Scroll regions need a keyboard focus target.

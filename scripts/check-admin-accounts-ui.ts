@@ -112,14 +112,14 @@ try {
     );
   await page.reload();
   const checkGrid = async () => {
-    await page.locator('.ten-row-grid').waitFor({ state: 'visible' });
+    await page.locator('.scroll-grid').waitFor({ state: 'visible' });
     await page.waitForFunction(() => {
-      const grid = document.querySelector('.ten-row-grid');
+      const grid = document.querySelector('.scroll-grid');
       return (
         grid && getComputedStyle(grid).maxHeight !== 'none' && grid.scrollHeight > grid.clientHeight
       );
     });
-    const metrics = await page.locator('.ten-row-grid').evaluate((element) => {
+    const metrics = await page.locator('.scroll-grid').evaluate((element) => {
       const rows = [...element.querySelectorAll('tbody tr')];
       const header = element.querySelector('thead')!.getBoundingClientRect().height;
       const row = rows[0].getBoundingClientRect().height;
@@ -137,10 +137,10 @@ try {
       Math.abs(metrics.viewport - metrics.header - metrics.row * 10) <= 4,
       JSON.stringify(metrics),
     );
-    await page.locator('.ten-row-grid').evaluate((element) => {
+    await page.locator('.scroll-grid').evaluate((element) => {
       element.scrollTop = element.scrollHeight;
     });
-    assert.ok(await page.locator('.ten-row-grid').evaluate((element) => element.scrollTop > 0));
+    assert.ok(await page.locator('.scroll-grid').evaluate((element) => element.scrollTop > 0));
   };
   await checkGrid();
   await page.goto(`${base}/administration/audit`);

@@ -1,9 +1,10 @@
+import { generalConfig } from '@/config/general';
 import Link from 'next/link';
 import { Button } from './ui/button';
 export function Pagination({
   page,
   count,
-  pageSize = 20,
+  pageSize = generalConfig.grids.pageSize,
   pageParam = 'page',
   path,
   params,
@@ -39,11 +40,14 @@ export function Pagination({
   );
 }
 export function pageNumber(value?: string) {
-  return Math.max(1, Math.min(10000, Number.parseInt(value || '1', 10) || 1));
+  return Math.max(
+    1,
+    Math.min(generalConfig.grids.maxPageNumber, Number.parseInt(value || '1', 10) || 1),
+  );
 }
 export function searchTerm(value?: string) {
   return (value || '')
     .replace(/[%_,()\\]/g, ' ')
     .trim()
-    .slice(0, 100);
+    .slice(0, generalConfig.search.maxLength);
 }

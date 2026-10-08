@@ -1,3 +1,4 @@
+import { pageRange } from '@/config/general';
 import { calendarDate } from '@/features/workflow/schemas';
 import Link from 'next/link';
 import { requireUser } from '@/features/auth/queries';
@@ -33,7 +34,7 @@ export async function TaskList({ params }: { params: Record<string, string | und
     query
       .order(sort, { ascending: sort !== 'updated_at', nullsFirst: false })
       .order('id')
-      .range((page - 1) * 20, page * 20 - 1),
+      .range(...pageRange(page)),
     db.from('organizations').select('id,legal_name').order('legal_name'),
     assignees(scope?.organization.id),
   ]);

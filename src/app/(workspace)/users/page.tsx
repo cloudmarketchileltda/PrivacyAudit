@@ -81,7 +81,7 @@ export default async function Page({
         <Button variant="outline">Buscar</Button>
       </form>
       <div
-        className="table-wrap ten-row-grid"
+        className="table-wrap scroll-grid"
         role="region"
         aria-label="Cuentas de usuario"
         // Scroll regions need a keyboard focus target.

@@ -1,3 +1,4 @@
+import { pageRange } from '@/config/general';
 import Link from 'next/link';
 import { requireUser } from '@/features/auth/queries';
 import { Button } from '@/components/ui/button';
@@ -20,7 +21,7 @@ export default async function Page({
   if (params.review && ['PENDING', 'REVIEWED'].includes(params.review))
     query = query.eq('legal_review_status', params.review);
   if (params.active) query = query.eq('active', params.active === 'true');
-  const { data, count, error } = await query.range((page - 1) * 20, page * 20 - 1);
+  const { data, count, error } = await query.range(...pageRange(page));
   if (error) throw error;
   return (
     <>
