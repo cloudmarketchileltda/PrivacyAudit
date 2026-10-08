@@ -192,3 +192,7 @@ El usuario repitió el alta en su sesión real y confirmó «Cuenta creada y hab
 - Se agregó `src/config/general.ts`, consumido por botones, formularios, paginación, consultas y layout. Se retiraron valores repetidos de colores/tamaños de botones y alturas/anchos/filas visibles del CSS, y se mantuvo el contrato de 20 resultados de las RPC.
 - Node 24.19.0: lint, TypeScript, 23 pruebas automatizadas y build correctos. `npm run test:ui:accounts` pasó CRUD y cambios de rol; grillas de cuentas/auditoría con diez filas visibles, scroll y sin desbordamiento en 360, 768 y 1440 px.
 - Esta entrega conserva las reglas y valores existentes. No modifica esquema, permisos ni Supabase Functions; no requiere migración remota. Los cambios de frontend requieren redespliegue de Next.js.
+
+## Límite visible del log — 8 de octubre de 2026
+
+Se compactó cada fila del log a 4 rem y se calculó su altura máxima desde la configuración general, con aplicación explícita al contenedor. La comprobación de navegador pasó con 20 resultados, exactamente diez filas visibles, scroll, detalles expandidos sin aumentar la altura y navegación a página 2. Lint, TypeScript y build de producción correctos. No requiere cambios SQL ni despliegue de Functions. La pantalla publicada requiere redespliegue de Next.js; la consulta pública al sitio devolvió HTTP 403 y no se afirma comprobación de su sesión administrativa real.

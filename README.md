@@ -246,7 +246,7 @@ La configuración compartida está en **[src/config/general.ts](src/config/gener
 
 - `actionStyles`: azul para acción general/rol, verde para modificar/guardar y rojo para eliminar. `Button` consume esas variantes; las clases Tailwind deben escribirse completas.
 - `buttons`: variantes y tamaños, valores predeterminados y variante de formularios.
-- `grids.visibleRows`: diez filas visibles de cuentas y auditoría; `headerHeight`, `accounts` y `audit` definen alturas y anchos. El layout convierte estos valores en variables CSS.
+- `grids.visibleRows`: diez filas visibles de cuentas y auditoría; `headerHeightRem`, `accounts.rowHeightRem` y `audit.rowHeightRem` definen alturas y anchos. El layout convierte estos valores en variables CSS.
 - `grids.pageSize`: 20 registros por página, usados por las consultas, cortes y paginación. Las RPC de cuentas, membresías y dashboard también aplican 20 en SQL; cambiar este contrato exige una migración coordinada.
 - `grids.maxPageNumber` y `search.maxLength`: límites compartidos del frontend, con equivalentes en RPC SQL que también deben revisarse al cambiarlos.
 

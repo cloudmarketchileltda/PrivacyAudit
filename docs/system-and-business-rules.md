@@ -72,7 +72,7 @@ Implementación: migraciones de fases 5–6, `src/features/evidence`, `src/featu
 ## Presentación, alcance y configuración
 
 - UI-01: acciones generales/cambio de rol en azul; edición/guardado en verde; eliminación en rojo. Usar `Button` con variantes del archivo general. Acciones de grilla con icono, etiqueta accesible y título. Navegación, cancelación y filtros pueden ser neutros.
-- UI-02: cuentas y auditoría muestran como máximo diez filas visibles, con scroll y encabezado fijo. La página contiene 20 resultados; el viewport y la paginación son valores distintos. Usar las configuraciones compartidas.
+- UI-02: cuentas y auditoría muestran como máximo diez filas visibles, con scroll y encabezado fijo. Abrir los detalles del log no debe aumentar la altura ni la cantidad de filas visibles. La página contiene 20 resultados; el viewport y la paginación son valores distintos. Usar las configuraciones compartidas.
 - SYS-04: el producto presenta avance de evaluación y métricas de gestión; no afirma certificación o cumplimiento jurídico garantizado. Las referencias normativas requieren revisión profesional, sin inferencias jurídicas automáticas.
 - SYS-05: alcance autorizado hasta fase 6; no iniciar fase 7, IA ni integraciones externas sin petición del usuario. El MVP completo todavía incluye fases pendientes.
 

@@ -1,4 +1,4 @@
-import { pageRange } from '@/config/general';
+import { gridViewportHeight, pageRange } from '@/config/general';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { requireUser } from '@/features/auth/queries';
@@ -119,6 +119,7 @@ export default async function Page({
       </form>
       <div
         className="table-wrap scroll-grid audit-grid"
+        style={{ maxHeight: gridViewportHeight('audit') }}
         role="region"
         aria-label="Eventos de auditoría"
         // Scroll regions need a keyboard focus target.
@@ -161,7 +162,7 @@ export default async function Page({
                   <p className="muted text-xs grid-text">{a.entity_id}</p>
                 </td>
                 <td>
-                  <details className="max-h-20 overflow-auto">
+                  <details>
                     <summary className="cursor-pointer text-teal-800">Ver cambios</summary>
                     <pre className="whitespace-pre-wrap break-all max-w-lg text-xs mt-2">
                       {JSON.stringify(a.metadata, null, 2)}

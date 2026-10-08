@@ -38,20 +38,28 @@ export const generalConfig = {
     maxPageNumber: 10000,
     // Altura del viewport, independiente del número de resultados por página.
     visibleRows: 10,
-    headerHeight: '2.75rem',
-    accounts: { rowHeight: '4rem', minWidth: '760px' },
-    audit: { rowHeight: '5.5rem', minWidth: '1150px' },
+    headerHeightRem: 2.75,
+    accounts: { rowHeightRem: 4, minWidth: '760px' },
+    audit: { rowHeightRem: 4, minWidth: '1150px' },
   },
   search: { maxLength: 100 },
 } as const;
 
+/** Altura exacta del encabezado y de las filas visibles; calculada sin multiplicar variables CSS. */
+export function gridViewportHeight(kind: 'accounts' | 'audit') {
+  const grids = generalConfig.grids;
+  return `${grids.headerHeightRem + grids.visibleRows * grids[kind].rowHeightRem}rem`;
+}
+
 /** Variables heredadas por las grillas desde el layout, sin duplicar valores en CSS. */
 export const gridCssVariables = {
   '--grid-visible-rows': generalConfig.grids.visibleRows,
-  '--grid-header-height': generalConfig.grids.headerHeight,
-  '--accounts-row-height': generalConfig.grids.accounts.rowHeight,
+  '--grid-header-height': `${generalConfig.grids.headerHeightRem}rem`,
+  '--accounts-row-height': `${generalConfig.grids.accounts.rowHeightRem}rem`,
+  '--accounts-viewport-height': gridViewportHeight('accounts'),
+  '--audit-viewport-height': gridViewportHeight('audit'),
   '--accounts-min-width': generalConfig.grids.accounts.minWidth,
-  '--audit-row-height': generalConfig.grids.audit.rowHeight,
+  '--audit-row-height': `${generalConfig.grids.audit.rowHeightRem}rem`,
   '--audit-min-width': generalConfig.grids.audit.minWidth,
 };
 

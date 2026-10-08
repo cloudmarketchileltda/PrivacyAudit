@@ -146,6 +146,37 @@ try {
   await page.goto(`${base}/administration/audit`);
   await page.getByRole('heading', { name: 'Log auditable', exact: true }).waitFor();
   await checkGrid();
+  // Expanded details must stay inside the same ten-row viewport.
+  const auditGrid = page.getByRole('region', { name: 'Eventos de auditoría' });
+  await auditGrid.evaluate((element) => {
+    element.scrollTop = 0;
+  });
+  await auditGrid.locator('summary').first().click();
+  const geometry = await auditGrid.evaluate((element) => {
+    const area = element.getBoundingClientRect();
+    const header = element.querySelector('thead')!.getBoundingClientRect();
+    const rows = [...element.querySelectorAll('tbody tr')].map((row) =>
+      row.getBoundingClientRect(),
+    );
+    return {
+      height: area.height,
+      header: header.height,
+      row: rows[0].height,
+      visibleRows: rows.filter(
+        (row) => row.top >= header.bottom - 1 && row.bottom <= area.bottom + 1,
+      ).length,
+    };
+  });
+  assert.equal(geometry.visibleRows, 10, JSON.stringify(geometry));
+  assert.ok(
+    Math.abs(geometry.height - geometry.header - 10 * geometry.row) <= 4,
+    JSON.stringify(geometry),
+  );
+  await auditGrid.locator('summary').first().click();
+  await page.getByRole('link', { name: 'Siguiente', exact: true }).click();
+  await page.waitForURL('**/administration/audit?page=2');
+  await page.getByText(/Página 2 de/).waitFor();
+  await checkGrid();
   await page.screenshot({ path: 'artifacts/ui/admin-audit-scroll.png', fullPage: true });
   await page.goto(`${base}/users`);
   for (const width of [360, 768, 1440]) {

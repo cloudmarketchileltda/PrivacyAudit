@@ -72,7 +72,7 @@ select {
 /* Values come from src/config/general.ts through the root layout. */
 .scroll-grid {
   --grid-row-height: var(--accounts-row-height);
-  max-height: calc(var(--grid-header-height) + var(--grid-visible-rows) * var(--grid-row-height));
+  max-height: var(--accounts-viewport-height);
   overflow: auto;
   scrollbar-gutter: stable;
 }
@@ -94,7 +94,13 @@ select {
   padding-bottom: 0;
 }
 .audit-grid {
+  max-height: var(--audit-viewport-height);
+  overflow-y: scroll;
   --grid-row-height: var(--audit-row-height);
+}
+.audit-grid details {
+  max-height: calc(var(--grid-row-height) - 0.5rem);
+  overflow: auto;
 }
 .audit-grid .data-table {
   min-width: var(--audit-min-width);
