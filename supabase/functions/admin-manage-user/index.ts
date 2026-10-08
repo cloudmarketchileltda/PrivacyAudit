@@ -24,12 +24,16 @@ Deno.serve(
     },
     async mutate(input, token) {
       const client = clientFor(token);
-      const { data: reservation, error } = await client.rpc('reserve_account_mutation', {
-        target: input.target,
-        operation: input.operation,
-        account_email: input.email ?? null,
-        account_name: input.full_name ?? null,
-      });
+      const { data: reservation, error } = await client.rpc(
+        input.contact ? 'reserve_account_contact_mutation' : 'reserve_account_mutation',
+        {
+          target: input.target,
+          operation: input.operation,
+          account_email: input.email ?? null,
+          account_name: input.full_name ?? null,
+          ...(input.contact ? { contact: input.contact } : {}),
+        },
+      );
       if (error || typeof reservation !== 'string') return false;
       try {
         const admin = createClient(url, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, {

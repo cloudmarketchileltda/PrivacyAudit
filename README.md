@@ -1,5 +1,13 @@
 # PrivacyAudit
 
+### Datos de cuenta y contraseña
+
+En **Mi cuenta**, todos los roles pueden editar nombre completo, dirección, teléfono, ciudad y país. Los contactos son opcionales, privados para el titular y SUPER_ADMIN y se guardan junto con el nombre en una transacción. La creación y edición administrativa también incluyen los cuatro campos de contacto. Borrar una organización conserva las cuentas y estos datos; borrar legítimamente una cuenta elimina su contacto por cascada.
+
+Para cambiar la contraseña: **Mi cuenta → Cambiar contraseña**, ingrese la contraseña actual, una nueva de 10 a 128 caracteres y su confirmación, y pulse **Guardar nueva contraseña**. Si olvidó la actual, use **Recuperar acceso** para recibir un enlace. La contraseña actual nunca se muestra ni se guarda en las tablas de perfil/contacto o el log. **Cambiar correo electrónico** pide el nuevo correo y la contraseña actual; siga las confirmaciones de Supabase en el correo actual y el nuevo cuando se requieran. Hasta completar el proceso, mantenga el correo actual para iniciar sesión.
+
+Migración `20261008184033_account_contact_and_self_service.sql` aplicada en PrivacyAudit (`pbihajfbbcbbdvoqpggy`); `admin-create-user` versión 4 y `admin-manage-user` versión 2 ACTIVE. Pendiente redesplegar Next.js en Dokploy. Las RPC anteriores siguen disponibles para compatibilidad. Verificación de navegador: `npm run test:ui:account-profile`; backend aislado, sin demostrar entrega de correos real. `npm test` y `npm run test:db` verifican privacidad, altas/ediciones reservadas, rollback y eliminación de contactos. Verificación SQL remota con rollback: `scripts/verify-account-contact-remote.sql`; ninguna cuenta real modificada. Límites compartidos en `src/config/general.ts` y constraints SQL; cambios de límites requieren mantener ambos sincronizados.
+
 ### Footer y páginas legales
 
 El logo del menú vuelve al home (`/`, con el dashboard como destino del sistema configurado). El footer compartido aparece en todas las páginas y contiene Facebook, Instagram, LinkedIn, YouTube, tres páginas públicas con textos iniciales —`/politicas-de-privacidad`, `/terminos-y-condiciones`, `/aviso-legal`— y un enlace al [texto oficial de la Ley 21.719 en BCN](https://www.bcn.cl/leychile/navegar?idNorma=1209272). Los destinos se editan en `src/config/general.ts`, sección `site`; las redes usan URLs genéricas aprobadas por el usuario hasta recibir los perfiles reales. Los textos se mantienen en `src/app/(legal)` y quedan pendientes de completar con los datos del operador. Este cambio de frontend requiere redesplegar Next.js para verse en producción.

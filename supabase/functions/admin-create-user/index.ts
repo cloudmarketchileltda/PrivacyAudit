@@ -27,11 +27,12 @@ Deno.serve(
         auth: { persistSession: false, autoRefreshToken: false },
       });
       const { data: reservation, error: reservationError } = await client.rpc(
-        'reserve_account_provisioning',
+        'reserve_account_contact_provisioning',
         {
           account_email: input.email,
           account_name: input.full_name,
           account_role: input.role,
+          contact: input.contact,
         },
       );
       if (reservationError || typeof reservation !== 'string') return { error: 'creation_failed' };

@@ -11,6 +11,8 @@ Consultadas el 4 de octubre de 2026 (America/Santiago).
 
 No se recibieron referencias visuales. El diseño se deriva de los requisitos B2B del maestro.
 
+Revisadas para datos de cuenta y cambios de credenciales el 8 de octubre de 2026: maestro, reglas, arquitectura y guía local Next.js `forms.md`. Changelog Supabase descargado y revisado sin cambios aplicables al cliente SSR instalado; documentación oficial de [contraseñas](https://supabase.com/docs/guides/auth/passwords) y [updateUser](https://supabase.com/docs/reference/javascript/auth-updateuser), consultada también mediante search_docs. El SDK instalado admite `current_password`; la app verifica además la contraseña actual mediante signInWithPassword antes de modificar correo o contraseña. Se aplicaron las habilidades Supabase y buenas prácticas PostgreSQL para contactos privados, reservas, RLS y FK.
+
 Revisadas para footer y páginas legales el 8 de octubre de 2026: maestro, reglas, configuración, arquitectura y guías locales Next.js `layouts-and-pages.md` y `link.md`. Enlace oficial verificado: [Ley 21.719 — Biblioteca del Congreso Nacional](https://www.bcn.cl/leychile/navegar?idNorma=1209272). El usuario confirmó Facebook, Instagram, LinkedIn y YouTube con enlaces genéricos hasta aportar perfiles reales. Las páginas legales incorporan textos iniciales que se modificarán posteriormente.
 
 Revisadas para fase 3 el 5 de octubre de 2026: documentación local de Next.js sobre páginas y Server Actions; changelog actual de Supabase y guía RLS. La migración declara grants explícitos y políticas por operación, sin depender de la exposición automática de tablas.

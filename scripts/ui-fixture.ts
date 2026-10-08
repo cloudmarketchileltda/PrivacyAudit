@@ -8,6 +8,7 @@ import { database, identity, ids, users, org } from '../tests/db-helper';
 import type { PGlite } from '@electric-sql/pglite';
 const tables = new Set([
   'profiles',
+  'account_details',
   'organizations',
   'organization_members',
   'organization_invitations',
@@ -30,6 +31,7 @@ const functions = new Set([
   'manage_member',
   'set_user_organizations',
   'admin_accounts',
+  'save_my_account',
   'admin_membership_users',
   'admin_membership_organizations',
   'set_user_role',
@@ -179,6 +181,9 @@ export async function startFixture(port = 54331) {
     )
   ).rows[0];
   const files = new Map<string, { bytes: Buffer; mime: string }>();
+  // Auth is simulated here, not GoTrue: these maps support account UI tests only.
+  const accountPasswords = new Map<string, string>();
+  const pendingEmails = new Map<string, string>();
   const server = createServer(async (request, response) => {
     try {
       if (request.method === 'OPTIONS') {
@@ -255,8 +260,16 @@ export async function startFixture(port = 54331) {
           async mutate(input) {
             await identity(db, actor);
             const { rows } = await db.query<{ id: string }>(
-              'select public.reserve_account_mutation($1,$2,$3,$4) id',
-              [input.target, input.operation, input.email ?? null, input.full_name ?? null],
+              input.contact
+                ? 'select public.reserve_account_contact_mutation($1,$2,$3,$4,$5) id'
+                : 'select public.reserve_account_mutation($1,$2,$3,$4) id',
+              [
+                input.target,
+                input.operation,
+                input.email ?? null,
+                input.full_name ?? null,
+                ...(input.contact ? [JSON.stringify(input.contact)] : []),
+              ],
             );
             try {
               await db.transaction(async (tx) => {
@@ -303,8 +316,8 @@ export async function startFixture(port = 54331) {
           async create(input, actor) {
             await identity(db, actor);
             const { rows } = await db.query<{ id: string }>(
-              'select public.reserve_account_provisioning($1,$2,$3) as id',
-              [input.email, input.full_name, input.role],
+              'select public.reserve_account_contact_provisioning($1,$2,$3,$4) as id',
+              [input.email, input.full_name, input.role, JSON.stringify(input.contact)],
             );
             const id = rows[0].id;
             try {
@@ -338,9 +351,11 @@ export async function startFixture(port = 54331) {
       }
       if (url.pathname === '/auth/v1/token') {
         const data = await body(request);
-        const name = String(data.email || '').split('@')[0] as keyof typeof ids;
-        const id = ids[name];
-        if (!id || data.password !== 'FixturePassword123') {
+        await db.exec('reset role');
+        const id = (
+          await db.query<{ id: string }>('select id from auth.users where email=$1', [data.email])
+        ).rows[0]?.id;
+        if (!id || data.password !== (accountPasswords.get(id) ?? 'FixturePassword123')) {
           json(response, 400, { error: 'invalid_grant', error_description: 'Invalid credentials' });
           return;
         }
@@ -364,7 +379,34 @@ export async function startFixture(port = 54331) {
           json(response, 401, { message: 'Not authenticated' });
           return;
         }
-        json(response, 200, user(id));
+        await db.exec('reset role');
+        const account = (
+          await db.query<{ email: string }>('select email from auth.users where id=$1', [id])
+        ).rows[0];
+        if (request.method === 'PUT') {
+          const input = await body(request);
+          if (input.password) {
+            if (
+              input.current_password &&
+              input.current_password !== (accountPasswords.get(id) ?? 'FixturePassword123')
+            ) {
+              json(response, 400, { message: 'Incorrect current password' });
+              return;
+            }
+            accountPasswords.set(id, input.password);
+            await identity(db, id, 'supabase_auth_admin');
+            await db.query('update auth.users set encrypted_password=$2 where id=$1', [
+              id,
+              'fixture-password-changed',
+            ]);
+          }
+          if (input.email) pendingEmails.set(id, input.email);
+        }
+        json(response, 200, {
+          ...user(id),
+          email: account.email,
+          new_email: pendingEmails.get(id),
+        });
         return;
       }
       if (url.pathname === '/auth/v1/logout') {

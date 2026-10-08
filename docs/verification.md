@@ -1,5 +1,15 @@
 # Verificación de las fases 1 a 6
 
+## Datos de cuenta y credenciales — 8 de octubre de 2026
+
+- Node 24.21.0: 28 pruebas automatizadas, lint, TypeScript y build aprobados. Las pruebas nuevas ejercitan migraciones reales en PGlite: contactos aislados entre usuarios, bloqueo de escrituras directas y reservas no administrativas, rollback de nombre/contacto ante error, alta y edición administrativa con consumo de reserva, eliminación por cascada y auditoría sin valores de contacto.
+- `npm run test:ui:account-profile` aprobado: guardado y persistencia de los cuatro contactos, contraseña actual incorrecta, confirmación distinta, cambio de contraseña y siguiente login con la nueva, correo pendiente de confirmación, alta y edición administrativa con contacto. Sin errores de navegador ni desbordamiento en 360, 768 y 1440 px. Capturas `artifacts/ui/account-profile.png` y `artifacts/ui/admin-account-contact.png` revisadas visualmente. Backend Auth aislado; no demuestra emisión de JWT reales ni entrega de correo.
+- `npm run test:ui:accounts` también aprobado: regresión del CRUD administrativo, cambio de roles y grillas con diez filas visibles.
+- Proyecto remoto identificado: PrivacyAudit `pbihajfbbcbbdvoqpggy`, ACTIVE_HEALTHY. Aplicada `20261008184033_account_contact_and_self_service.sql`; `admin-create-user` versión 4 y `admin-manage-user` versión 2 ACTIVE. El archivo de migración generado por CLI se alineó con el timestamp registrado por Supabase.
+- `scripts/verify-account-contact-remote.sql` aprobado remotamente con rollback: aprovisionamiento reservado/contacto, lectura privada, guardado propio atómico, reserva administrativa/edición, cascada y grants. Cero cuentas temporales restantes y cero perfiles sin fila de contacto. Los endpoints de Functions responden 401 sin sesión; no se editaron cuentas reales.
+- Advisor sin advertencias nuevas. Las reservas privadas con RLS y sin políticas niegan acceso directo por diseño ([referencia](https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy)); sigue el aviso previo de protección de contraseñas filtradas deshabilitada ([referencia](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection)).
+- Pendiente redesplegar Next.js en Dokploy y validar los cambios de credenciales y confirmaciones con Auth/correo reales. El despliegue de Dokploy lo realiza el usuario.
+
 ## Navegación, footer y páginas legales — 8 de octubre de 2026
 
 - Lint y TypeScript correctos. Build de producción y 26 pruebas existentes aprobadas con Node 24.21.0; las pruebas de base de datos usan PGlite local.

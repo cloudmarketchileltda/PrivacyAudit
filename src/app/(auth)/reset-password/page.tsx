@@ -8,7 +8,20 @@ export default async function Page() {
     <>
       <h1 className="page-title mb-6">Nueva contraseña</h1>
       <ActionForm action={resetPassword}>
-        <Field label="Contraseña (mínimo 10 caracteres)" name="password" type="password" required />
+        <Field
+          label="Contraseña (mínimo 10 caracteres)"
+          name="password"
+          type="password"
+          required
+          autoComplete="new-password"
+        />
+        <Field
+          label="Confirmar nueva contraseña"
+          name="password_confirmation"
+          type="password"
+          required
+          autoComplete="new-password"
+        />
       </ActionForm>
       <Link href="/dashboard" className="block underline text-sm mt-5">
         Volver al dashboard

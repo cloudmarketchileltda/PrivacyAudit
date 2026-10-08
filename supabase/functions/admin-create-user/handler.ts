@@ -1,8 +1,10 @@
+import { contactInput, type ContactInput } from '../_shared/account-contact.ts';
 export type AccountInput = {
   full_name: string;
   email: string;
   password: string;
   role: 'CLIENT' | 'CONSULTANT';
+  contact: ContactInput;
 };
 export type AccountDependencies = {
   authorize: (token: string) => Promise<{ id: string; role: string } | null>;
@@ -34,7 +36,15 @@ export function accountInput(value: unknown): AccountInput | null {
     !['CLIENT', 'CONSULTANT'].includes(data.role)
   )
     return null;
-  return { full_name, email, password: data.password, role: data.role as AccountInput['role'] };
+  const contact = contactInput(data);
+  if (!contact) return null;
+  return {
+    full_name,
+    email,
+    password: data.password,
+    role: data.role as AccountInput['role'],
+    contact,
+  };
 }
 export function accountHandler(deps: AccountDependencies) {
   return async (request: Request) => {

@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/server';
 import { appUrl, safeNext } from '@/lib/config';
 import { requireUser } from './queries';
 import type { ActionState } from '@/components/forms';
+import { passwordSchema } from '@/features/account/schemas';
 export async function login(_: ActionState, data: FormData): Promise<ActionState> {
   const parsed = z
     .object({ email: z.email(), password: z.string().min(1) })
@@ -28,10 +29,11 @@ export async function recover(_: ActionState, data: FormData): Promise<ActionSta
   };
 }
 export async function resetPassword(_: ActionState, data: FormData): Promise<ActionState> {
-  const password = z.string().min(10).max(128).safeParse(data.get('password'));
-  if (!password.success) return { error: 'Use una contraseña de al menos 10 caracteres.' };
+  const password = passwordSchema.safeParse(Object.fromEntries(data));
+  if (!password.success)
+    return { error: 'Use de 10 a 128 caracteres y confirme la misma contraseña.' };
   const { db } = await requireUser();
-  const { error } = await db.auth.updateUser({ password: password.data });
+  const { error } = await db.auth.updateUser({ password: password.data.password });
   if (error) return { error: 'No se pudo cambiar la contraseña. Solicite un nuevo enlace.' };
   return { success: 'Contraseña actualizada. Puede volver al dashboard.' };
 }

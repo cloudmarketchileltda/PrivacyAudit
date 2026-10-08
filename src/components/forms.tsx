@@ -53,12 +53,16 @@ export function Field({
   type = 'text',
   defaultValue = '',
   required = false,
+  autoComplete,
+  maxLength,
 }: {
   label: string;
   name: string;
   type?: string;
   defaultValue?: string;
   required?: boolean;
+  autoComplete?: string;
+  maxLength?: number;
 }) {
   return (
     <label className="form-label">
@@ -69,6 +73,8 @@ export function Field({
         type={type}
         defaultValue={defaultValue}
         required={required}
+        autoComplete={autoComplete}
+        maxLength={maxLength}
       />
     </label>
   );

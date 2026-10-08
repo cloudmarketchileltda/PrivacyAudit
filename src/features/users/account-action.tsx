@@ -6,12 +6,13 @@ import { Button } from '@/components/ui/button';
 import { Field, type ActionState } from '@/components/forms';
 import { manageAccount } from './actions';
 import { setRole } from '@/features/organizations/actions';
+import { ContactFields, type AccountContact } from '@/features/account/contact-fields';
 export type Account = {
   id: string;
   full_name: string;
   email: string;
   role: 'CLIENT' | 'CONSULTANT' | 'SUPER_ADMIN';
-};
+} & AccountContact;
 export function AccountAction({
   account,
   kind,
@@ -114,6 +115,11 @@ export function AccountAction({
                       defaultValue={account.email}
                       required
                     />
+                    <ContactFields contact={account} />
+                    <p className="muted">
+                      La contraseña se cambia desde Mi cuenta o mediante Recuperar acceso. La
+                      contraseña actual nunca se muestra.
+                    </p>
                   </>
                 ) : (
                   <>

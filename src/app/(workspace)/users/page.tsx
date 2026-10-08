@@ -8,6 +8,7 @@ import { z } from '@/lib/validation';
 import { Pagination, pageNumber, searchTerm } from '@/components/table-tools';
 
 import { Button } from '@/components/ui/button';
+import { ContactFields } from '@/features/account/contact-fields';
 export default async function Page({
   searchParams,
 }: {
@@ -30,6 +31,10 @@ export default async function Page({
           id: z.uuid(),
           full_name: z.string(),
           email: z.string(),
+          address: z.string(),
+          phone: z.string(),
+          city: z.string(),
+          country: z.string(),
           role: z.enum(['CLIENT', 'CONSULTANT', 'SUPER_ADMIN']),
         }),
       ),
@@ -58,6 +63,7 @@ export default async function Page({
             type="password"
             required
           />
+          <ContactFields />
           <label className="form-label">
             Rol
             <select className="field" name="role" defaultValue="CLIENT">
@@ -67,8 +73,8 @@ export default async function Page({
           </label>
           <p className="muted">
             La cuenta quedará habilitada por el administrador sin correo de confirmación. Comparta
-            las credenciales de forma segura. El usuario puede cambiar su contraseña mediante
-            Recuperar acceso.
+            las credenciales de forma segura. El usuario puede cambiar su contraseña mediante Mi
+            cuenta o Recuperar acceso.
           </p>
         </ActionForm>
       </section>
@@ -129,7 +135,7 @@ export default async function Page({
                 {(['role', 'edit', 'delete'] as const).map((kind) => (
                   <td key={kind}>
                     <AccountAction
-                      key={`${kind}:${account.full_name}:${account.email}:${account.role}`}
+                      key={`${kind}:${JSON.stringify(account)}`}
                       account={account}
                       kind={kind}
                       self={account.id === user.id}

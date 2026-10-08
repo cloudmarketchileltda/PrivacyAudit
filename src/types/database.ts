@@ -3,6 +3,33 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export interface Database {
   public: {
     Tables: {
+      account_details: {
+        Row: {
+          user_id: string;
+          address: string;
+          phone: string;
+          city: string;
+          country: string;
+          updated_at: string;
+        };
+        Insert: {
+          user_id: string;
+          address?: string;
+          phone?: string;
+          city?: string;
+          country?: string;
+          updated_at?: string;
+        };
+        Update: {
+          user_id?: string;
+          address?: string;
+          phone?: string;
+          city?: string;
+          country?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       assessment_controls: {
         Row: {
           id: string;
@@ -766,6 +793,25 @@ export interface Database {
       record_audit_export: { Args: { filters: Json; record_count: number }; Returns: undefined };
       record_evidence_download: { Args: { evidence: string }; Returns: undefined };
       register_consultant: { Args: Record<string, never>; Returns: undefined };
+      reserve_account_contact_mutation: {
+        Args: {
+          target: string;
+          operation: string;
+          account_email: string;
+          account_name: string;
+          contact: Json;
+        };
+        Returns: string;
+      };
+      reserve_account_contact_provisioning: {
+        Args: {
+          account_email: string;
+          account_name: string;
+          account_role: Database['public']['Enums']['app_role'];
+          contact: Json;
+        };
+        Returns: string;
+      };
       reserve_account_mutation: {
         Args: { target: string; operation: string; account_email: string; account_name: string };
         Returns: string;
@@ -779,6 +825,7 @@ export interface Database {
         Returns: string;
       };
       revoke_invitation: { Args: { invitation_id: string }; Returns: undefined };
+      save_my_account: { Args: { account_name: string; contact: Json }; Returns: undefined };
       set_user_organizations: {
         Args: {
           target: string;

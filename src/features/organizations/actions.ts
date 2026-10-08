@@ -100,15 +100,6 @@ export async function revokeInvite(_: ActionState, data: FormData): Promise<Acti
   revalidatePath('/administration/organizations', 'layout');
   return { success: 'Invitación revocada.' };
 }
-export async function saveProfile(_: ActionState, data: FormData): Promise<ActionState> {
-  const parsed = z.string().trim().min(2).max(160).safeParse(data.get('full_name'));
-  if (!parsed.success) return { error: 'Nombre inválido.' };
-  const { db, user } = await requireUser();
-  const { error } = await db.from('profiles').update({ full_name: parsed.data }).eq('id', user.id);
-  if (error) return { error: 'No se pudo actualizar.' };
-  revalidatePath('/', 'layout');
-  return { success: 'Perfil actualizado.' };
-}
 export async function setRole(_: ActionState, data: FormData): Promise<ActionState> {
   const parsed = z
     .object({ target: z.uuid(), new_role: z.enum(['CLIENT', 'CONSULTANT', 'SUPER_ADMIN']) })

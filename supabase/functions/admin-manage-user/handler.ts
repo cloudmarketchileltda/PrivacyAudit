@@ -1,9 +1,11 @@
+import { contactInput, type ContactInput } from '../_shared/account-contact.ts';
 export type MutationInput = {
   target: string;
   operation: 'UPDATE' | 'DELETE';
   full_name?: string;
   email?: string;
   confirmation?: string;
+  contact?: ContactInput;
 };
 export function mutationInput(value: unknown): MutationInput | null {
   if (!value || typeof value !== 'object') return null;
@@ -28,7 +30,10 @@ export function mutationInput(value: unknown): MutationInput | null {
     !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
   )
     return null;
-  return { target: d.target, operation: 'UPDATE', full_name, email };
+  const hasContact = ['address', 'phone', 'city', 'country'].some((field) => field in d);
+  const contact = hasContact ? contactInput(d) : undefined;
+  if (contact === null) return null;
+  return { target: d.target, operation: 'UPDATE', full_name, email, contact };
 }
 export function mutationHandler(deps: {
   authorize: (token: string) => Promise<{ id: string; role: string } | null>;

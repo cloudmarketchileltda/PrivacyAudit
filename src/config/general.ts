@@ -11,6 +11,13 @@ const actionStyles = {
 } as const;
 
 export const generalConfig = {
+  account: {
+    fullNameMaxLength: 160,
+    emailMaxLength: 254,
+    passwordMinLength: 10,
+    passwordMaxLength: 128,
+    contactMaxLengths: { address: 300, phone: 40, city: 120, country: 120 },
+  },
   site: {
     homeHref: '/',
     legalLinks: [
