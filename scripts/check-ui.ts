@@ -75,7 +75,6 @@ try {
     '/assessments/new',
     `/assessments/${fixture.assessment}`,
     `/assessments/${fixture.assessment}/controls/${fixture.responseId}`,
-    '/controls',
     '/account',
     '/processing',
     '/findings',

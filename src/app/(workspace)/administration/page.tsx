@@ -8,6 +8,12 @@ export default async function Page() {
     <>
       <h1 className="page-title">Administración</h1>
       <div className="grid md:grid-cols-2 gap-5">
+        <Link href="/administration/controls" className="panel p-6 hover:border-teal-700">
+          <h2 className="section-title">Catálogo de controles</h2>
+          <p className="muted">
+            Agregar y modificar controles; eliminar los que no estén aplicados.
+          </p>
+        </Link>
         <Link href="/administration/organizations" className="panel p-6 hover:border-teal-700">
           <h2 className="section-title">Organizaciones</h2>
           <p className="muted">Agregar, modificar y eliminar organizaciones y sus datos.</p>

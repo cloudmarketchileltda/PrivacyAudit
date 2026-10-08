@@ -81,7 +81,12 @@ test('Organizaciones: CRUD administrativo, borrado completo, bloqueo, reintento 
       );
       previous = id;
     }
+    await db.query(
+      "update findings set status='ACCEPTED_RISK',closure_note='Riesgo aceptado con justificación para probar borrado prioritario' where id=$1",
+      [finding],
+    );
     await identity(db, ids.admin);
+    await db.query("update organizations set status='ARCHIVED' where id=$1", [a]);
     await db.query("select prepare_organization_deletion($1,'ELIMINAR ORGANIZACION')", [a]);
     // Direct finalization cannot bypass Storage API removal.
     await assert.rejects(db.query('select finish_organization_deletion($1)', [a]));

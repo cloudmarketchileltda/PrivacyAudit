@@ -12,6 +12,12 @@ Este archivo reúne las reglas vigentes; las validaciones ejecutables están en 
 4. Si el usuario cambia una regla, actualizar este documento, su implementación y las pruebas relevantes en la misma entrega. Las instrucciones explícitas vigentes del usuario tienen prioridad; no introducir excepciones por cuenta propia. Si documentos y código difieren, registrar y resolver la diferencia, sin presentar como aplicada una regla que solo está escrita.
 5. Todo cambio SQL requiere una migración generada mediante `supabase migration new`. Identificar el proyecto remoto antes de aplicarla y documentar qué quedó aplicado, publicado y verificado. GitHub, Supabase y Dokploy tienen pasos de despliegue independientes.
 
+## Regla prioritaria de eliminación de organizaciones
+
+**ORG-04 prevalece sobre TODAS las demás reglas de conservación, inmutabilidad, archivo y restricciones de eliminación de datos relacionados con la organización.** Después de la confirmación administrativa, se debe eliminar toda su información: evaluaciones y aplicaciones/snapshots de controles, tratamientos, hallazgos, tareas, entregas y versiones de evidencias, archivos, comentarios, membresías, invitaciones, avisos y auditoría asociada. Ninguna otra regla puede dejar registros de esa organización ni bloquear la limpieza por estar aplicada, archivada, cerrada o confirmada. Mantener esta precedencia al incorporar futuras tablas, FK o triggers.
+
+La prioridad opera dentro del borrado autorizado de la organización; no concede permisos de administrador a otros roles. Las cuentas y definiciones globales del catálogo son entidades compartidas: se elimina por completo su vinculación y los datos de la organización, sin destruir información de otras organizaciones. Storage debe completarse mediante su API antes de finalizar la limpieza SQL; si falla, el borrado sigue pendiente y se reintenta hasta completar, sin comunicar éxito parcial.
+
 ## Identidad, cuentas y acceso
 
 | Regla                              | Condición obligatoria                                                                                                                                                                                                                                                                            | Aplicación actual                                                                                                     |
@@ -39,9 +45,17 @@ Para CTA-03, los registros de acceso y auditoría por sí solos no bloquean el b
 
 ORG-06 — Administración: creación, consulta del módulo, modificación y eliminación disponibles exclusivamente en Administración para SUPER_ADMIN; RLS/RPC y Server Actions aplican la restricción. Clientes y consultores mantienen sus flujos de evaluaciones, tratamientos, hallazgos, tareas y evidencias según membresía.
 
-El borrado de organización autorizado el 8 de octubre es una excepción explícita a FLU-05, EVI-02 y EVI-04: elimina también historial, entregas confirmadas y comentarios. La preparación bloquea escrituras; los archivos se eliminan mediante Storage API antes de la limpieza transaccional SQL. Ante error, queda bloqueada y el administrador reintenta Eliminar; no comunicar éxito parcial. Los eventos asociados y snapshots del log se eliminan. Solo queda una constancia administrativa global sin identidad ni datos de la organización. Las cuentas se conservan, aunque pierden las membresías de esa organización.
+El borrado de organización autorizado el 8 de octubre tiene prioridad sobre todas las reglas de conservación y eliminación, incluidas CAT-02, ORG-03, EVA-01, FLU-05, EVI-02, EVI-04 y AUD-02: elimina también historial, entregas confirmadas y comentarios. La preparación bloquea escrituras; los archivos se eliminan mediante Storage API antes de la limpieza transaccional SQL. Ante error, queda bloqueada y el administrador reintenta Eliminar; no comunicar éxito parcial. Los eventos asociados y snapshots del log se eliminan. Solo queda una constancia administrativa global sin identidad ni datos de la organización. Las cuentas se conservan, aunque pierden las membresías de esa organización.
 
 Implementación: `admin_organization_crud`, `admin-delete-organization`, `src/app/(workspace)/administration/organizations`, migraciones de identidad, membresías y tratamientos; `src/features/organizations` y `src/features/users/membership-actions.ts`. Pruebas: `tests/phase1.test.ts`, `tests/memberships.test.ts`, `tests/database.test.ts` y `tests/organizations.test.ts`.
+
+## Catálogo de controles
+
+- CAT-01: módulo disponible solo en Administración para SUPER_ADMIN; creación, edición, lectura del catálogo y borrado comprobados también en servidor y RLS. Consultores/clientes consultan los controles aplicados mediante los snapshots de sus evaluaciones.
+- CAT-02: no eliminar una definición del catálogo mientras exista cualquier aplicación en `assessment_controls`, de cualquier organización/estado, incluso si el control está inactivo. La FK RESTRICT comprueba el uso también ante operaciones concurrentes. Se puede modificar/desactivar; las evaluaciones anteriores conservan su snapshot.
+- CAT-03: ORG-04 tiene prioridad: al eliminar una organización se eliminan siempre todas sus aplicaciones y copias históricas de controles. La protección del catálogo no bloquea ese borrado. La definición global continúa protegida mientras esté aplicada en otra organización; cuando no tenga aplicaciones puede eliminarse desde Administración.
+
+Implementación: `src/app/(workspace)/administration/controls`, `src/features/controls/actions.ts`, políticas `controls_*` y FK `assessment_controls_control_id_fkey`. Prueba: `tests/controls.test.ts`.
 
 ## Evaluaciones, tratamientos y trabajo correctivo
 
@@ -76,7 +90,7 @@ Implementación: migraciones de fases 5–6, `src/features/evidence`, `src/featu
 ## Presentación, alcance y configuración
 
 - UI-01: acciones generales/cambio de rol en azul; edición/guardado en verde; eliminación en rojo. Usar `Button` con variantes del archivo general. Acciones de grilla con icono, etiqueta accesible y título. Navegación, cancelación y filtros pueden ser neutros.
-- UI-02: organizaciones administrativas, cuentas y auditoría muestran como máximo diez filas visibles, con scroll y encabezado fijo. Abrir los detalles del log no debe aumentar la altura ni la cantidad de filas visibles. La página contiene 20 resultados; el viewport y la paginación son valores distintos. Usar las configuraciones compartidas.
+- UI-02: catálogo de controles, organizaciones administrativas, cuentas y auditoría muestran como máximo diez filas visibles, con scroll y encabezado fijo. Abrir los detalles del log no debe aumentar la altura ni la cantidad de filas visibles. La página contiene 20 resultados; el viewport y la paginación son valores distintos. Usar las configuraciones compartidas.
 - SYS-04: el producto presenta avance de evaluación y métricas de gestión; no afirma certificación o cumplimiento jurídico garantizado. Las referencias normativas requieren revisión profesional, sin inferencias jurídicas automáticas.
 - SYS-05: alcance autorizado hasta fase 6; no iniciar fase 7, IA ni integraciones externas sin petición del usuario. El MVP completo todavía incluye fases pendientes.
 

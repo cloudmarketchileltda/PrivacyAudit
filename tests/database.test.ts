@@ -78,7 +78,11 @@ test('Fase 2: catálogo, creación atómica, snapshots, estados e aislamiento', 
       response.snapshot.title,
     );
     await identity(db, ids.a);
-    assert.equal((await db.query('select * from controls')).rows.length, 51);
+    assert.equal(
+      (await db.query('select * from controls')).rows.length,
+      0,
+      'El catálogo es administrativo; las evaluaciones usan sus snapshots.',
+    );
     await db.query(`update assessments set status='IN_PROGRESS' where id=$1`, [assessment]);
     await db.query(`update assessment_controls set status='CONFORM' where assessment_id=$1`, [
       assessment,

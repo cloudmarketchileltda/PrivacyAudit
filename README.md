@@ -263,3 +263,13 @@ Verificación: `npm run test:ui:organizations` usa un backend aislado con migrac
 Estado Supabase: migración `20261008134058_admin_organization_crud.sql` aplicada en `pbihajfbbcbbdvoqpggy`; `admin-delete-organization` v1 ACTIVE. Verificación SQL remota con rollback y rechazo 401 sin sesión aprobados. No se eliminaron organizaciones reales durante la verificación. Redesplegar Next.js en Dokploy después de actualizar el código de GitHub; queda pendiente verificar el recorrido con JWT y archivos reales.
 
 Validación de esta entrega: 25 pruebas unitarias/SQL, lint, typecheck, build, CRUD administrativo de navegador y 216 comprobaciones de pantallas/flujos existentes aprobados.
+
+## Catálogo en Administración y regla prioritaria
+
+Administración → Catálogo de controles es exclusivo de SUPER_ADMIN, con alta, modificación y eliminación; iconos verde/rojo, scroll y paginación comunes. El catálogo global también queda restringido por RLS. Los controles aplicados siguen disponibles dentro de las evaluaciones mediante sus snapshots.
+
+No se elimina un control aplicado en ninguna organización, aunque esté inactivo. Se permite modificar/desactivar sin alterar el historial. La FK protege también llamadas directas y concurrencia; el modal muestra el motivo de bloqueo.
+
+**La eliminación completa de una organización prevalece sobre todas las otras reglas de conservación y eliminación de sus datos relacionados.** Se eliminan también aplicaciones/snapshots de controles, registros de organizaciones archivadas y evidencias confirmadas. Definiciones globales y cuentas compartidas permanecen; se retiran todos sus vínculos y datos de esa organización. Si el control ya no tiene aplicaciones en ninguna organización, el administrador puede eliminarlo. Esta precedencia queda documentada en las reglas y AGENTS.md y cubierta por pruebas SQL y navegador (`npm run test:ui:controls`).
+
+Migración `20261008142527_admin_control_catalog.sql` aplicada en PrivacyAudit `pbihajfbbcbbdvoqpggy`. Pruebas SQL locales y remotas con rollback, pruebas de navegador, lint, typecheck y build aprobados. La prueba completa de organizaciones cubre además archivo, riesgo aceptado, versiones de evidencias confirmadas y prioridad del borrado. Pendiente redesplegar Next.js en Dokploy y recorrer con sesiones y archivos reales.

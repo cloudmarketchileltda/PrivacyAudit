@@ -10,7 +10,9 @@ Cambio de cuentas autorizado el 7 de octubre de 2026: registro público cerrado;
 
 Cambio de membresías autorizado el 7 de octubre de 2026: grillas administrativas separadas; CLIENT con una sola organización como máximo y CONSULTANT con varias. Asignación directa por SUPER_ADMIN, transaccional y auditada. Mantener esta cardinalidad también en invitaciones y RPC heredadas.
 
-Cambio de organizaciones autorizado el 8 de octubre de 2026: CRUD exclusivo de SUPER_ADMIN desde Administración. El borrado confirmado elimina todos los datos de la organización y sus archivos; conservar cuentas de usuario y catálogo global. Esta operación es la excepción explícita a la conservación de hallazgos, tareas y evidencias confirmadas. Borrar blobs con Storage API, nunca solo metadata SQL.
+Cambio de organizaciones autorizado el 8 de octubre de 2026: CRUD exclusivo de SUPER_ADMIN desde Administración. El borrado confirmado elimina todos los datos de la organización y sus archivos; conservar cuentas de usuario y catálogo global. La eliminación completa de TODOS los datos relacionados con la organización prevalece sobre TODAS las otras reglas de conservación, inmutabilidad, archivo y restricciones de eliminación. Mantener esta prioridad en tablas/FK/triggers actuales y futuros. Borrar blobs con Storage API, nunca solo metadata SQL.
+
+Cambio de catálogo autorizado el 8 de octubre de 2026: módulo exclusivo de SUPER_ADMIN desde Administración, con creación/edición/borrado. No eliminar una definición aplicada en ninguna organización, incluso inactiva. Borrar una organización elimina siempre sus aplicaciones/snapshots y relaciones de controles; esa prioridad no destruye definiciones globales compartidas ni datos de otras organizaciones.
 
 Convención de acciones desde el 8 de octubre de 2026: usar las variantes compartidas de `Button`; azul (`default`/`role`) para acciones generales y cambio de rol, verde (`edit`) para modificar/guardar, rojo (`destructive`) para eliminar. Botones de acciones en grillas con icono, `aria-label` y `title`. Navegación/cancelación/filtros pueden usar `outline` o `ghost`.
 
