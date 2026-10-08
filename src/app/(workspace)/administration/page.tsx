@@ -9,7 +9,7 @@ export default async function Page() {
       <h1 className="page-title">Administración</h1>
       <div className="grid md:grid-cols-2 gap-5">
         <Link href="/users" className="panel p-6 hover:border-teal-700">
-          <h2 className="section-title">Usuarios y permisos</h2>
+          <h2 className="section-title">Administración de cuentas</h2>
           <p className="muted">Administrar roles y usuarios del sistema.</p>
         </Link>
         <Link href="/administration/memberships" className="panel p-6 hover:border-teal-700">

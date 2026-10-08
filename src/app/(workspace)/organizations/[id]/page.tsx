@@ -162,7 +162,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             {org.status === 'ACTIVE' && (
               <div className="max-w-md mt-6">
                 <h3 className="text-sm font-semibold mb-3">Invitar usuario cliente</h3>
-                <ActionForm action={inviteClient} label="Crear enlace">
+                <ActionForm action={inviteClient} label="Crear enlace" variant="default">
                   <input type="hidden" name="org" value={id} />
                   <Field label="Email del cliente" name="email" type="email" required />
                 </ActionForm>

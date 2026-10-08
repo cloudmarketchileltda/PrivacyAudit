@@ -76,3 +76,13 @@ La migración `20261008004619_admin_membership_grids.sql` ya está aplicada en P
 Después de publicar y redesplegar esta entrega, pruebe como administrador: asignar cliente, transferirlo a otra organización, retirar su membresía y seleccionar varias organizaciones para un consultor. Verifique con sus sesiones reales el acceso resultante. La base de datos ya aplica la cardinalidad nueva a RPC anteriores e invitaciones, aunque todavía se vea la pantalla antigua. Los cambios de rol entre cliente y consultor requieren retirar primero las membresías incompatibles.
 
 Para corregir el alta administrativa del 7 de octubre: aplicar `20261008012856_fix_admin_account_provisioning.sql` y desplegar `admin-create-user` con `index.ts` y `handler.ts` actuales. Mantener `verify_jwt=false`: la función valida el token mediante Auth `getUser` y el rol actual antes de reservar. La clave administrativa permanece únicamente en Supabase Functions. Next.js sigue invocando la misma función, por lo que no necesita redespliegue para este arreglo.
+
+## Administración de cuentas: edición, eliminación y scroll
+
+Entrega local del 8 de octubre de 2026. Aplicar la migración generada `20261008105702_admin_account_management.sql` al proyecto dedicado PrivacyAudit `pbihajfbbcbbdvoqpggy`, desplegar `admin-manage-user` con `index.ts` y `handler.ts`, y redesplegar Next.js. Estos pasos no se ejecutaron en esta entrega. La nueva consulta `/users` requiere la migración antes de publicar el frontend.
+
+```sh
+supabase functions deploy admin-manage-user --project-ref pbihajfbbcbbdvoqpggy
+```
+
+Mantener `verify_jwt=false`: el handler verifica el JWT con `getUser` y el rol actual. Ninguna credencial privilegiada va en Next.js. Verificar con cuentas reales modificación de nombre/correo, rechazo de correo duplicado, borrado de una cuenta sin relaciones históricas y bloqueo de borrado de cuenta administrativa o con historial. El cambio de correo se habilita administrativamente sin enviar una notificación operativa ni acreditar propiedad del buzón. Verificar que cuentas y auditoría muestran diez filas y desplazamiento interno. El backend local de navegador reproduce operaciones SQL y autorización, pero no demuestra el comportamiento completo de GoTrue ni sesiones reales remotas.

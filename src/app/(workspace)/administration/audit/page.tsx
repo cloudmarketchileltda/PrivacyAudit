@@ -116,7 +116,14 @@ export default async function Page({
           Limpiar
         </Link>
       </form>
-      <div className="table-wrap">
+      <div
+        className="table-wrap ten-row-grid audit-grid"
+        role="region"
+        aria-label="Eventos de auditoría"
+        // Scroll regions need a keyboard focus target.
+        // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+        tabIndex={0}
+      >
         <table className="data-table">
           <thead>
             <tr>
@@ -133,19 +140,27 @@ export default async function Page({
               <tr key={a.id}>
                 <td className="whitespace-nowrap">{formatDateTime(a.created_at)}</td>
                 <td>
-                  {a.actor_name}
+                  <p className="grid-text" title={a.actor_name}>
+                    {a.actor_name}
+                  </p>
                   <p className="muted">{auditRoleLabels[a.actor_role] || a.actor_role}</p>
                 </td>
-                <td>{a.organization_name || 'Sistema'}</td>
                 <td>
-                  <span className="badge">{auditActionLabels[a.action] || a.action}</span>
+                  <p className="grid-text" title={a.organization_name || 'Sistema'}>
+                    {a.organization_name || 'Sistema'}
+                  </p>
+                </td>
+                <td>
+                  <span className="badge max-w-full truncate block">
+                    {auditActionLabels[a.action] || a.action}
+                  </span>
                 </td>
                 <td>
                   {auditEntityLabels[a.entity_type] || a.entity_type}
-                  <p className="muted text-xs break-all max-w-48">{a.entity_id}</p>
+                  <p className="muted text-xs grid-text">{a.entity_id}</p>
                 </td>
                 <td>
-                  <details>
+                  <details className="max-h-20 overflow-auto">
                     <summary className="cursor-pointer text-teal-800">Ver cambios</summary>
                     <pre className="whitespace-pre-wrap break-all max-w-lg text-xs mt-2">
                       {JSON.stringify(a.metadata, null, 2)}

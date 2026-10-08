@@ -222,7 +222,9 @@ export function ProcessingForm({
         </p>
       )}
       <div className="flex flex-wrap gap-3">
-        <Button disabled={pending}>{pending ? 'Guardando…' : 'Guardar tratamiento'}</Button>
+        <Button variant="edit" disabled={pending}>
+          {pending ? 'Guardando…' : 'Guardar tratamiento'}
+        </Button>
         <Button variant="outline" asChild>
           <Link
             href={

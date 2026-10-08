@@ -3,9 +3,10 @@ import { createAccount } from '@/features/users/actions';
 import { requireUser } from '@/features/auth/queries';
 import { notFound } from 'next/navigation';
 import { ActionForm, Field } from '@/components/forms';
-import { setRole } from '@/features/organizations/actions';
+import { AccountAction } from '@/features/users/account-action';
+import { z } from '@/lib/validation';
 import { Pagination, pageNumber, searchTerm } from '@/components/table-tools';
-import type { Profile } from '@/types/domain';
+
 import { Button } from '@/components/ui/button';
 export default async function Page({
   searchParams,
@@ -16,17 +17,28 @@ export default async function Page({
   if (profile.role !== 'SUPER_ADMIN') notFound();
   const params = await searchParams;
   const page = pageNumber(params.page);
-  let query = db
-    .from('profiles')
-    .select('id,full_name,role', { count: 'exact' })
-    .order('full_name');
-  if (searchTerm(params.q)) query = query.ilike('full_name', `%${searchTerm(params.q)}%`);
-  const { data, count, error } = await query.range((page - 1) * 20, page * 20 - 1);
-  if (error) throw error;
+  const { data: result, error } = await db.rpc('admin_accounts', {
+    term: searchTerm(params.q),
+    page_number: page,
+  });
+  if (error) throw new Error('No se pudieron cargar las cuentas.');
+  const { users: accounts, count } = z
+    .object({
+      count: z.number(),
+      users: z.array(
+        z.object({
+          id: z.uuid(),
+          full_name: z.string(),
+          email: z.string(),
+          role: z.enum(['CLIENT', 'CONSULTANT', 'SUPER_ADMIN']),
+        }),
+      ),
+    })
+    .parse(result);
   return (
     <>
       <div className="flex flex-wrap justify-between gap-4 items-center">
-        <h1 className="page-title">Usuarios</h1>
+        <h1 className="page-title">Administración de cuentas</h1>
         <Button asChild variant="outline">
           <Link href="/administration/memberships">Usuarios y membresías</Link>
         </Button>
@@ -37,7 +49,7 @@ export default async function Page({
           Cree una cuenta de cliente o consultor. El rol no asigna acceso a una organización
           existente.
         </p>
-        <ActionForm action={createAccount} label="Crear cuenta">
+        <ActionForm action={createAccount} label="Crear cuenta" variant="default">
           <Field label="Nombre completo" name="full_name" required />
           <Field label="Correo electrónico" name="email" type="email" required />
           <Field
@@ -60,40 +72,76 @@ export default async function Page({
           </p>
         </ActionForm>
       </section>
-      <h2 className="section-title">Usuarios existentes y roles</h2>
+      <h2 className="section-title">Cuentas de usuario</h2>
       <form className="flex gap-3 items-end">
         <label className="form-label flex-1">
-          Buscar por nombre
+          Buscar por nombre o correo
           <input className="field" name="q" defaultValue={params.q} />
         </label>
         <Button variant="outline">Buscar</Button>
       </form>
-      <section className="panel space-y-6">
-        {(data as Profile[]).map((p) => (
-          <div key={p.id} className="border-b border-slate-100 pb-4">
-            <h2 className="font-semibold text-sm">
-              {p.full_name || 'Sin nombre'}
-              {p.id === user.id ? ' · Usted' : ''}
-            </h2>
-            <p className="muted break-all mb-3">{p.id}</p>
-            {p.id !== user.id ? (
-              <ActionForm action={setRole} label="Cambiar rol" variant="outline">
-                <input type="hidden" name="target" value={p.id} />
-                <label className="form-label">
-                  Rol
-                  <select className="field max-w-xs" name="new_role" defaultValue={p.role}>
-                    <option value="CLIENT">Cliente</option>
-                    <option value="CONSULTANT">Consultor</option>
-                    <option value="SUPER_ADMIN">Administrador del sistema</option>
-                  </select>
-                </label>
-              </ActionForm>
-            ) : (
-              <p className="muted">{p.role}</p>
-            )}
-          </div>
-        ))}
-      </section>
+      <div
+        className="table-wrap ten-row-grid"
+        role="region"
+        aria-label="Cuentas de usuario"
+        // Scroll regions need a keyboard focus target.
+        // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+        tabIndex={0}
+      >
+        <table className="data-table">
+          <colgroup>
+            <col style={{ width: '30%' }} />
+            <col style={{ width: '34%' }} />
+            <col style={{ width: '12%' }} />
+            <col style={{ width: '12%' }} />
+            <col style={{ width: '12%' }} />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Correo electrónico</th>
+              <th>Modificar rol</th>
+              <th>Modificar cuenta</th>
+              <th>Eliminar</th>
+            </tr>
+          </thead>
+          <tbody>
+            {accounts.map((account) => (
+              <tr key={account.id}>
+                <td>
+                  <p className="grid-text font-semibold" title={account.full_name}>
+                    {account.full_name || 'Sin nombre'}
+                    {account.id === user.id ? ' · Usted' : ''}
+                  </p>
+                  <p className="muted">
+                    {
+                      { CLIENT: 'Cliente', CONSULTANT: 'Consultor', SUPER_ADMIN: 'Administrador' }[
+                        account.role
+                      ]
+                    }
+                  </p>
+                </td>
+                <td>
+                  <p className="grid-text" title={account.email}>
+                    {account.email}
+                  </p>
+                </td>
+                {(['role', 'edit', 'delete'] as const).map((kind) => (
+                  <td key={kind}>
+                    <AccountAction
+                      key={`${kind}:${account.full_name}:${account.email}:${account.role}`}
+                      account={account}
+                      kind={kind}
+                      self={account.id === user.id}
+                    />
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {!accounts.length && <p className="empty">No se encontraron cuentas.</p>}
+      </div>
       <Pagination count={count || 0} page={page} path="/users" params={params} />
     </>
   );

@@ -69,6 +69,9 @@ export function followingDay(day: string) {
   return date.toISOString().slice(0, 10);
 }
 export const auditActionLabels: Record<string, string> = {
+  ADMIN_ACCOUNT_CREATED: 'Cuenta creada por administrador',
+  ADMIN_ACCOUNT_UPDATED: 'Cuenta modificada por administrador',
+  ADMIN_ACCOUNT_DELETED: 'Cuenta eliminada por administrador',
   CREATE: 'Creación',
   UPDATE: 'Actualización',
   DELETE: 'Eliminación',

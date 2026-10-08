@@ -68,3 +68,52 @@ select {
     @apply py-12 text-center text-sm text-slate-500;
   }
 }
+
+/* Shared administrative viewport: sticky header + ten fixed-height rows. */
+.ten-row-grid {
+  --grid-row-height: 4rem;
+  --grid-header-height: 2.75rem;
+  max-height: calc(var(--grid-header-height) + 10 * var(--grid-row-height));
+  overflow: auto;
+  scrollbar-gutter: stable;
+}
+.ten-row-grid .data-table {
+  table-layout: fixed;
+  min-width: 760px;
+}
+.ten-row-grid thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.ten-row-grid th {
+  height: var(--grid-header-height);
+}
+.ten-row-grid td {
+  height: var(--grid-row-height);
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.audit-grid {
+  --grid-row-height: 5.5rem;
+}
+.audit-grid .data-table {
+  min-width: 1150px;
+}
+.grid-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.account-dialog {
+  width: min(32rem, calc(100vw - 2rem));
+  max-height: calc(100vh - 2rem);
+  overflow: auto;
+  margin: auto;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid #cbd5e1;
+}
+.account-dialog::backdrop {
+  background: #0f172a80;
+}

@@ -10,6 +10,7 @@ export default defineConfig([
     'node_modules/**',
     'artifacts/**',
     'supabase/functions/admin-create-user/index.ts',
+    'supabase/functions/admin-manage-user/index.ts',
   ]),
   js.configs.recommended,
   ...tseslint.configs.recommended,

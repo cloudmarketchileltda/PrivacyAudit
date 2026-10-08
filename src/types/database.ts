@@ -718,6 +718,8 @@ export interface Database {
     Views: Record<string, never>;
     Functions: {
       accept_invitation: { Args: { token: string }; Returns: string };
+      account_mutation_completed: { Args: { reservation_id: string }; Returns: boolean };
+      admin_accounts: { Args: { term: string; page_number: number }; Returns: Json };
       admin_membership_organizations: { Args: Record<string, never>; Returns: Json };
       admin_membership_users: {
         Args: {
@@ -728,6 +730,7 @@ export interface Database {
         Returns: Json;
       };
       can_manage_organization: { Args: { org: string }; Returns: boolean };
+      cancel_account_mutation: { Args: { reservation_id: string }; Returns: undefined };
       cancel_account_provisioning: { Args: { reservation_id: string }; Returns: undefined };
       create_assessment: {
         Args: { org: string; title: string; details?: string };
@@ -757,6 +760,10 @@ export interface Database {
       record_audit_export: { Args: { filters: Json; record_count: number }; Returns: undefined };
       record_evidence_download: { Args: { evidence: string }; Returns: undefined };
       register_consultant: { Args: Record<string, never>; Returns: undefined };
+      reserve_account_mutation: {
+        Args: { target: string; operation: string; account_email: string; account_name: string };
+        Returns: string;
+      };
       reserve_account_provisioning: {
         Args: {
           account_email: string;

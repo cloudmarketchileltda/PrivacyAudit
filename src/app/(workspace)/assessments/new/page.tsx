@@ -23,7 +23,7 @@ export default async function Page({
         {!data.length ? (
           <p className="muted">Cree una organización activa antes de iniciar una evaluación.</p>
         ) : (
-          <ActionForm action={createAssessment} label="Crear evaluación">
+          <ActionForm action={createAssessment} label="Crear evaluación" variant="default">
             <label className="form-label">
               Organización
               <select name="organization_id" className="field" required defaultValue={organization}>

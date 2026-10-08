@@ -122,7 +122,7 @@ export function MembershipForm({
             {errors.organizations.message}
           </p>
         )}
-        <Button type="submit" variant="outline">
+        <Button type="submit" variant="edit">
           {pending
             ? 'Guardando…'
             : role === 'CLIENT'

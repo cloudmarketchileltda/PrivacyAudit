@@ -63,7 +63,7 @@ try {
   await context.clearCookies();
   await login('admin@example.test');
   await page.goto(`${base}/administration`);
-  await page.getByRole('link', { name: /Usuarios y permisos/ }).click();
+  await page.getByRole('link', { name: /Administración de cuentas/ }).click();
   await page.getByRole('heading', { name: 'Crear cuenta de usuario' }).waitFor();
   for (const [role, name] of [
     ['CONSULTANT', 'Consultor creado'],
@@ -78,24 +78,76 @@ try {
     await form.locator('select[name="role"]').selectOption(role);
     await form.getByRole('button', { name: 'Crear cuenta', exact: true }).click();
     await form.getByRole('status').waitFor();
-    await page.getByRole('heading', { name, exact: true }).waitFor();
-    const select = page
-      .getByRole('heading', { name, exact: true })
-      .locator('..')
-      .locator('select[name="new_role"]');
-    assert.equal(await select.inputValue(), role);
-    await select.selectOption(role === 'CLIENT' ? 'CONSULTANT' : 'CLIENT');
-    await page
-      .getByRole('heading', { name, exact: true })
-      .locator('..')
-      .getByRole('button', { name: 'Cambiar rol' })
-      .click();
-    await page
-      .getByRole('heading', { name, exact: true })
-      .locator('..')
-      .getByText('Rol actualizado.')
-      .waitFor();
+    let row = page.getByRole('row').filter({ hasText: name });
+    await row.waitFor();
+    await row.getByRole('button', { name: `Cambiar rol: ${name}` }).click();
+    let dialog = page.getByRole('dialog', { name: 'Cambiar rol', exact: true });
+    assert.equal(await dialog.locator('select[name="new_role"]').inputValue(), role);
+    await dialog
+      .locator('select[name="new_role"]')
+      .selectOption(role === 'CLIENT' ? 'CONSULTANT' : 'CLIENT');
+    await dialog.getByRole('button', { name: 'Cambiar rol', exact: true }).click();
+    await dialog.waitFor({ state: 'hidden' });
+    await row.getByRole('button', { name: `Modificar cuenta: ${name}` }).click();
+    dialog = page.getByRole('dialog', { name: 'Modificar cuenta', exact: true });
+    await dialog.getByLabel('Nombre completo').fill(`${name} editado`);
+    await dialog.getByLabel('Correo electrónico').fill(`${role.toLowerCase()}-edited@example.test`);
+    await dialog.getByRole('button', { name: 'Modificar cuenta', exact: true }).click();
+    await dialog.waitFor({ state: 'hidden' });
+    row = page.getByRole('row').filter({ hasText: `${name} editado` });
+    await row.getByText(`${role.toLowerCase()}-edited@example.test`, { exact: true }).waitFor();
+    await row.getByRole('button', { name: `Eliminar cuenta: ${name} editado` }).click();
+    dialog = page.getByRole('dialog', { name: 'Eliminar cuenta', exact: true });
+    await dialog.getByLabel('Escriba ELIMINAR CUENTA para confirmar').fill('ELIMINAR CUENTA');
+    await dialog.getByRole('button', { name: 'Eliminar cuenta', exact: true }).click();
+    await dialog.waitFor({ state: 'hidden' });
+    await row.waitFor({ state: 'hidden' });
   }
+  // Seed enough real migrated rows to verify the fixed viewport and scrolling.
+  await fixture.db.exec('reset role');
+  for (let i = 0; i < 18; i++)
+    await fixture.db.query(
+      'insert into auth.users(id,email,raw_user_meta_data) values(gen_random_uuid(),$1,$2)',
+      [`grid-${i}@example.test`, JSON.stringify({ full_name: `Usuario grilla ${i}` })],
+    );
+  await page.reload();
+  const checkGrid = async () => {
+    await page.locator('.ten-row-grid').waitFor({ state: 'visible' });
+    await page.waitForFunction(() => {
+      const grid = document.querySelector('.ten-row-grid');
+      return (
+        grid && getComputedStyle(grid).maxHeight !== 'none' && grid.scrollHeight > grid.clientHeight
+      );
+    });
+    const metrics = await page.locator('.ten-row-grid').evaluate((element) => {
+      const rows = [...element.querySelectorAll('tbody tr')];
+      const header = element.querySelector('thead')!.getBoundingClientRect().height;
+      const row = rows[0].getBoundingClientRect().height;
+      return {
+        viewport: element.clientHeight,
+        header,
+        row,
+        scrollHeight: element.scrollHeight,
+        count: rows.length,
+      };
+    });
+    assert.equal(metrics.count, 20);
+    assert.ok(metrics.scrollHeight > metrics.viewport, JSON.stringify(metrics));
+    assert.ok(
+      Math.abs(metrics.viewport - metrics.header - metrics.row * 10) <= 4,
+      JSON.stringify(metrics),
+    );
+    await page.locator('.ten-row-grid').evaluate((element) => {
+      element.scrollTop = element.scrollHeight;
+    });
+    assert.ok(await page.locator('.ten-row-grid').evaluate((element) => element.scrollTop > 0));
+  };
+  await checkGrid();
+  await page.goto(`${base}/administration/audit`);
+  await page.getByRole('heading', { name: 'Log auditable', exact: true }).waitFor();
+  await checkGrid();
+  await page.screenshot({ path: 'artifacts/ui/admin-audit-scroll.png', fullPage: true });
+  await page.goto(`${base}/users`);
   for (const width of [360, 768, 1440]) {
     await page.setViewportSize({ width, height: 1000 });
     assert.equal(
@@ -110,7 +162,7 @@ try {
     'artifacts/ui/admin-accounts-results.json',
     JSON.stringify({ results, errors }, null, 2),
   );
-  console.log('Administrative account creation and role changes passed in browser.');
+  console.log('Administrative account CRUD, role changes and ten-row scrolling passed in browser.');
 } catch (error) {
   await writeFile('artifacts/ui/server.log', logs);
   if (browser) {

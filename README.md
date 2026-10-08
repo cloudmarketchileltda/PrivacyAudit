@@ -60,7 +60,7 @@ supabase db push
 3. Cargue `supabase/seed.sql` mediante SQL Editor del proyecto identificado o `psql "$DATABASE_URL" -f supabase/seed.sql`. La conexión de base de datos es administrativa y solo se utiliza para despliegue, nunca en la app. El seed no contiene usuarios ni contraseñas y no sobrescribe controles existentes.
 4. En Auth habilite Email + Password y confirmación de email. Site URL: `http://localhost:3000` en desarrollo; URL HTTPS real en producción. Permita `http://localhost:3000/auth/callback**` y la ruta equivalente del dominio final. Configure SMTP para entrega fiable fuera de desarrollo.
 5. Para confirmar enlaces en dispositivos distintos configure el template de confirmación con token hash: `{{ .SiteURL }}/auth/callback?token_hash={{ .TokenHash }}&type=email&next=/onboarding`. Las invitaciones de organización requieren una cuenta creada por el administrador. Para recuperación utilice `type=recovery&next=/reset-password`. También se soporta callback PKCE `code` mediante el enlace predeterminado de Supabase en el navegador que inició la operación.
-6. El registro público está cerrado. Complete el perfil del administrador inicial creado en el paso 1 con el SQL del paso 7. Después, las cuentas de cliente y consultor se crean exclusivamente desde Administración → Usuarios y permisos.
+6. El registro público está cerrado. Complete el perfil del administrador inicial creado en el paso 1 con el SQL del paso 7. Después, las cuentas de cliente y consultor se crean exclusivamente desde Administración → Administración de cuentas.
 7. Para crear el administrador inicial, use SQL administrativo con el UUID confirmado:
 
 ```sql
@@ -78,7 +78,7 @@ Requiere Docker. `supabase start` y `supabase db reset` aplican el esquema y see
 ## Uso de las fases 1 y 2
 
 1. Consultor crea una organización con RUT válido y perfil de tratamiento.
-2. El administrador crea primero la cuenta CLIENT en Administración → Usuarios y permisos y la asocia directamente desde Administración → Usuarios y membresías → Clientes. Un cliente puede pertenecer a una sola organización. Se conserva la invitación por enlace como flujo opcional para cuentas existentes: exige email confirmado coincidente, vence en siete días, se acepta una vez y rechaza clientes asignados a otra organización. No se envía email de invitación.
+2. El administrador crea primero la cuenta CLIENT en Administración → Administración de cuentas y la asocia directamente desde Administración → Usuarios y membresías → Clientes. Un cliente puede pertenecer a una sola organización. Se conserva la invitación por enlace como flujo opcional para cuentas existentes: exige email confirmado coincidente, vence en siete días, se acepta una vez y rechaza clientes asignados a otra organización. No se envía email de invitación.
 3. Consultor crea evaluación; se copian los controles activos en una transacción.
 4. Abre cada control y registra estado, comentario y motivo cuando no aplica.
 5. Cambia estado de evaluación a En progreso, En revisión o Completada. Completar exige que no haya controles pendientes. Puede reabrir para corregir respuestas.
@@ -191,7 +191,7 @@ Las migraciones `20261007205833_phase6_notifications_audit_dashboard.sql`, `2026
 
 Cambio solicitado el 7 de octubre de 2026. El login ofrece inicio de sesión y recuperación de acceso. `/signup` redirige a `/login`; `/onboarding` ya no permite activar consultores. No existe registro público ni autoasignación de rol. Las invitaciones de organización vinculan cuentas existentes y no crean usuarios.
 
-Como SUPER_ADMIN, abra **Administración → Usuarios y permisos → Crear cuenta de usuario**. Ingrese nombre completo, correo, contraseña inicial de 10 a 128 caracteres y rol **Cliente** o **Consultor**. La cuenta queda habilitada por el administrador, con email marcado como confirmado administrativamente; esto no demuestra que el usuario haya verificado su buzón. No se envía correo de alta. Comparta las credenciales de forma segura; el usuario puede solicitar su cambio mediante Recuperar acceso o Mi cuenta. El formulario no permite crear administradores. La edición de roles existente conserva sus restricciones: solo SUPER_ADMIN, sin editar la propia cuenta y sin membresías incompatibles.
+Como SUPER_ADMIN, abra **Administración → Administración de cuentas → Crear cuenta de usuario**. Ingrese nombre completo, correo, contraseña inicial de 10 a 128 caracteres y rol **Cliente** o **Consultor**. La cuenta queda habilitada por el administrador, con email marcado como confirmado administrativamente; esto no demuestra que el usuario haya verificado su buzón. No se envía correo de alta. Comparta las credenciales de forma segura; el usuario puede solicitar su cambio mediante Recuperar acceso o Mi cuenta. El formulario no permite crear administradores. La edición de roles existente conserva sus restricciones: solo SUPER_ADMIN, sin editar la propia cuenta y sin membresías incompatibles.
 
 Crear una cuenta o cambiar su rol no asigna organizaciones. El administrador realiza la asignación desde Administración → Usuarios y membresías: una organización por cliente y varias por consultor. Un consultor queda vinculado automáticamente a las organizaciones que crea. Para cambiar entre roles CLIENT y CONSULTANT retire primero las membresías incompatibles.
 
@@ -229,3 +229,11 @@ Prueba específica: `npm run test:ui:memberships`. Las pruebas SQL y de dominio 
 El 7 de octubre de 2026 se corrigió el rechazo de cuentas CLIENT/CONSULTANT: Supabase Auth inserta la cuenta antes de aplicar `app_metadata`. La función `admin-create-user` ahora reserva un UUID, correo, nombre, rol y administrador mediante una RPC autenticada. La reserva privada vence en cinco minutos; el trigger la consume durante el alta y crea el perfil y la auditoría con el rol correcto. No se confía en metadata editable del usuario para autorizar el alta. El registro público sigue cerrado. Ante un fallo de Auth se cancela la reserva; las reservas vencidas se depuran al reservar otra cuenta.
 
 Aplicar `20261008012856_fix_admin_account_provisioning.sql` y desplegar la versión actual de `admin-create-user`. Este ajuste se ejecuta en Supabase; no exige redesplegar Next.js en Dokploy.
+
+### Edición y eliminación de cuentas (8 de octubre de 2026)
+
+**Administración → Administración de cuentas** muestra nombre, correo, cambio de rol, edición y eliminación. Los botones de grilla tienen iconos y etiquetas accesibles. La edición permite cambiar nombre y correo; la eliminación exige escribir `ELIMINAR CUENTA`. Solo SUPER_ADMIN puede operar. Las cuentas administrativas y las cuentas con registros históricos asociados están protegidas contra eliminación; se conserva la auditoría.
+
+Las tablas de cuentas y log tienen diez filas visibles como máximo y scroll interno con encabezado fijo. Conservan paginación de 20 resultados y filtros. Las acciones comparten variantes de `Button`: azul (`default`/`role`), verde para modificar/guardar (`edit`) y rojo para eliminar (`destructive`).
+
+Esta entrega requiere aplicar `20261008105702_admin_account_management.sql`, desplegar la función `admin-manage-user` y redesplegar Next.js; todavía no se aplicó remotamente. La clave Auth Admin permanece exclusivamente en Supabase Functions. Consulte `docs/deployment.md`.

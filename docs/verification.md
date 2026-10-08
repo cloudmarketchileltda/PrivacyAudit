@@ -176,3 +176,10 @@ Se reemplazó ese supuesto por una reserva privada autenticada de UUID/correo/no
 - Advisor: tabla privada con RLS sin políticas intencionadamente (deniega todo acceso directo), grants revocados y funciones acotadas; aviso previo de protección de contraseñas filtradas deshabilitada sin cambios. No se habilitan IA, fase 7 ni canales operativos externos.
 
 El usuario repitió el alta en su sesión real y confirmó «Cuenta creada y habilitada». Los registros muestran Auth Admin HTTP 200 y Edge Function HTTP 201 posteriores al ajuste; se comprobó un perfil CONSULTANT remoto. Esta confirmación valida el flujo real de creación, sin afirmar inicio de sesión de la nueva cuenta ni recuperación por correo. Se actualizó README; el documento maestro permanece sin cambios.
+
+## Administración de cuentas y scroll — 8 de octubre de 2026
+
+- Node 24.19.0: lint, TypeScript y build de producción correctos; 23 pruebas automatizadas aprobadas. Las migraciones se ejecutaron realmente en PostgreSQL PGlite. Las pruebas nuevas comprueban autorización de lectura de correo, edición con sincronización de perfil/actor, metadata ordinaria sin cambios al perfil canónico, reserva vencida, bloqueo de eliminación sin reserva, eliminación con retirada de sesiones y perfil, protección administrativa y rollback del borrado cuando hay relaciones históricas.
+- `npm run test:ui:accounts` aprobado: creación de CLIENT/CONSULTANT, cambio de rol con diálogo, modificación de nombre/correo, eliminación confirmada, tablas con 20 resultados y altura de diez filas, scroll efectivo y encabezados fijos. Sin errores de navegador ni desbordamiento de documento en 360, 768 y 1440 px. Capturas locales en `artifacts/ui/admin-accounts.png` y `artifacts/ui/admin-audit-scroll.png`.
+- Se revisaron visualmente ambas capturas. El backend aislado de prueba ejecuta los handlers y las migraciones reales; no sustituye Supabase Auth/GoTrue, entrega de correo ni un recorrido con JWT remotos.
+- Pendientes: aplicar `20261008105702_admin_account_management.sql`, desplegar `admin-manage-user`, redesplegar Next.js y comprobar el flujo con Auth real. No se modificó el proyecto remoto ni se inició fase 7.

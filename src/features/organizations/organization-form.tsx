@@ -128,7 +128,9 @@ export function OrganizationForm({ organization }: { organization?: Organization
           {state.error}
         </p>
       )}
-      <Button disabled={pending}>{pending ? 'Guardando…' : 'Guardar organización'}</Button>
+      <Button variant="edit" disabled={pending}>
+        {pending ? 'Guardando…' : 'Guardar organización'}
+      </Button>
     </form>
   );
 }

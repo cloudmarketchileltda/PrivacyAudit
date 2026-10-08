@@ -135,7 +135,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             descártela y vuelva a subir el archivo.
           </p>
           {writable && (
-            <ActionForm action={finalizeEvidence} label="Confirmar entrega">
+            <ActionForm action={finalizeEvidence} label="Confirmar entrega" variant="default">
               <input type="hidden" name="id" value={id} />
             </ActionForm>
           )}

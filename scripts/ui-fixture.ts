@@ -1,3 +1,4 @@
+import { mutationHandler } from '../supabase/functions/admin-manage-user/handler';
 import { accountHandler } from '../supabase/functions/admin-create-user/handler';
 // Isolated UI test backend. This is NOT Supabase Auth or PostgREST and is never imported by application code.
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
@@ -27,6 +28,7 @@ const functions = new Set([
   'accept_invitation',
   'manage_member',
   'set_user_organizations',
+  'admin_accounts',
   'admin_membership_users',
   'admin_membership_organizations',
   'set_user_role',
@@ -97,7 +99,7 @@ export async function startFixture(port = 54331) {
   const db: PGlite = await database();
   await users(db);
   await db.exec(
-    'create role supabase_auth_admin; grant usage on schema auth to supabase_auth_admin; grant insert on auth.users to supabase_auth_admin;',
+    'create role supabase_auth_admin; grant usage on schema auth to supabase_auth_admin; grant select,insert,update,delete on auth.users to supabase_auth_admin;',
   );
   await db.exec(await readFile('supabase/seed.sql', 'utf8'));
   await identity(db, ids.a);
@@ -186,6 +188,53 @@ export async function startFixture(port = 54331) {
         return;
       }
       const url = new URL(request.url || '/', `http://localhost:${port}`);
+      if (url.pathname === '/functions/v1/admin-manage-user') {
+        const data = await body(request);
+        const actor = uid(request);
+        const handler = mutationHandler({
+          async authorize() {
+            const { rows } = await db.query<{ role: string }>(
+              'select role from profiles where id=$1',
+              [actor],
+            );
+            return rows[0] ? { id: actor, role: rows[0].role } : null;
+          },
+          async mutate(input) {
+            await identity(db, actor);
+            const { rows } = await db.query<{ id: string }>(
+              'select public.reserve_account_mutation($1,$2,$3,$4) id',
+              [input.target, input.operation, input.email ?? null, input.full_name ?? null],
+            );
+            try {
+              await db.transaction(async (tx) => {
+                await tx.exec('set local role supabase_auth_admin');
+                if (input.operation === 'DELETE')
+                  await tx.query('delete from auth.users where id=$1', [input.target]);
+                else
+                  await tx.query(
+                    'update auth.users set email=$2,raw_user_meta_data=$3 where id=$1',
+                    [input.target, input.email, JSON.stringify({ full_name: input.full_name })],
+                  );
+              });
+              return true;
+            } catch {
+              return false;
+            } finally {
+              await identity(db, actor);
+              await db.query('select public.cancel_account_mutation($1)', [rows[0].id]);
+            }
+          },
+        });
+        const result = await handler(
+          new Request(url, {
+            method: 'POST',
+            headers: { Authorization: String(request.headers.authorization || '') },
+            body: JSON.stringify(data),
+          }),
+        );
+        json(response, result.status, await result.json());
+        return;
+      }
       if (url.pathname === '/functions/v1/admin-create-user') {
         const data = await body(request);
         const handler = accountHandler({

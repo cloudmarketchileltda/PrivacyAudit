@@ -7,12 +7,12 @@ export function ActionForm({
   action,
   children,
   label = 'Guardar',
-  variant = 'default',
+  variant = 'edit',
 }: {
   action: FormAction;
   children?: React.ReactNode;
   label?: string;
-  variant?: 'default' | 'outline' | 'destructive';
+  variant?: 'default' | 'outline' | 'destructive' | 'edit' | 'role';
 }) {
   const [state, formAction, pending] = useActionState(action, {});
   return (

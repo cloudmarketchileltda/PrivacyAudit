@@ -18,7 +18,7 @@ export default async function Page({
           El enlace no es válido o ha vencido.
         </p>
       )}
-      <ActionForm action={login} label="Entrar">
+      <ActionForm action={login} label="Entrar" variant="default">
         <input type="hidden" name="next" value={params.next || '/dashboard'} />
         <Field label="Email" name="email" type="email" required />
         <Field label="Contraseña" name="password" type="password" required />

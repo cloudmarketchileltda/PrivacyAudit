@@ -24,7 +24,7 @@ export default async function Page({
           evaluaciones de esa organización.
         </p>
         {user ? (
-          <ActionForm action={acceptInvite} label="Aceptar invitación">
+          <ActionForm action={acceptInvite} label="Aceptar invitación" variant="default">
             <p className="text-sm">Sesión: {user.email}</p>
             <input type="hidden" name="token" value={token || ''} />
           </ActionForm>

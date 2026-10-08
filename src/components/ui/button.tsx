@@ -7,12 +7,14 @@ const variants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-teal-800 text-white hover:bg-teal-900',
+        default: 'bg-blue-700 text-white hover:bg-blue-800',
+        role: 'bg-blue-700 text-white hover:bg-blue-800',
+        edit: 'bg-green-700 text-white hover:bg-green-800',
         outline: 'border border-slate-300 bg-white hover:bg-slate-50',
         destructive: 'bg-red-700 text-white hover:bg-red-800',
         ghost: 'hover:bg-slate-100',
       },
-      size: { default: 'h-10 px-4', sm: 'h-8 px-3', lg: 'h-12 px-6' },
+      size: { default: 'h-10 px-4', sm: 'h-8 px-3', lg: 'h-12 px-6', icon: 'h-9 w-9 shrink-0' },
     },
     defaultVariants: { variant: 'default', size: 'default' },
   },

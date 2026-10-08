@@ -210,7 +210,7 @@ export function WorkflowForm({
           </p>
         )}
         <div className="flex flex-wrap gap-3">
-          <Button disabled={pending}>
+          <Button variant="edit" disabled={pending}>
             {pending ? 'Guardando…' : finding ? 'Guardar hallazgo' : 'Guardar tarea'}
           </Button>
           <Button asChild variant="outline">
