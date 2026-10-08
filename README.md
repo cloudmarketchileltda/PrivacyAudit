@@ -236,4 +236,4 @@ Aplicar `20261008012856_fix_admin_account_provisioning.sql` y desplegar la versi
 
 Las tablas de cuentas y log tienen diez filas visibles como máximo y scroll interno con encabezado fijo. Conservan paginación de 20 resultados y filtros. Las acciones comparten variantes de `Button`: azul (`default`/`role`), verde para modificar/guardar (`edit`) y rojo para eliminar (`destructive`).
 
-Esta entrega requiere aplicar `20261008105702_admin_account_management.sql`, desplegar la función `admin-manage-user` y redesplegar Next.js; todavía no se aplicó remotamente. La clave Auth Admin permanece exclusivamente en Supabase Functions. Consulte `docs/deployment.md`.
+La migración `20261008120939_admin_account_management.sql` ya está aplicada en PrivacyAudit y `admin-manage-user` versión 1 está activa. Falta redesplegar Next.js y verificar edición/borrado con sesiones reales. La clave Auth Admin permanece exclusivamente en Supabase Functions. Consulte `docs/deployment.md`.

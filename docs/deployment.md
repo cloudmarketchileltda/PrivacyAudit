@@ -79,7 +79,7 @@ Para corregir el alta administrativa del 7 de octubre: aplicar `20261008012856_f
 
 ## Administración de cuentas: edición, eliminación y scroll
 
-Entrega local del 8 de octubre de 2026. Aplicar la migración generada `20261008105702_admin_account_management.sql` al proyecto dedicado PrivacyAudit `pbihajfbbcbbdvoqpggy`, desplegar `admin-manage-user` con `index.ts` y `handler.ts`, y redesplegar Next.js. Estos pasos no se ejecutaron en esta entrega. La nueva consulta `/users` requiere la migración antes de publicar el frontend.
+El 8 de octubre de 2026 se aplicó `20261008120939_admin_account_management.sql` al proyecto dedicado PrivacyAudit `pbihajfbbcbbdvoqpggy` (ACTIVE_HEALTHY) y se desplegó `admin-manage-user` versión 1 ACTIVE. La versión local se alineó con la asignada por el historial remoto; el archivo original se generó mediante `supabase migration new`. No repita la migración. Falta redesplegar Next.js en Dokploy.
 
 ```sh
 supabase functions deploy admin-manage-user --project-ref pbihajfbbcbbdvoqpggy
