@@ -1,4 +1,3 @@
-import { randomUUID } from 'node:crypto';
 import { accountHandler } from '../supabase/functions/admin-create-user/handler';
 // Isolated UI test backend. This is NOT Supabase Auth or PostgREST and is never imported by application code.
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
@@ -200,7 +199,12 @@ export async function startFixture(port = 54331) {
             return rows[0] ? { id, role: rows[0].role } : null;
           },
           async create(input, actor) {
-            const id = randomUUID();
+            await identity(db, actor);
+            const { rows } = await db.query<{ id: string }>(
+              'select public.reserve_account_provisioning($1,$2,$3) as id',
+              [input.email, input.full_name, input.role],
+            );
+            const id = rows[0].id;
             try {
               await db.transaction(async (tx) => {
                 await tx.exec('set local role supabase_auth_admin');
@@ -210,7 +214,7 @@ export async function startFixture(port = 54331) {
                     id,
                     input.email,
                     JSON.stringify({ full_name: input.full_name }),
-                    JSON.stringify({ provisioned_by: actor, provisioned_role: input.role }),
+                    JSON.stringify({ provider: 'email', providers: ['email'] }),
                   ],
                 );
               });

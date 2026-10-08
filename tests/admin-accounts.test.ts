@@ -75,25 +75,118 @@ test('Auth: registro público y autoactivación bloqueados, rol inicial y actor 
     await assert.rejects(insert({}, { provisioned_by: ids.admin, provisioned_role: 'CONSULTANT' }));
     await assert.rejects(insert({ provisioned_by: ids.a, provisioned_role: 'CONSULTANT' }));
     await assert.rejects(insert({ provisioned_by: ids.admin, provisioned_role: 'SUPER_ADMIN' }));
-    await insert(
-      { provisioned_by: ids.admin, provisioned_role: 'CONSULTANT' },
-      { full_name: 'Consultor creado', role: 'SUPER_ADMIN' },
+    // GoTrue's initial INSERT contains only provider app metadata. It updates
+    // caller-supplied app_metadata later in the same transaction.
+    await assert.rejects(insert({ provisioned_by: ids.admin, provisioned_role: 'CONSULTANT' }));
+    await identity(db, ids.client);
+    await assert.rejects(
+      db.query("select public.reserve_account_provisioning('new@example.test','Nuevo','CLIENT')"),
+    );
+    await identity(db, ids.a);
+    await assert.rejects(
+      db.query(
+        "select public.reserve_account_provisioning('new@example.test','Nuevo','CONSULTANT')",
+      ),
+    );
+    await identity(db, ids.admin);
+    await assert.rejects(
+      db.query(
+        "select public.reserve_account_provisioning('new@example.test','Nuevo','SUPER_ADMIN')",
+      ),
+    );
+    await assert.rejects(db.query('select * from private.account_provisioning'));
+    const reserve = async (role: string) =>
+      (
+        await db.query<{ id: string }>(
+          'select public.reserve_account_provisioning($1,$2,$3) as id',
+          ['admin-created@example.test', 'Consultor creado', role],
+        )
+      ).rows[0].id;
+    const reservation = await reserve('CONSULTANT');
+    await db.exec('reset role; set role supabase_auth_admin');
+    await assert.rejects(
+      db.query('insert into auth.users(id,email) values($1,$2)', [
+        reservation,
+        'wrong@example.test',
+      ]),
+    );
+    await db.query(
+      'insert into auth.users(id,email,raw_app_meta_data,raw_user_meta_data) values($1,$2,$3,$4)',
+      [
+        reservation,
+        'admin-created@example.test',
+        JSON.stringify({ provider: 'email', providers: ['email'] }),
+        JSON.stringify({ full_name: 'Untrusted', role: 'SUPER_ADMIN' }),
+      ],
     );
     await db.exec('reset role');
     assert.equal(
-      (await db.query<{ role: string }>('select role from profiles where id=$1', [uid])).rows[0]
-        .role,
+      (await db.query<{ role: string }>('select role from profiles where id=$1', [reservation]))
+        .rows[0].role,
       'CONSULTANT',
     );
     const events = await db.query<{ actor_id: string; metadata: { role: string } }>(
       "select actor_id,metadata from audit_logs where entity_id=$1 and action='ADMIN_ACCOUNT_CREATED'",
-      [uid],
+      [reservation],
     );
     assert.equal(events.rows.length, 1);
     assert.equal(events.rows[0].actor_id, ids.admin);
     assert.equal(events.rows[0].metadata.role, 'CONSULTANT');
     assert.equal(
-      (await db.query('select * from organization_members where user_id=$1', [uid])).rows.length,
+      (await db.query('select * from organization_members where user_id=$1', [reservation])).rows
+        .length,
+      0,
+    );
+    assert.equal(
+      (await db.query('select * from private.account_provisioning where id=$1', [reservation])).rows
+        .length,
+      0,
+    );
+    assert.equal(
+      (
+        await db.query<{ full_name: string }>('select full_name from profiles where id=$1', [
+          reservation,
+        ])
+      ).rows[0].full_name,
+      'Consultor creado',
+    );
+    await identity(db, ids.admin);
+    const clientReservation = await reserve('CLIENT');
+    await db.exec('reset role; set role supabase_auth_admin');
+    await db.query('insert into auth.users(id,email,raw_app_meta_data) values($1,$2,$3)', [
+      clientReservation,
+      'admin-created@example.test',
+      JSON.stringify({ provider: 'email' }),
+    ]);
+    await db.exec('reset role');
+    assert.equal(
+      (
+        await db.query<{ role: string }>('select role from profiles where id=$1', [
+          clientReservation,
+        ])
+      ).rows[0].role,
+      'CLIENT',
+    );
+    await identity(db, ids.admin);
+    const expired = await reserve('CLIENT');
+    await db.exec('reset role');
+    await db.query(
+      "update private.account_provisioning set expires_at=now()-interval '1 minute' where id=$1",
+      [expired],
+    );
+    await db.exec('set role supabase_auth_admin');
+    await assert.rejects(
+      db.query('insert into auth.users(id,email) values($1,$2)', [
+        expired,
+        'admin-created@example.test',
+      ]),
+    );
+    await identity(db, ids.admin);
+    await db.query('select public.cancel_account_provisioning($1)', [expired]);
+    await db.exec('reset role');
+    assert.equal(
+      (await db.query('select * from private.account_provisioning where id=$1', [expired])).rows
+        .length,
       0,
     );
   } finally {

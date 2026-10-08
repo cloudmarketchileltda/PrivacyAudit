@@ -6,7 +6,11 @@ export type AccountInput = {
 };
 export type AccountDependencies = {
   authorize: (token: string) => Promise<{ id: string; role: string } | null>;
-  create: (input: AccountInput, actor: string) => Promise<{ id?: string; error?: string }>;
+  create: (
+    input: AccountInput,
+    actor: string,
+    token: string,
+  ) => Promise<{ id?: string; error?: string }>;
 };
 export function accountInput(value: unknown): AccountInput | null {
   if (!value || typeof value !== 'object') return null;
@@ -59,7 +63,7 @@ export function accountHandler(deps: AccountDependencies) {
         return reply(400, {
           error: 'Revise nombre, correo, rol y contraseña (10 a 128 caracteres).',
         });
-      const result = await deps.create(input, actor.id);
+      const result = await deps.create(input, actor.id, token);
       if (result.error || !result.id)
         return reply(400, {
           error:

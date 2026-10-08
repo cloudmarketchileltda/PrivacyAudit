@@ -223,3 +223,9 @@ No se permiten nuevas asignaciones a organizaciones archivadas. Las membresías 
 El guardado verifica en SQL el rol y las membresías que se mostraron al abrir la página. Si otro administrador los cambió, rechaza el guardado y solicita actualizar, sin sobrescribir el cambio. Solo se añaden/retiran relaciones que cambiaron; los triggers existentes conservan la auditoría con el administrador real. La lista de organizaciones se agrega en SQL, sin el límite de 1.000 filas de la API.
 
 Prueba específica: `npm run test:ui:memberships`. Las pruebas SQL y de dominio están incluidas en `npm test` y `npm run test:db`. La migración `20261008004619_admin_membership_grids.sql` ya está aplicada en PrivacyAudit; no vuelva a aplicarla manualmente. El estado del despliegue y los resultados se documentan en `docs/verification.md`. El documento maestro permanece sin modificaciones.
+
+### Corrección de creación de cuentas administrativas
+
+El 7 de octubre de 2026 se corrigió el rechazo de cuentas CLIENT/CONSULTANT: Supabase Auth inserta la cuenta antes de aplicar `app_metadata`. La función `admin-create-user` ahora reserva un UUID, correo, nombre, rol y administrador mediante una RPC autenticada. La reserva privada vence en cinco minutos; el trigger la consume durante el alta y crea el perfil y la auditoría con el rol correcto. No se confía en metadata editable del usuario para autorizar el alta. El registro público sigue cerrado. Ante un fallo de Auth se cancela la reserva; las reservas vencidas se depuran al reservar otra cuenta.
+
+Aplicar `20261008012856_fix_admin_account_provisioning.sql` y desplegar la versión actual de `admin-create-user`. Este ajuste se ejecuta en Supabase; no exige redesplegar Next.js en Dokploy.

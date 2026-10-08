@@ -728,6 +728,7 @@ export interface Database {
         Returns: Json;
       };
       can_manage_organization: { Args: { org: string }; Returns: boolean };
+      cancel_account_provisioning: { Args: { reservation_id: string }; Returns: undefined };
       create_assessment: {
         Args: { org: string; title: string; details?: string };
         Returns: string;
@@ -756,6 +757,14 @@ export interface Database {
       record_audit_export: { Args: { filters: Json; record_count: number }; Returns: undefined };
       record_evidence_download: { Args: { evidence: string }; Returns: undefined };
       register_consultant: { Args: Record<string, never>; Returns: undefined };
+      reserve_account_provisioning: {
+        Args: {
+          account_email: string;
+          account_name: string;
+          account_role: Database['public']['Enums']['app_role'];
+        };
+        Returns: string;
+      };
       revoke_invitation: { Args: { invitation_id: string }; Returns: undefined };
       set_user_organizations: {
         Args: {
