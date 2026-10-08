@@ -68,3 +68,9 @@ La migración `20261007234041_admin_managed_accounts.sql` y la Edge Function `ad
 Redespliegue esta entrega de Next.js para retirar los enlaces de registro e incorporar Crear cuenta en Administración → Usuarios y permisos. Mientras no se redespliegue, las pantallas antiguas pueden seguir apareciendo, pero el trigger de Auth ya rechaza altas públicas y la RPC de autoactivación ya está bloqueada. En el proyecto remoto no se modificó el ajuste de Auth Allow new users to sign up: el bloqueo comprobado se aplica en la base de datos y una llamada directa de signup devuelve HTTP 500 sin crear usuarios. Se recomienda deshabilitar también ese ajuste en Auth; no sustituye la autorización administrativa de la función.
 
 Compruebe con su administrador real la creación de un CLIENT y un CONSULTANT, entrada con la contraseña inicial, cambio de contraseña por recuperación y vinculación a una organización. El administrador habilita el email administrativamente; no se envía correo de alta ni se afirma verificación del buzón. Las cuentas existentes conservan sus roles y membresías.
+
+## Grillas de usuarios y membresías
+
+La migración `20261008004619_admin_membership_grids.sql` ya está aplicada en PrivacyAudit `pbihajfbbcbbdvoqpggy`. No repita su aplicación. No requiere nuevas variables ni claves privilegiadas en Next.js. La nueva sección es `/administration/memberships`, exclusivamente para SUPER_ADMIN. El cliente tiene una organización como máximo; el consultor puede tener varias.
+
+Después de publicar y redesplegar esta entrega, pruebe como administrador: asignar cliente, transferirlo a otra organización, retirar su membresía y seleccionar varias organizaciones para un consultor. Verifique con sus sesiones reales el acceso resultante. La base de datos ya aplica la cardinalidad nueva a RPC anteriores e invitaciones, aunque todavía se vea la pantalla antigua. Los cambios de rol entre cliente y consultor requieren retirar primero las membresías incompatibles.

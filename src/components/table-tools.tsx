@@ -4,18 +4,20 @@ export function Pagination({
   page,
   count,
   pageSize = 20,
+  pageParam = 'page',
   path,
   params,
 }: {
   page: number;
   count: number;
   pageSize?: number;
+  pageParam?: string;
   path: string;
   params: Record<string, string | undefined>;
 }) {
   const total = Math.max(1, Math.ceil(count / pageSize));
   const href = (n: number) =>
-    `${path}?${new URLSearchParams({ ...(Object.fromEntries(Object.entries(params).filter(([, v]) => v !== undefined)) as Record<string, string>), page: String(n) })}`;
+    `${path}?${new URLSearchParams({ ...(Object.fromEntries(Object.entries(params).filter(([, v]) => v !== undefined)) as Record<string, string>), [pageParam]: String(n) })}`;
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 text-sm">
       <p className="text-slate-500">

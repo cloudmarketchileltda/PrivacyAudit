@@ -49,6 +49,9 @@ export async function acceptInvite(_: ActionState, data: FormData): Promise<Acti
   const { db } = await requireUser();
   const { data: org, error } = await db.rpc('accept_invitation', { token: token.data });
   if (error)
-    return { error: 'Invitación vencida, utilizada, revocada o correspondiente a otro email.' };
+    return {
+      error:
+        'No se pudo aceptar la invitación. Revise el correo y la vigencia; la cuenta debe ser cliente y no estar asignada a otra organización.',
+    };
   redirect(`/organizations/${org}`);
 }

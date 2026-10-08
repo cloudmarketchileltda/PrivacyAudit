@@ -78,7 +78,7 @@ Requiere Docker. `supabase start` y `supabase db reset` aplican el esquema y see
 ## Uso de las fases 1 y 2
 
 1. Consultor crea una organización con RUT válido y perfil de tratamiento.
-2. El administrador crea primero la cuenta CLIENT en Administración → Usuarios y permisos. El consultor crea un enlace de invitación en el resumen de la organización y lo comparte con el cliente. La aplicación no envía email de invitación. El enlace exige email confirmado coincidente, vence en siete días y solo se acepta una vez. El consultor puede revocarlo o retirar membresías.
+2. El administrador crea primero la cuenta CLIENT en Administración → Usuarios y permisos y la asocia directamente desde Administración → Usuarios y membresías → Clientes. Un cliente puede pertenecer a una sola organización. Se conserva la invitación por enlace como flujo opcional para cuentas existentes: exige email confirmado coincidente, vence en siete días, se acepta una vez y rechaza clientes asignados a otra organización. No se envía email de invitación.
 3. Consultor crea evaluación; se copian los controles activos en una transacción.
 4. Abre cada control y registra estado, comentario y motivo cuando no aplica.
 5. Cambia estado de evaluación a En progreso, En revisión o Completada. Completar exige que no haya controles pendientes. Puede reabrir para corregir respuestas.
@@ -193,7 +193,7 @@ Cambio solicitado el 7 de octubre de 2026. El login ofrece inicio de sesión y r
 
 Como SUPER_ADMIN, abra **Administración → Usuarios y permisos → Crear cuenta de usuario**. Ingrese nombre completo, correo, contraseña inicial de 10 a 128 caracteres y rol **Cliente** o **Consultor**. La cuenta queda habilitada por el administrador, con email marcado como confirmado administrativamente; esto no demuestra que el usuario haya verificado su buzón. No se envía correo de alta. Comparta las credenciales de forma segura; el usuario puede solicitar su cambio mediante Recuperar acceso o Mi cuenta. El formulario no permite crear administradores. La edición de roles existente conserva sus restricciones: solo SUPER_ADMIN, sin editar la propia cuenta y sin membresías incompatibles.
 
-Crear una cuenta o cambiar su rol no asigna organizaciones. Para clientes, el consultor o administrador genera un enlace en Organización → Usuarios y membresías; para consultores existentes, el administrador los asigna desde esa sección. Un consultor queda vinculado a las organizaciones que crea.
+Crear una cuenta o cambiar su rol no asigna organizaciones. El administrador realiza la asignación desde Administración → Usuarios y membresías: una organización por cliente y varias por consultor. Un consultor queda vinculado automáticamente a las organizaciones que crea. Para cambiar entre roles CLIENT y CONSULTANT retire primero las membresías incompatibles.
 
 La Server Action y la Edge Function `admin-create-user` verifican al usuario y su rol actual en `profiles`. La función valida el JWT con `getUser`, sin confiar en metadata del usuario. La clave privilegiada permanece exclusivamente en el entorno gestionado de Supabase Functions; no se agrega a Next.js, `.env.local`, Docker ni variables públicas. Se utiliza la API administrativa oficial de Auth, sin fabricar usuarios ni contraseñas mediante SQL. Un trigger de Auth rechaza altas sin metadata administrativa protegida y sin administrador válido, también por la API pública; los roles SQL de mantenimiento `postgres` y `supabase_admin` conservan el bootstrap/importación. El perfil y el evento `ADMIN_ACCOUNT_CREATED`, con actor y rol, se generan en la transacción de alta. No se registran contraseñas.
 
@@ -208,3 +208,18 @@ supabase functions deploy admin-create-user --project-ref SU_PROYECTO
 `verify_jwt=false` en esta función permite usar las claves publishable modernas: la función realiza explícitamente autenticación mediante Auth y autorización antes de crear la cuenta. No acepta solicitudes anónimas ni de clientes/consultores. No hay CORS público porque Next.js invoca la función desde servidor.
 
 Verificación específica: `npm run test:ui:accounts`. `npm test` y `npm run test:db` incluyen las denegaciones de registro/autoactivación y la creación administrativa con rol y trazabilidad.
+
+## Grillas administrativas de usuarios y membresías
+
+Cambio solicitado el 7 de octubre de 2026. Abra **Administración → Usuarios y membresías**. La sección tiene dos grillas separadas con nombre, correo, organizaciones actuales y controles de asignación; búsqueda por nombre/correo y paginación independiente de 20 usuarios por grilla. El botón Crear usuarios y administrar roles lleva al módulo existente de cuentas.
+
+- **Clientes:** seleccione una organización y pulse **Guardar asignación**. La asignación es inmediata, sin enlace ni aceptación del usuario. Cambiarla retira su acceso anterior y lo incorpora a la nueva organización en una sola transacción. **Sin organización** retira la membresía; la cuenta y su historial se conservan.
+- **Consultores:** abra **Seleccionar organizaciones**, marque una o varias y pulse **Guardar organizaciones**. Las organizaciones desmarcadas dejan de estar asignadas; se conservan las seleccionadas. Desmarcar todas retira todas sus membresías. Ya no es necesario copiar el UUID en el resumen de una organización: allí existe un enlace a estas grillas.
+
+Solo SUPER_ADMIN consulta estas grillas y guarda sus asignaciones. Un índice único parcial impide que cualquier cuenta tenga más de una membresía CLIENT, también mediante las RPC anteriores e invitaciones. Las membresías deben coincidir con el rol global, salvo las membresías históricas de SUPER_ADMIN. Cambiar de cliente a consultor o viceversa exige retirar antes las membresías incompatibles.
+
+No se permiten nuevas asignaciones a organizaciones archivadas. Las membresías ya existentes en ellas se pueden conservar o retirar. Al transferir o retirar una membresía, los registros, tareas, evidencias y autores históricos permanecen; se pierde el acceso a los registros de la organización retirada. No se reasignan sus tareas automáticamente.
+
+El guardado verifica en SQL el rol y las membresías que se mostraron al abrir la página. Si otro administrador los cambió, rechaza el guardado y solicita actualizar, sin sobrescribir el cambio. Solo se añaden/retiran relaciones que cambiaron; los triggers existentes conservan la auditoría con el administrador real. La lista de organizaciones se agrega en SQL, sin el límite de 1.000 filas de la API.
+
+Prueba específica: `npm run test:ui:memberships`. Las pruebas SQL y de dominio están incluidas en `npm test` y `npm run test:db`. La migración `20261008004619_admin_membership_grids.sql` ya está aplicada en PrivacyAudit; no vuelva a aplicarla manualmente. El estado del despliegue y los resultados se documentan en `docs/verification.md`. El documento maestro permanece sin modificaciones.

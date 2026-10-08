@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { createAccount } from '@/features/users/actions';
 import { requireUser } from '@/features/auth/queries';
 import { notFound } from 'next/navigation';
@@ -24,7 +25,12 @@ export default async function Page({
   if (error) throw error;
   return (
     <>
-      <h1 className="page-title">Usuarios</h1>
+      <div className="flex flex-wrap justify-between gap-4 items-center">
+        <h1 className="page-title">Usuarios</h1>
+        <Button asChild variant="outline">
+          <Link href="/administration/memberships">Usuarios y membresías</Link>
+        </Button>
+      </div>
       <section className="panel max-w-xl">
         <h2 className="section-title">Crear cuenta de usuario</h2>
         <p className="muted mb-4">

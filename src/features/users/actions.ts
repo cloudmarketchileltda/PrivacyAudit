@@ -23,6 +23,7 @@ export async function createAccount(_: ActionState, form: FormData): Promise<Act
         'No se pudo crear la cuenta. Revise si el correo ya existe, la contraseña y la disponibilidad del servicio.',
     };
   revalidatePath('/users');
+  revalidatePath('/administration/memberships');
   return {
     success:
       'Cuenta creada y habilitada. Comparta las credenciales de forma segura; el usuario puede cambiar su contraseña mediante Recuperar acceso. Asigne después su organización.',

@@ -27,6 +27,9 @@ const functions = new Set([
   'invite_client',
   'accept_invitation',
   'manage_member',
+  'set_user_organizations',
+  'admin_membership_users',
+  'admin_membership_organizations',
   'set_user_role',
   'revoke_invitation',
   'can_manage_organization',
@@ -344,7 +347,15 @@ export async function startFixture(port = 54331) {
           const query = `select public.${identifier(fn)}(${args.map(([key], i) => `${identifier(key)} => $${i + 1}`).join(',')}) as value`;
           const result = await tx.query<{ value: unknown }>(
             query,
-            args.map(([, v]) => (typeof v === 'object' && v !== null ? JSON.stringify(v) : v)),
+            args.map(([key, v]) =>
+              fn === 'set_user_organizations' &&
+              ['organizations', 'expected_organizations'].includes(key) &&
+              Array.isArray(v)
+                ? `{${v.join(',')}}`
+                : typeof v === 'object' && v !== null
+                  ? JSON.stringify(v)
+                  : v,
+            ),
           );
           return { value: result.rows[0].value, count: 1 };
         }
@@ -465,7 +476,10 @@ export async function startFixture(port = 54331) {
       json(response, 200, result.value);
     } catch (error) {
       json(response, 400, {
-        code: 'FIXTURE_ERROR',
+        code:
+          typeof error === 'object' && error !== null && 'code' in error
+            ? String(error.code)
+            : 'FIXTURE_ERROR',
         message: error instanceof Error ? error.message : 'Error',
       });
     }

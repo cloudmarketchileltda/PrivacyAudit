@@ -9,7 +9,7 @@ try {
   );
   const names = new Set(enums.map((e) => e.name));
   function type(name: string) {
-    if (name === '_text') return 'string[]';
+    if (name === '_text' || name === '_uuid') return 'string[]';
     if (names.has(name)) return `Database['public']['Enums']['${name}']`;
     if (['int2', 'int4', 'int8', 'numeric', 'float4', 'float8'].includes(name)) return 'number';
     if (name === 'bool') return 'boolean';
@@ -50,7 +50,7 @@ try {
     `select p.proname as name,t.typname as returns,p.pronargdefaults as defaults,coalesce((select jsonb_agg(jsonb_build_object('name',p.proargnames[a.n],'type',at.typname) order by a.n) from unnest(p.proargtypes) with ordinality a(oid,n) join pg_type at on at.oid=a.oid),'[]') as args from pg_proc p join pg_namespace n on n.oid=p.pronamespace join pg_type t on t.oid=p.prorettype where n.nspname='public' order by p.proname`,
   );
   for (const fn of functions)
-    output += `${fn.name}: { Args: ${fn.args.length ? `{${fn.args.map((a, i) => `${a.name}${i >= fn.args.length - fn.defaults ? '?' : ''}: ${type(a.type)}${a.name === 'member_role' ? ' | null' : ''}`).join(';')}}` : 'Record<string, never>'}; Returns: ${type(fn.returns)} };\n`;
+    output += `${fn.name}: { Args: ${fn.args.length ? `{${fn.args.map((a, i) => `${a.name}${i >= fn.args.length - fn.defaults ? '?' : ''}: ${type(a.type)}${fn.name === 'manage_member' && a.name === 'member_role' ? ' | null' : ''}`).join(';')}}` : 'Record<string, never>'}; Returns: ${type(fn.returns)} };\n`;
   output += '}; Enums: {\n';
   for (const e of enums)
     output += `${e.name}: ${e.values.map((v) => JSON.stringify(v)).join(' | ')};\n`;

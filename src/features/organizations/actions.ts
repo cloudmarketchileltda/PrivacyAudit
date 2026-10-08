@@ -109,6 +109,7 @@ export async function setRole(_: ActionState, data: FormData): Promise<ActionSta
         'No se pudo cambiar el rol. Retire membresías incompatibles y no modifique su propia cuenta.',
     };
   revalidatePath('/users');
+  revalidatePath('/administration/memberships');
   return { success: 'Rol actualizado.' };
 }
 export async function assignConsultant(_: ActionState, data: FormData): Promise<ActionState> {

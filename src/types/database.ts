@@ -718,6 +718,15 @@ export interface Database {
     Views: Record<string, never>;
     Functions: {
       accept_invitation: { Args: { token: string }; Returns: string };
+      admin_membership_organizations: { Args: Record<string, never>; Returns: Json };
+      admin_membership_users: {
+        Args: {
+          member_role: Database['public']['Enums']['app_role'];
+          term: string;
+          page_number: number;
+        };
+        Returns: Json;
+      };
       can_manage_organization: { Args: { org: string }; Returns: boolean };
       create_assessment: {
         Args: { org: string; title: string; details?: string };
@@ -748,6 +757,15 @@ export interface Database {
       record_evidence_download: { Args: { evidence: string }; Returns: undefined };
       register_consultant: { Args: Record<string, never>; Returns: undefined };
       revoke_invitation: { Args: { invitation_id: string }; Returns: undefined };
+      set_user_organizations: {
+        Args: {
+          target: string;
+          expected_role: Database['public']['Enums']['app_role'];
+          organizations: string[];
+          expected_organizations: string[];
+        };
+        Returns: undefined;
+      };
       set_user_role: {
         Args: { target: string; new_role: Database['public']['Enums']['app_role'] };
         Returns: undefined;

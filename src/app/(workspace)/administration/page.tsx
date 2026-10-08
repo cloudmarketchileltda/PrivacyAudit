@@ -12,6 +12,10 @@ export default async function Page() {
           <h2 className="section-title">Usuarios y permisos</h2>
           <p className="muted">Administrar roles y usuarios del sistema.</p>
         </Link>
+        <Link href="/administration/memberships" className="panel p-6 hover:border-teal-700">
+          <h2 className="section-title">Usuarios y membresías</h2>
+          <p className="muted">Asignar una organización a clientes y varias a consultores.</p>
+        </Link>
         <Link href="/administration/audit" className="panel p-6 hover:border-teal-700">
           <h2 className="section-title">Log auditable</h2>
           <p className="muted">

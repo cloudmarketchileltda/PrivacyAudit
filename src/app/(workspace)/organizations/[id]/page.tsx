@@ -9,7 +9,6 @@ import {
   removeMember,
   revokeInvite,
   deleteOrganization,
-  assignConsultant,
 } from '@/features/organizations/actions';
 import { formatDate } from '@/lib/utils';
 import type { Organization, Profile } from '@/types/domain';
@@ -171,11 +170,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             )}
             {profile.role === 'SUPER_ADMIN' && (
               <div className="mt-6 max-w-md">
-                <h3 className="text-sm font-semibold mb-3">Asignar consultor existente</h3>
-                <ActionForm action={assignConsultant} label="Asignar">
-                  <input type="hidden" name="org" value={id} />
-                  <Field label="UUID del usuario consultor" name="target" required />
-                </ActionForm>
+                <Link href="/administration/memberships" className="text-teal-800 underline">
+                  Gestionar asignaciones de clientes y consultores
+                </Link>
               </div>
             )}
           </section>
