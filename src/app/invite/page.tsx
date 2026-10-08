@@ -36,9 +36,9 @@ export default async function Page({
             >
               Iniciar sesión
             </Link>
-            <Link className="underline" href={`/signup?token=${encodeURIComponent(token || '')}`}>
-              Crear cuenta de cliente
-            </Link>
+            <p className="muted">
+              Si todavía no tiene cuenta, solicite su creación al administrador.
+            </p>
           </div>
         )}
       </section>

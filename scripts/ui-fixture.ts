@@ -1,3 +1,5 @@
+import { randomUUID } from 'node:crypto';
+import { accountHandler } from '../supabase/functions/admin-create-user/handler';
 // Isolated UI test backend. This is NOT Supabase Auth or PostgREST and is never imported by application code.
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
 import { readFile } from 'node:fs/promises';
@@ -92,6 +94,9 @@ function user(id: string) {
 export async function startFixture(port = 54331) {
   const db: PGlite = await database();
   await users(db);
+  await db.exec(
+    'create role supabase_auth_admin; grant usage on schema auth to supabase_auth_admin; grant insert on auth.users to supabase_auth_admin;',
+  );
   await db.exec(await readFile('supabase/seed.sql', 'utf8'));
   await identity(db, ids.a);
   const orgA = await org(db, 'Empresa Demo SpA', '76123456-0');
@@ -179,6 +184,49 @@ export async function startFixture(port = 54331) {
         return;
       }
       const url = new URL(request.url || '/', `http://localhost:${port}`);
+      if (url.pathname === '/functions/v1/admin-create-user') {
+        const data = await body(request);
+        const handler = accountHandler({
+          async authorize() {
+            const id = uid(request);
+            if (!Object.values(ids).includes(id)) return null;
+            const { rows } = await db.query<{ role: string }>(
+              'select role from profiles where id=$1',
+              [id],
+            );
+            return rows[0] ? { id, role: rows[0].role } : null;
+          },
+          async create(input, actor) {
+            const id = randomUUID();
+            try {
+              await db.transaction(async (tx) => {
+                await tx.exec('set local role supabase_auth_admin');
+                await tx.query(
+                  'insert into auth.users(id,email,email_confirmed_at,raw_user_meta_data,raw_app_meta_data) values($1,$2,now(),$3,$4)',
+                  [
+                    id,
+                    input.email,
+                    JSON.stringify({ full_name: input.full_name }),
+                    JSON.stringify({ provisioned_by: actor, provisioned_role: input.role }),
+                  ],
+                );
+              });
+              return { id };
+            } catch {
+              return { error: 'creation_failed' };
+            }
+          },
+        });
+        const result = await handler(
+          new Request(url, {
+            method: request.method,
+            headers: { Authorization: String(request.headers.authorization || '') },
+            body: JSON.stringify(data),
+          }),
+        );
+        json(response, result.status, await result.json());
+        return;
+      }
       if (url.pathname === '/auth/v1/token') {
         const data = await body(request);
         const name = String(data.email || '').split('@')[0] as keyof typeof ids;

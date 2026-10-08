@@ -4,7 +4,7 @@ Aplicación SaaS de gestión y diagnóstico de protección de datos, orientada a
 
 ## Alcance
 
-- Fase 1: proyecto Next.js, email y contraseña, confirmación y recuperación, sesiones SSR, perfiles y roles, CRUD de organizaciones, perfil de tratamiento, membresías, invitaciones con enlaces y caducidad, aislamiento mediante RLS y administración básica de usuarios.
+- Fase 1: proyecto Next.js, email y contraseña, cuentas creadas por administrador y recuperación, sesiones SSR, perfiles y roles, CRUD de organizaciones, perfil de tratamiento, membresías, invitaciones con enlaces y caducidad, aislamiento mediante RLS y administración básica de usuarios.
 - Fase 2: catálogo global de 52 controles orientativos, edición por SUPER_ADMIN, evaluaciones históricas, copias de controles activos, respuestas con estados y comentarios separados de consultor y cliente, motivo obligatorio de no aplicabilidad, métricas de avance y dashboard de evaluación. Búsqueda, filtros y paginación en tablas de estas fases.
 - Fase 3: registro de actividades de tratamiento por organización, con responsables, finalidad, categorías de titulares y datos, origen, base de licitud propuesta y explicación, sistemas, destinatarios, proveedores, transferencias, conservación, medidas de seguridad y observaciones. Creación, edición, archivo/reactivación y eliminación confirmada por consultores autorizados; consulta por clientes; búsqueda, filtros, orden y paginación.
 - Fase 4: hallazgos desde controles históricos, tareas correctivas asignadas, envío a revisión por cliente, devolución con observaciones y aprobación por consultor, cierre justificado y plan de acción con filtros y progreso. Incluye historial protegido de cambios.
@@ -47,7 +47,7 @@ Email y contraseña y confirmación de correo están habilitados en Supabase. Si
 
 Para reproducir la configuración en **otro proyecto**:
 
-1. Identifique el proyecto dedicado a PrivacyAudit.
+1. Identifique el proyecto dedicado a PrivacyAudit. En un proyecto nuevo, deshabilite el registro público en Auth y cree la cuenta del administrador inicial mediante la administración de Supabase Auth **antes de aplicar las migraciones**. Habilite su email administrativamente y conserve el UUID. El bloqueo de altas exige que el administrador exista antes de crear cuentas desde la aplicación.
 2. Vincule el proyecto y revise el plan de migraciones antes de aplicarlas:
 
 ```sh
@@ -59,12 +59,14 @@ supabase db push
 
 3. Cargue `supabase/seed.sql` mediante SQL Editor del proyecto identificado o `psql "$DATABASE_URL" -f supabase/seed.sql`. La conexión de base de datos es administrativa y solo se utiliza para despliegue, nunca en la app. El seed no contiene usuarios ni contraseñas y no sobrescribe controles existentes.
 4. En Auth habilite Email + Password y confirmación de email. Site URL: `http://localhost:3000` en desarrollo; URL HTTPS real en producción. Permita `http://localhost:3000/auth/callback**` y la ruta equivalente del dominio final. Configure SMTP para entrega fiable fuera de desarrollo.
-5. Para confirmar enlaces en dispositivos distintos configure el template de confirmación con token hash: `{{ .SiteURL }}/auth/callback?token_hash={{ .TokenHash }}&type=email&next=/onboarding`. En invitaciones propias, el usuario vuelve a abrir el enlace original después de confirmar. Para recuperación utilice `type=recovery&next=/reset-password`. También se soporta callback PKCE `code` mediante el enlace predeterminado de Supabase en el navegador que inició la operación.
-6. Cree su primera cuenta y confirme el email. Abra `/onboarding` para activar cuenta de consultor. Las cuentas vinculadas a clientes no pueden activar ese rol por sí mismas.
+5. Para confirmar enlaces en dispositivos distintos configure el template de confirmación con token hash: `{{ .SiteURL }}/auth/callback?token_hash={{ .TokenHash }}&type=email&next=/onboarding`. Las invitaciones de organización requieren una cuenta creada por el administrador. Para recuperación utilice `type=recovery&next=/reset-password`. También se soporta callback PKCE `code` mediante el enlace predeterminado de Supabase en el navegador que inició la operación.
+6. El registro público está cerrado. Complete el perfil del administrador inicial creado en el paso 1 con el SQL del paso 7. Después, las cuentas de cliente y consultor se crean exclusivamente desde Administración → Usuarios y permisos.
 7. Para crear el administrador inicial, use SQL administrativo con el UUID confirmado:
 
 ```sql
-update public.profiles set role = 'SUPER_ADMIN' where id = 'UUID_REAL_DEL_USUARIO';
+insert into public.profiles (id, full_name, role, consultant_enrollment_allowed)
+values ('UUID_REAL_DEL_USUARIO', 'Administrador', 'SUPER_ADMIN', false)
+on conflict (id) do update set role = 'SUPER_ADMIN', consultant_enrollment_allowed = false;
 ```
 
 Este procedimiento no debe ejecutarse con una clave pública. Los usuarios no pueden editar roles por REST ni mediante user_metadata.
@@ -76,7 +78,7 @@ Requiere Docker. `supabase start` y `supabase db reset` aplican el esquema y see
 ## Uso de las fases 1 y 2
 
 1. Consultor crea una organización con RUT válido y perfil de tratamiento.
-2. Crea un enlace de invitación en el resumen de la organización y lo comparte con el cliente. La aplicación no envía email de invitación. El enlace exige email confirmado coincidente, vence en siete días y solo se acepta una vez. El consultor puede revocarlo o retirar membresías.
+2. El administrador crea primero la cuenta CLIENT en Administración → Usuarios y permisos. El consultor crea un enlace de invitación en el resumen de la organización y lo comparte con el cliente. La aplicación no envía email de invitación. El enlace exige email confirmado coincidente, vence en siete días y solo se acepta una vez. El consultor puede revocarlo o retirar membresías.
 3. Consultor crea evaluación; se copian los controles activos en una transacción.
 4. Abre cada control y registra estado, comentario y motivo cuando no aplica.
 5. Cambia estado de evaluación a En progreso, En revisión o Completada. Completar exige que no haya controles pendientes. Puede reabrir para corregir respuestas.
@@ -184,3 +186,25 @@ Los inicios de sesión confirmados, creación de cuentas y actualizaciones de la
 RLS restringe cada aviso a su destinatario y comprueba acceso actual a organización, tarea y evidencia: retirar membresía o reasignar una tarea oculta sus avisos anteriores al usuario que perdió acceso. Las métricas se agregan en SQL con RLS, sin descargar todos los registros ni truncar totales. Los controles corresponden a la última evaluación de cada organización; evaluaciones en progreso incluyen todas las evaluaciones IN_PROGRESS/REVIEW del ámbito. Los clientes cuentan únicamente sus propias tareas. Los totales de evidencias consideran la última entrega confirmada de cada cadena.
 
 Las migraciones `20261007205833_phase6_notifications_audit_dashboard.sql`, `20261007205840_phase6_overdue_schedule.sql` y `20261007211919_phase6_audit_identity_retention.sql` ya están aplicadas en el proyecto dedicado `pbihajfbbcbbdvoqpggy`; no vuelva a aplicarlas manualmente. El job `privacyaudit-overdue-notifications` está activo. PGlite omite la instalación de pg_cron y prueba el worker directamente. Prueba específica: `npm run test:ui:phase6`; la suite completa incluye el mismo recorrido. Consulte `docs/verification.md` para los resultados. La entrega continúa el flujo de publicación en GitHub, rama `main`. Queda pendiente redesplegar esta entrega en Dokploy y verificar las nuevas pantallas con sesiones reales. La fase 7 (informe PDF) y el cierre de fase 8 siguen pendientes.
+
+## Cuentas administradas exclusivamente por el administrador
+
+Cambio solicitado el 7 de octubre de 2026. El login ofrece inicio de sesión y recuperación de acceso. `/signup` redirige a `/login`; `/onboarding` ya no permite activar consultores. No existe registro público ni autoasignación de rol. Las invitaciones de organización vinculan cuentas existentes y no crean usuarios.
+
+Como SUPER_ADMIN, abra **Administración → Usuarios y permisos → Crear cuenta de usuario**. Ingrese nombre completo, correo, contraseña inicial de 10 a 128 caracteres y rol **Cliente** o **Consultor**. La cuenta queda habilitada por el administrador, con email marcado como confirmado administrativamente; esto no demuestra que el usuario haya verificado su buzón. No se envía correo de alta. Comparta las credenciales de forma segura; el usuario puede solicitar su cambio mediante Recuperar acceso o Mi cuenta. El formulario no permite crear administradores. La edición de roles existente conserva sus restricciones: solo SUPER_ADMIN, sin editar la propia cuenta y sin membresías incompatibles.
+
+Crear una cuenta o cambiar su rol no asigna organizaciones. Para clientes, el consultor o administrador genera un enlace en Organización → Usuarios y membresías; para consultores existentes, el administrador los asigna desde esa sección. Un consultor queda vinculado a las organizaciones que crea.
+
+La Server Action y la Edge Function `admin-create-user` verifican al usuario y su rol actual en `profiles`. La función valida el JWT con `getUser`, sin confiar en metadata del usuario. La clave privilegiada permanece exclusivamente en el entorno gestionado de Supabase Functions; no se agrega a Next.js, `.env.local`, Docker ni variables públicas. Se utiliza la API administrativa oficial de Auth, sin fabricar usuarios ni contraseñas mediante SQL. Un trigger de Auth rechaza altas sin metadata administrativa protegida y sin administrador válido, también por la API pública; los roles SQL de mantenimiento `postgres` y `supabase_admin` conservan el bootstrap/importación. El perfil y el evento `ADMIN_ACCOUNT_CREATED`, con actor y rol, se generan en la transacción de alta. No se registran contraseñas.
+
+La migración `20261007234041_admin_managed_accounts.sql`, aplicada en PrivacyAudit, bloquea también la RPC anterior de autoactivación. `supabase/config.toml` deshabilita signup general y por email para entornos locales nuevos. En otros proyectos aplique la migración y despliegue la función, además de deshabilitar **Allow new users to sign up** en Auth. La configuración remota y el estado de despliegue de esta entrega se documentan en `docs/verification.md`.
+
+Despliegue de la función en el proyecto identificado:
+
+```sh
+supabase functions deploy admin-create-user --project-ref SU_PROYECTO
+```
+
+`verify_jwt=false` en esta función permite usar las claves publishable modernas: la función realiza explícitamente autenticación mediante Auth y autorización antes de crear la cuenta. No acepta solicitudes anónimas ni de clientes/consultores. No hay CORS público porque Next.js invoca la función desde servidor.
+
+Verificación específica: `npm run test:ui:accounts`. `npm test` y `npm run test:db` incluyen las denegaciones de registro/autoactivación y la creación administrativa con rol y trazabilidad.

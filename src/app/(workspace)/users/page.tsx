@@ -1,6 +1,7 @@
+import { createAccount } from '@/features/users/actions';
 import { requireUser } from '@/features/auth/queries';
 import { notFound } from 'next/navigation';
-import { ActionForm } from '@/components/forms';
+import { ActionForm, Field } from '@/components/forms';
 import { setRole } from '@/features/organizations/actions';
 import { Pagination, pageNumber, searchTerm } from '@/components/table-tools';
 import type { Profile } from '@/types/domain';
@@ -24,6 +25,36 @@ export default async function Page({
   return (
     <>
       <h1 className="page-title">Usuarios</h1>
+      <section className="panel max-w-xl">
+        <h2 className="section-title">Crear cuenta de usuario</h2>
+        <p className="muted mb-4">
+          Cree una cuenta de cliente o consultor. El rol no asigna acceso a una organización
+          existente.
+        </p>
+        <ActionForm action={createAccount} label="Crear cuenta">
+          <Field label="Nombre completo" name="full_name" required />
+          <Field label="Correo electrónico" name="email" type="email" required />
+          <Field
+            label="Contraseña inicial (10 a 128 caracteres)"
+            name="password"
+            type="password"
+            required
+          />
+          <label className="form-label">
+            Rol
+            <select className="field" name="role" defaultValue="CLIENT">
+              <option value="CLIENT">Cliente</option>
+              <option value="CONSULTANT">Consultor</option>
+            </select>
+          </label>
+          <p className="muted">
+            La cuenta quedará habilitada por el administrador sin correo de confirmación. Comparta
+            las credenciales de forma segura. El usuario puede cambiar su contraseña mediante
+            Recuperar acceso.
+          </p>
+        </ActionForm>
+      </section>
+      <h2 className="section-title">Usuarios existentes y roles</h2>
       <form className="flex gap-3 items-end">
         <label className="form-label flex-1">
           Buscar por nombre
@@ -45,9 +76,9 @@ export default async function Page({
                 <label className="form-label">
                   Rol
                   <select className="field max-w-xs" name="new_role" defaultValue={p.role}>
-                    <option>CLIENT</option>
-                    <option>CONSULTANT</option>
-                    <option>SUPER_ADMIN</option>
+                    <option value="CLIENT">Cliente</option>
+                    <option value="CONSULTANT">Consultor</option>
+                    <option value="SUPER_ADMIN">Administrador del sistema</option>
                   </select>
                 </label>
               </ActionForm>

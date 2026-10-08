@@ -22,11 +22,6 @@ export default async function Page() {
         <Link className="block underline text-sm mt-6" href="/recover">
           Solicitar cambio de contraseña por email
         </Link>
-        {profile.role === 'CLIENT' && (
-          <Link className="block underline text-sm mt-4" href="/onboarding">
-            Configuración de cuenta nueva
-          </Link>
-        )}
       </section>
     </>
   );

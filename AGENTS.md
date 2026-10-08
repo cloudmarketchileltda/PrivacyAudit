@@ -4,6 +4,8 @@ Revisar `docs/references/index.md`, `docs/architecture.md` y el documento maestr
 
 Acuerdo de continuación del 5 de octubre de 2026: IA aplazada hasta completar y validar el MVP; no implementar integraciones ni funciones de IA ahora. Notificaciones operativas externas fuera por ahora (WhatsApp, email, SMS y otros canales); conservar correos de autenticación y implementar solo notificaciones internas en fase 6. Hoja de ruta en `docs/architecture.md`.
 
+Cambio de cuentas autorizado el 7 de octubre de 2026: registro público cerrado; solo SUPER_ADMIN crea cuentas CLIENT/CONSULTANT desde Administración y asigna sus roles. Sin autoactivación de consultores. La credencial administrativa de Auth se mantiene exclusivamente en Supabase Functions, nunca en Next.js.
+
 Stack: Next.js App Router, TypeScript estricto, Tailwind 4, componentes shadcn/ui, React Hook Form, Zod y Supabase SSR. Server Components por defecto. Validar entradas en servidor y aplicar RLS. Ninguna clave service role en la aplicación. Relaciones con FK y snapshots de controles para preservar historia.
 
 Comandos: `npm ci`, `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`, `npm run dev`. `npm run test:db` ejecuta las migraciones reales en PostgreSQL embebido PGlite, con roles Auth de prueba; no demuestra conectividad remota ni entrega de correo de Supabase.

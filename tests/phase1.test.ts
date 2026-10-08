@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { database, identity, ids, users, org } from './db-helper';
 test('Fase 1: RLS, roles, organizaciones, membresías e invitaciones', async () => {
-  const db = await database(1);
+  const db = await database();
   try {
     await users(db);
     assert.equal(
@@ -83,7 +83,7 @@ test('Fase 1: RLS, roles, organizaciones, membresías e invitaciones', async () 
       'retiro quita acceso',
     );
     await identity(db, ids.other);
-    await db.query('select register_consultant()');
+    await assert.rejects(db.query('select register_consultant()'), 'autoactivación deshabilitada');
     await identity(db, ids.admin);
     assert.equal((await db.query('select * from organizations')).rows.length, 2);
     await identity(db, '', 'anon');
@@ -95,7 +95,7 @@ test('Fase 1: RLS, roles, organizaciones, membresías e invitaciones', async () 
 });
 
 test('Invitaciones rechazan cuentas sin confirmar, revocación, expiración y empresas archivadas', async () => {
-  const db = await database(1);
+  const db = await database();
   try {
     await users(db);
     await identity(db, ids.a);

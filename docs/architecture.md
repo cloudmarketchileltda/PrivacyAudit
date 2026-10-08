@@ -19,7 +19,7 @@
 - Supabase externo. No hay backend Express, secretos privilegiados en la aplicación ni fallback con datos simulados.
 - Cada petición verifica usuario con getUser; proxy renueva cookies con getClaims. RLS aplica incluso mediante llamadas directas a API.
 - Rol global en profiles, inmutable por los clientes. Las membresías determinan acceso por organización y rol efectivo; un consultor necesita membresía CONSULTANT para editar esa empresa.
-- Registro público de consultores permitido solo para cuentas nuevas sin membresías ni invitaciones de cliente; usuarios invitados mantienen CLIENT. SUPER_ADMIN se provisiona mediante SQL administrativo, nunca metadata del usuario.
+- Desde el cambio del 7 de octubre de 2026, solo SUPER_ADMIN crea cuentas CLIENT/CONSULTANT desde Administración. Registro público y autoactivación deshabilitados. Una función de Supabase verifica sesión/rol y usa Auth Admin; un trigger bloquea altas no administrativas y genera perfil/rol y trazabilidad atómicamente. Next.js conserva únicamente claves públicas. El administrador inicial se provisiona mediante mantenimiento, nunca metadata editable del usuario.
 - Invitaciones con token aleatorio de 64 caracteres hexadecimales, hash SHA256 y expiración de siete días. Solo se aceptan con email confirmado coincidente. Se comparte un enlace explícito; no se envía correo de invitación automáticamente.
 - Funciones SECURITY DEFINER solamente en esquema private, con search_path fijo, comprobaciones de identidad y autorización. Wrappers públicos SECURITY INVOKER exponen únicamente operaciones concretas.
 - Crear organización y membresía, crear evaluación y respuestas, aceptar invitación: operaciones atómicas en base de datos.

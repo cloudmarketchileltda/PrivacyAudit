@@ -1,6 +1,6 @@
 # Despliegue en Docker y Dokploy
 
-El usuario realizará el despliegue y la configuración de Cloudflare. El código preparado cubre fases 1 a 4.
+El usuario realizará el despliegue y la configuración de Cloudflare. El código preparado cubre fases 1 a 6 y el cambio de cuentas administradas exclusivamente por SUPER_ADMIN.
 
 ## Configuración
 
@@ -36,7 +36,7 @@ El 5 de octubre de 2026 se aplicó también `20261005201508_phase3_processing_ac
 
 1. Revise logs de compilación y ejecución, y healthcheck /api/health.
 2. Configure DNS en Cloudflare apuntando al VPS y compruebe https://privacyaudit.cloudmarket.cl/signup.
-3. Registre una cuenta propia, confirme correo en el navegador que inició el registro y pruebe login, recuperación y renovación de sesión.
+3. Cree las cuentas desde Administración con un SUPER_ADMIN existente y pruebe login, recuperación y renovación de sesión. El registro público está cerrado.
 4. Pruebe aislamiento con cuentas de dos organizaciones. Las pruebas previas de PostgreSQL no sustituyen sesiones reales de Supabase Auth.
 
 ## Prueba local de Docker
@@ -60,3 +60,11 @@ Fuentes: https://docs.dokploy.com/docs/core/providers y https://docs.dokploy.com
 El 6 de octubre de 2026 se autorizó fase 4. La migración `20261007020423_phase4_findings_tasks.sql` ya está aplicada en el proyecto PrivacyAudit `pbihajfbbcbbdvoqpggy`. Se generó inicialmente con `supabase migration new phase4_findings_tasks`; tras aplicarla por el conector se alineó el nombre local con la versión remota asignada. Las cinco migraciones locales corresponden al historial remoto.
 
 La base de datos está preparada para Hallazgos, Tareas y Plan de acción. Después de publicar el código, redespliegue `main` en Dokploy; no repita ni resetee las migraciones. La presencia de tablas nuevas no despliega las pantallas. Pruebe crear hallazgo desde un control, asignar tarea a un cliente, envío a revisión, devolución con observaciones, reenvío, aprobación y cierre. El cliente no debe editar hallazgos ni aprobar tareas. Evidencias y Storage corresponden a fase 5 y todavía no están disponibles.
+
+## Cuentas creadas por el administrador
+
+La migración `20261007234041_admin_managed_accounts.sql` y la Edge Function `admin-create-user` ya están aplicadas en el proyecto PrivacyAudit `pbihajfbbcbbdvoqpggy`. No repita la migración. La función valida el JWT con Auth y exige SUPER_ADMIN en `profiles`; la credencial privilegiada se conserva únicamente en Supabase Functions. El Docker de Next.js no necesita nuevos secretos.
+
+Redespliegue esta entrega de Next.js para retirar los enlaces de registro e incorporar Crear cuenta en Administración → Usuarios y permisos. Mientras no se redespliegue, las pantallas antiguas pueden seguir apareciendo, pero el trigger de Auth ya rechaza altas públicas y la RPC de autoactivación ya está bloqueada. En el proyecto remoto no se modificó el ajuste de Auth Allow new users to sign up: el bloqueo comprobado se aplica en la base de datos y una llamada directa de signup devuelve HTTP 500 sin crear usuarios. Se recomienda deshabilitar también ese ajuste en Auth; no sustituye la autorización administrativa de la función.
+
+Compruebe con su administrador real la creación de un CLIENT y un CONSULTANT, entrada con la contraseña inicial, cambio de contraseña por recuperación y vinculación a una organización. El administrador habilita el email administrativamente; no se envía correo de alta ni se afirma verificación del buzón. Las cuentas existentes conservan sus roles y membresías.

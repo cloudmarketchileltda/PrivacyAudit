@@ -44,9 +44,6 @@ export default function Page() {
                 <ArrowRight size={16} />
               </Link>
             </Button>
-            <Button asChild variant="outline">
-              <Link href="/signup">Crear cuenta</Link>
-            </Button>
           </div>
           <div className="mt-7 flex gap-2 items-center text-xs text-slate-500">
             <Database size={15} /> Los datos se mantienen aislados por organización mediante RLS.

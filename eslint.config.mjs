@@ -4,7 +4,13 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import { defineConfig, globalIgnores } from 'eslint/config';
 export default defineConfig([
-  globalIgnores(['.next/**', 'next-env.d.ts', 'node_modules/**', 'artifacts/**']),
+  globalIgnores([
+    '.next/**',
+    'next-env.d.ts',
+    'node_modules/**',
+    'artifacts/**',
+    'supabase/functions/admin-create-user/index.ts',
+  ]),
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
