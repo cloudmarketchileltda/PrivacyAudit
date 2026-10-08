@@ -12,9 +12,14 @@ select set_config('evidence_test.rut',(
 insert into auth.users(id,email,email_confirmed_at,raw_user_meta_data)
 select current_setting('evidence_test.'||actor)::uuid,current_setting('evidence_test.'||actor)||'@example.test',now(),'{"full_name":"Temporary phase 5 check"}'::jsonb from unnest(array['a','b','client']) actor;
 update public.profiles set role='CONSULTANT' where id in(current_setting('evidence_test.a')::uuid,current_setting('evidence_test.b')::uuid);
+update public.profiles set role='SUPER_ADMIN' where id=current_setting('evidence_test.a')::uuid;
 select set_config('request.jwt.claim.sub',current_setting('evidence_test.a'),true);
 set local role authenticated;
 select set_config('evidence_test.org',public.create_organization(jsonb_build_object('legal_name','Temporary phase 5 check','rut',current_setting('evidence_test.rut')))::text,true);
+reset role;
+update public.profiles set role='CONSULTANT' where id=current_setting('evidence_test.a')::uuid;
+insert into public.organization_members(organization_id,user_id,role) values(current_setting('evidence_test.org')::uuid,current_setting('evidence_test.a')::uuid,'CONSULTANT');
+set local role authenticated;
 select set_config('evidence_test.assessment',public.create_assessment(current_setting('evidence_test.org')::uuid,'Temporary assessment')::text,true);
 select set_config('evidence_test.control',(select id::text from public.assessment_controls where assessment_id=current_setting('evidence_test.assessment')::uuid limit 1),true);
 select set_config('evidence_test.token',public.invite_client(current_setting('evidence_test.org')::uuid,current_setting('evidence_test.client')||'@example.test'),true);

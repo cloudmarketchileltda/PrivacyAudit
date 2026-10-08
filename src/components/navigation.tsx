@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard,
-  Building2,
   ListChecks,
   ClipboardList,
   FolderOpen,
@@ -15,7 +14,6 @@ export function Navigation({ admin }: { admin: boolean }) {
   const path = usePathname();
   const items = [
     ['/dashboard', 'Dashboard', LayoutDashboard],
-    ['/organizations', 'Organizaciones', Building2],
     ['/assessments', 'Evaluaciones', ClipboardList],
     ['/processing', 'Tratamientos', FolderOpen],
     ['/findings', 'Hallazgos', ListChecks],

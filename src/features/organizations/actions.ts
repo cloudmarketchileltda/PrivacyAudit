@@ -7,6 +7,8 @@ import { requireManager, requireUser } from '@/features/auth/queries';
 import { organizationSchema } from './schemas';
 import type { ActionState } from '@/components/forms';
 export async function saveOrganization(_: ActionState, data: FormData): Promise<ActionState> {
+  const { db, profile } = await requireUser();
+  if (profile.role !== 'SUPER_ADMIN') return { error: 'Acción exclusiva del administrador.' };
   const raw = Object.fromEntries(data);
   const booleans = [
     'treats_clients',
@@ -29,32 +31,44 @@ export async function saveOrganization(_: ActionState, data: FormData): Promise<
   let id = data.get('id')?.toString();
   if (id) {
     if (!z.uuid().safeParse(id).success) return { error: 'Organización inválida.' };
-    const { db } = await requireManager(id);
-    const { error } = await db.from('organizations').update(parsed.data).eq('id', id);
-    if (error) return { error: 'No se pudo guardar. Revise que el RUT sea único.' };
+    const { error } = await db
+      .from('organizations')
+      .update(parsed.data)
+      .eq('id', id)
+      .select('id')
+      .single();
+    if (error)
+      return {
+        error:
+          'No se pudo guardar. Revise el RUT, sus permisos y si la organización está en proceso de eliminación.',
+      };
   } else {
-    const { db, profile } = await requireUser();
-    if (profile.role === 'CLIENT') return { error: 'Acceso restringido a consultores.' };
     const { data: created, error } = await db.rpc('create_organization', { payload: parsed.data });
     if (error) return { error: 'No se pudo crear. Revise que el RUT sea único.' };
     id = created;
     // The RPC persists all organization fields in the same transaction.
   }
-  revalidatePath('/organizations');
+  revalidatePath('/administration/organizations');
   revalidatePath('/dashboard');
-  redirect(`/organizations/${id}`);
+  redirect(`/administration/organizations/${id}`);
 }
 export async function deleteOrganization(_: ActionState, data: FormData): Promise<ActionState> {
   const id = z.uuid().safeParse(data.get('id'));
   if (!id.success) return { error: 'Organización inválida.' };
-  const { db } = await requireManager(id.data);
-  const { error } = await db.from('organizations').delete().eq('id', id.data);
+  const { db, profile } = await requireUser();
+  if (profile.role !== 'SUPER_ADMIN') return { error: 'Acción exclusiva del administrador.' };
+  if (data.get('confirmation') !== 'ELIMINAR ORGANIZACION')
+    return { error: 'Confirme el borrado en el modal.' };
+  const { error } = await db.functions.invoke('admin-delete-organization', {
+    body: { org: id.data, confirmation: 'ELIMINAR ORGANIZACION' },
+  });
   if (error)
     return {
-      error: 'La organización tiene registros asociados. Archívela para conservar su historial.',
+      error:
+        'No se completó la eliminación. La organización puede estar bloqueada para completar el borrado. Reintente desde Administración.',
     };
-  revalidatePath('/organizations');
-  redirect('/organizations');
+  revalidatePath('/', 'layout');
+  return { success: 'Organización y todos sus datos eliminados.' };
 }
 export async function inviteClient(_: ActionState, data: FormData): Promise<ActionState> {
   const parsed = z.object({ org: z.uuid(), email: z.email() }).safeParse(Object.fromEntries(data));
@@ -65,7 +79,7 @@ export async function inviteClient(_: ActionState, data: FormData): Promise<Acti
     target_email: parsed.data.email,
   });
   if (error) return { error: 'No se pudo crear la invitación. La organización debe estar activa.' };
-  revalidatePath(`/organizations/${parsed.data.org}`);
+  revalidatePath(`/administration/organizations/${parsed.data.org}`);
   return { link: `${appUrl()}/invite?token=${token}`, success: 'Invitación creada.' };
 }
 export async function removeMember(_: ActionState, data: FormData): Promise<ActionState> {
@@ -74,7 +88,7 @@ export async function removeMember(_: ActionState, data: FormData): Promise<Acti
   const { db } = await requireManager(parsed.data.org);
   const { error } = await db.rpc('manage_member', { ...parsed.data, member_role: null });
   if (error) return { error: 'No se puede retirar esta membresía.' };
-  revalidatePath(`/organizations/${parsed.data.org}`);
+  revalidatePath(`/administration/organizations/${parsed.data.org}`);
   return { success: 'Membresía retirada.' };
 }
 export async function revokeInvite(_: ActionState, data: FormData): Promise<ActionState> {
@@ -83,7 +97,7 @@ export async function revokeInvite(_: ActionState, data: FormData): Promise<Acti
   if (!parsed.success) return { error: 'Datos inválidos.' };
   const { error } = await db.rpc('revoke_invitation', { invitation_id: parsed.data });
   if (error) return { error: 'No autorizado.' };
-  revalidatePath('/organizations', 'layout');
+  revalidatePath('/administration/organizations', 'layout');
   return { success: 'Invitación revocada.' };
 }
 export async function saveProfile(_: ActionState, data: FormData): Promise<ActionState> {
@@ -119,6 +133,6 @@ export async function assignConsultant(_: ActionState, data: FormData): Promise<
   if (profile.role !== 'SUPER_ADMIN') return { error: 'No autorizado.' };
   const { error } = await db.rpc('manage_member', { ...parsed.data, member_role: 'CONSULTANT' });
   if (error) return { error: 'El usuario debe tener rol CONSULTANT.' };
-  revalidatePath(`/organizations/${parsed.data.org}`);
+  revalidatePath(`/administration/organizations/${parsed.data.org}`);
   return { success: 'Consultor asignado.' };
 }

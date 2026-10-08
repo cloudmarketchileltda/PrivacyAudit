@@ -40,9 +40,15 @@ export async function users(db: PGlite) {
   );
 }
 export async function org(db: PGlite, name: string, rut: string) {
+  // Fixtures provision organizations through the administrative contract, then assign the caller.
+  const caller = (await db.query<{ id: string }>('select auth.uid() as id')).rows[0].id;
+  await identity(db, ids.admin);
   const { rows } = await db.query<{ id: string }>(
     `select public.create_organization($1::jsonb) as id`,
     [JSON.stringify({ legal_name: name, rut })],
   );
+  if (caller !== ids.admin)
+    await db.query("select public.manage_member($1,$2,'CONSULTANT')", [rows[0].id, caller]);
+  await identity(db, caller);
   return rows[0].id;
 }

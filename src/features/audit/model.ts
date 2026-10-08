@@ -72,6 +72,7 @@ export const auditActionLabels: Record<string, string> = {
   ADMIN_ACCOUNT_CREATED: 'Cuenta creada por administrador',
   ADMIN_ACCOUNT_UPDATED: 'Cuenta modificada por administrador',
   ADMIN_ACCOUNT_DELETED: 'Cuenta eliminada por administrador',
+  ADMIN_ORGANIZATION_DELETED: 'Organización y datos eliminados por administrador',
   CREATE: 'Creación',
   UPDATE: 'Actualización',
   DELETE: 'Eliminación',
@@ -97,6 +98,7 @@ export const auditActionLabels: Record<string, string> = {
 };
 export const auditEntityLabels: Record<string, string> = {
   authentication: 'Autenticación',
+  administration: 'Administración',
   profiles: 'Usuarios y roles',
   organizations: 'Organizaciones',
   organization_members: 'Membresías y permisos',

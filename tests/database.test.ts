@@ -333,7 +333,9 @@ test('Fase 3: tratamientos, validación SQL, identidad, archivo y aislamiento', 
       1,
     );
     await identity(db, ids.a);
+    await identity(db, ids.admin);
     await db.query(`update organizations set status='ARCHIVED' where id=$1`, [a]);
+    await identity(db, ids.a);
     await assert.rejects(create(a));
     assert.equal(
       (
@@ -357,7 +359,9 @@ test('Fase 3: tratamientos, validación SQL, identidad, archivo y aislamiento', 
       'consulta del archivo',
     );
     await identity(db, ids.a);
+    await identity(db, ids.admin);
     await db.query(`update organizations set status='ACTIVE' where id=$1`, [a]);
+    await identity(db, ids.a);
     await db.query(`select manage_member($1,$2,null)`, [a, ids.client]);
     await identity(db, ids.client);
     assert.equal(

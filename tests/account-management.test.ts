@@ -155,7 +155,11 @@ test('Cuentas SQL: correo restringido, sincronización atómica, borrado y conse
       'Nuevo nombre',
     );
     await identity(db, ids.a);
-    await org(db, 'Empresa histórica', '76123456-0');
+    const historicalOrg = await org(db, 'Empresa histórica', '76123456-0');
+    await db.query(
+      "insert into processing_activities(organization_id,name,purpose,data_subject_categories,personal_data_categories) values($1,'Tratamiento histórico','Gestionar clientes',array['CLIENTS'],array['CONTACT'])",
+      [historicalOrg],
+    );
     await identity(db, ids.admin);
     await reserve(ids.a, 'DELETE');
     await db.exec('reset role; set role supabase_auth_admin');

@@ -134,7 +134,7 @@ export default async function Page({
                               <li key={orgId}>
                                 {org ? (
                                   <Link
-                                    href={`/organizations/${org.id}`}
+                                    href={`/administration/organizations/${org.id}`}
                                     className="text-teal-800 underline"
                                   >
                                     {org.legal_name}

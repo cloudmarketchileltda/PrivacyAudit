@@ -205,15 +205,19 @@ test('Fase 6: notificaciones privadas, vencimientos, métricas y auditoría prot
     );
     await identity(db, ids.a);
     const empty = await org(db, 'Organización sin datos', '76234567-6');
-    await db.query(`delete from organizations where id=$1`, [empty]);
+    await assert.rejects(db.query(`delete from organizations where id=$1`, [empty]));
     await identity(db, ids.admin);
-    const deletion = (
-      await db.query<{ organization_ref: string; organization_name: string }>(
-        `select organization_ref,organization_name from audit_logs where action='DELETE' and entity_type='organizations'`,
-      )
-    ).rows[0];
-    assert.equal(deletion.organization_ref, empty);
-    assert.equal(deletion.organization_name, 'Organización sin datos');
+    await db.query("select prepare_organization_deletion($1,'ELIMINAR ORGANIZACION')", [empty]);
+    await db.query('select finish_organization_deletion($1)', [empty]);
+    assert.equal(
+      (await db.query('select * from audit_logs where organization_ref=$1', [empty])).rows.length,
+      0,
+    );
+    assert.equal(
+      (await db.query("select * from audit_logs where action='ADMIN_ORGANIZATION_DELETED'")).rows
+        .length,
+      1,
+    );
   } finally {
     await db.close();
   }

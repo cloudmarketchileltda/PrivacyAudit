@@ -29,15 +29,19 @@ Para CTA-03, los registros de acceso y auditoría por sí solos no bloquean el b
 
 ## Organizaciones y membresías
 
-| Regla                 | Condición obligatoria                                                                                                                                                                  |
-| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ORG-01 — Cardinalidad | CLIENT pertenece a una organización como máximo; CONSULTANT puede tener varias. Aplicar también en invitaciones y RPC heredadas.                                                       |
-| ORG-02 — Asignación   | La asignación administrativa corresponde a SUPER_ADMIN, es transaccional y auditada. Rechazar guardados obsoletos o relaciones incompatibles.                                          |
-| ORG-03 — Archivo      | Las organizaciones archivadas son de solo lectura para operaciones de negocio y no admiten nuevas membresías. Se pueden conservar o retirar las ya existentes.                         |
-| ORG-04 — Borrado      | Conservar historial; no eliminar una organización que tenga evaluaciones, tratamientos u otras relaciones que las FK protejan. Ofrecer archivo cuando corresponda.                     |
-| ORG-05 — Invitaciones | Cuenta CLIENT existente, correo confirmado coincidente, token válido no revocado y vigencia de siete días. No crear una segunda membresía de cliente ni crear cuentas desde el enlace. |
+| Regla                 | Condición obligatoria                                                                                                                                                                                 |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ORG-01 — Cardinalidad | CLIENT pertenece a una organización como máximo; CONSULTANT puede tener varias. Aplicar también en invitaciones y RPC heredadas.                                                                      |
+| ORG-02 — Asignación   | La asignación administrativa corresponde a SUPER_ADMIN, es transaccional y auditada. Rechazar guardados obsoletos o relaciones incompatibles.                                                         |
+| ORG-03 — Archivo      | Las organizaciones archivadas son de solo lectura para operaciones de negocio y no admiten nuevas membresías. Se pueden conservar o retirar las ya existentes.                                        |
+| ORG-04 — Borrado      | Solo SUPER_ADMIN, después de confirmar el modal con Cancelar/Eliminar, elimina la organización y TODOS sus datos relacionados y archivos. Operación permanente; no borrar cuentas ni catálogo global. |
+| ORG-05 — Invitaciones | Cuenta CLIENT existente, correo confirmado coincidente, token válido no revocado y vigencia de siete días. No crear una segunda membresía de cliente ni crear cuentas desde el enlace.                |
 
-Implementación: migraciones de identidad, membresías y tratamientos; `src/features/organizations` y `src/features/users/membership-actions.ts`. Pruebas: `tests/phase1.test.ts`, `tests/memberships.test.ts` y `tests/database.test.ts`.
+ORG-06 — Administración: creación, consulta del módulo, modificación y eliminación disponibles exclusivamente en Administración para SUPER_ADMIN; RLS/RPC y Server Actions aplican la restricción. Clientes y consultores mantienen sus flujos de evaluaciones, tratamientos, hallazgos, tareas y evidencias según membresía.
+
+El borrado de organización autorizado el 8 de octubre es una excepción explícita a FLU-05, EVI-02 y EVI-04: elimina también historial, entregas confirmadas y comentarios. La preparación bloquea escrituras; los archivos se eliminan mediante Storage API antes de la limpieza transaccional SQL. Ante error, queda bloqueada y el administrador reintenta Eliminar; no comunicar éxito parcial. Los eventos asociados y snapshots del log se eliminan. Solo queda una constancia administrativa global sin identidad ni datos de la organización. Las cuentas se conservan, aunque pierden las membresías de esa organización.
+
+Implementación: `admin_organization_crud`, `admin-delete-organization`, `src/app/(workspace)/administration/organizations`, migraciones de identidad, membresías y tratamientos; `src/features/organizations` y `src/features/users/membership-actions.ts`. Pruebas: `tests/phase1.test.ts`, `tests/memberships.test.ts`, `tests/database.test.ts` y `tests/organizations.test.ts`.
 
 ## Evaluaciones, tratamientos y trabajo correctivo
 
@@ -72,7 +76,7 @@ Implementación: migraciones de fases 5–6, `src/features/evidence`, `src/featu
 ## Presentación, alcance y configuración
 
 - UI-01: acciones generales/cambio de rol en azul; edición/guardado en verde; eliminación en rojo. Usar `Button` con variantes del archivo general. Acciones de grilla con icono, etiqueta accesible y título. Navegación, cancelación y filtros pueden ser neutros.
-- UI-02: cuentas y auditoría muestran como máximo diez filas visibles, con scroll y encabezado fijo. Abrir los detalles del log no debe aumentar la altura ni la cantidad de filas visibles. La página contiene 20 resultados; el viewport y la paginación son valores distintos. Usar las configuraciones compartidas.
+- UI-02: organizaciones administrativas, cuentas y auditoría muestran como máximo diez filas visibles, con scroll y encabezado fijo. Abrir los detalles del log no debe aumentar la altura ni la cantidad de filas visibles. La página contiene 20 resultados; el viewport y la paginación son valores distintos. Usar las configuraciones compartidas.
 - SYS-04: el producto presenta avance de evaluación y métricas de gestión; no afirma certificación o cumplimiento jurídico garantizado. Las referencias normativas requieren revisión profesional, sin inferencias jurídicas automáticas.
 - SYS-05: alcance autorizado hasta fase 6; no iniciar fase 7, IA ni integraciones externas sin petición del usuario. El MVP completo todavía incluye fases pendientes.
 

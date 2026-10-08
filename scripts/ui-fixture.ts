@@ -1,3 +1,4 @@
+import { deletionHandler } from '../supabase/functions/admin-delete-organization/handler';
 import { mutationHandler } from '../supabase/functions/admin-manage-user/handler';
 import { accountHandler } from '../supabase/functions/admin-create-user/handler';
 // Isolated UI test backend. This is NOT Supabase Auth or PostgREST and is never imported by application code.
@@ -104,10 +105,12 @@ export async function startFixture(port = 54331) {
   await db.exec(await readFile('supabase/seed.sql', 'utf8'));
   await identity(db, ids.a);
   const orgA = await org(db, 'Empresa Demo SpA', '76123456-0');
+  await identity(db, ids.admin);
   await db.query(
     `update organizations set industry='Servicios profesionales',contact_name='María Pérez',contact_email='maria@example.test',privacy_officer='Juan Gómez' where id=$1`,
     [orgA],
   );
+  await identity(db, ids.a);
   const activityId = (
     await db.query<{ id: string }>(
       `insert into processing_activities(organization_id,name,area,purpose,data_subject_categories,personal_data_categories) values($1,'Gestión de clientes','Comercial','Gestionar relaciones comerciales',array['CLIENTS'],array['CONTACT']) returning id`,
@@ -188,6 +191,56 @@ export async function startFixture(port = 54331) {
         return;
       }
       const url = new URL(request.url || '/', `http://localhost:${port}`);
+      if (url.pathname === '/functions/v1/admin-delete-organization') {
+        const data = await body(request);
+        const actor = uid(request);
+        const handler = deletionHandler({
+          async authorize() {
+            await identity(db, actor);
+            return (
+              (await db.query<{ role: string }>('select role from profiles where id=$1', [actor]))
+                .rows[0] ?? null
+            );
+          },
+          async prepare(org) {
+            await identity(db, actor);
+            await db.query("select prepare_organization_deletion($1,'ELIMINAR ORGANIZACION')", [
+              org,
+            ]);
+          },
+          async files(org) {
+            await identity(db, actor);
+            return (
+              await db.query<{ paths: string[] }>('select organization_deletion_files($1) paths', [
+                org,
+              ])
+            ).rows[0].paths;
+          },
+          async remove(paths) {
+            // Isolated Storage API adapter: remove both bytes and metadata, as the real API does.
+            await db.exec('reset role');
+            for (const path of paths) {
+              await db.query("delete from storage.objects where bucket_id='evidence' and name=$1", [
+                path,
+              ]);
+              files.delete(path);
+            }
+          },
+          async finish(org) {
+            await identity(db, actor);
+            await db.query('select finish_organization_deletion($1)', [org]);
+          },
+        });
+        const result = await handler(
+          new Request(url, {
+            method: 'POST',
+            headers: { Authorization: String(request.headers.authorization || '') },
+            body: JSON.stringify(data),
+          }),
+        );
+        json(response, result.status, await result.json());
+        return;
+      }
       if (url.pathname === '/functions/v1/admin-manage-user') {
         const data = await body(request);
         const actor = uid(request);

@@ -74,7 +74,7 @@ export async function FindingList({
           </Button>
         ) : !scope && profile.role !== 'CLIENT' ? (
           <Button asChild variant="outline">
-            <Link href="/organizations">Elegir organización</Link>
+            <Link href="/dashboard">Elegir organización</Link>
           </Button>
         ) : null}
       </div>

@@ -162,7 +162,9 @@ test('Fase 4: referencias históricas, asignación, revisión, cierre e aislamie
     );
     await assert.rejects(db.query(`update tasks set created_by=$1 where id=$2`, [ids.b, task]));
     await assert.rejects(db.query(`delete from findings where id=$1`, [finding.id]));
+    await identity(db, ids.admin);
     await db.query(`update organizations set status='ARCHIVED' where id=$1`, [a]);
+    await identity(db, ids.a);
     assert.equal(
       (await db.query(`update findings set title='Archivada' returning id`)).rows.length,
       0,
@@ -174,7 +176,9 @@ test('Fase 4: referencias históricas, asignación, revisión, cierre e aislamie
     await identity(db, ids.client);
     await assert.rejects(db.query(`select submit_task($1,'WAITING_REVIEW')`, [task]));
     await identity(db, ids.a);
+    await identity(db, ids.admin);
     await db.query(`update organizations set status='ACTIVE' where id=$1`, [a]);
+    await identity(db, ids.a);
     await db.query(`select manage_member($1,$2,null)`, [a, ids.client]);
     await identity(db, ids.client);
     assert.equal((await db.query(`select * from tasks`)).rows.length, 0);

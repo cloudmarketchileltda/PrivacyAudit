@@ -251,3 +251,15 @@ La configuración compartida está en **[src/config/general.ts](src/config/gener
 - `grids.maxPageNumber` y `search.maxLength`: límites compartidos del frontend, con equivalentes en RPC SQL que también deben revisarse al cambiarlos.
 
 Las modificaciones de presentación requieren build y redespliegue de Next.js. Este archivo es público y puede importarse en el navegador; nunca debe contener secretos. `src/lib/config.ts` mantiene las utilidades del entorno y las URL. El documento maestro y la arquitectura conservan el alcance y las decisiones de implementación.
+
+## Organizaciones desde Administración
+
+Desde el 8 de octubre de 2026 solo SUPER_ADMIN administra organizaciones: Administración → Organizaciones ofrece alta, consulta, edición y eliminación, con diez filas visibles, scroll y páginas de 20. Consultores/clientes continúan trabajando en sus evaluaciones y registros asociados; las organizaciones y membresías las provisiona el administrador.
+
+Eliminar muestra un modal con Cancelar/Eliminar y advierte que se borran todos los datos relacionados, incluidos evidencias/archivos y auditoría de la organización. `admin-delete-organization` prepara y bloquea la organización, elimina blobs mediante Storage API y ejecuta la limpieza SQL transaccional. Si falla Storage o expira la ejecución, reintentar Eliminar desde Administración; puede haber archivos ya eliminados y el estado sigue bloqueado hasta completar. No se eliminan cuentas ni el catálogo global. Una constancia global no guarda identidad ni datos de la organización eliminada.
+
+Verificación: `npm run test:ui:organizations` usa un backend aislado con migraciones reales y adaptador de Storage; verifica acceso por rol, CRUD, modal/cancelación, borrado relacionado, aislamiento y móvil. `tests/organizations.test.ts` verifica también versiones de evidencias, bloqueo de escrituras, negativa a finalizar con archivos y reintento. Las suites SQL limitan concurrencia a dos para acotar memoria de PGlite/WASM. Esto no equivale a una eliminación con JWT y archivos reales en Supabase.
+
+Estado Supabase: migración `20261008134058_admin_organization_crud.sql` aplicada en `pbihajfbbcbbdvoqpggy`; `admin-delete-organization` v1 ACTIVE. Verificación SQL remota con rollback y rechazo 401 sin sesión aprobados. No se eliminaron organizaciones reales durante la verificación. Redesplegar Next.js en Dokploy después de actualizar el código de GitHub; queda pendiente verificar el recorrido con JWT y archivos reales.
+
+Validación de esta entrega: 25 pruebas unitarias/SQL, lint, typecheck, build, CRUD administrativo de navegador y 216 comprobaciones de pantallas/flujos existentes aprobados.

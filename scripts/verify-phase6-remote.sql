@@ -14,9 +14,14 @@ insert into auth.users(id,email,raw_user_meta_data) values(current_setting('phas
 update auth.users set last_sign_in_at=now() where id=current_setting('phase6_test.unused')::uuid;
 delete from auth.users where id=current_setting('phase6_test.unused')::uuid;
 do $$ begin if not exists(select 1 from public.audit_logs where action='AUTH_SIGN_IN' and actor_ref=current_setting('phase6_test.unused')::uuid and actor_id is null and actor_name='Temporary phase 6 check') then raise exception 'Lost historical actor identity';end if;end $$;
+update public.profiles set role='SUPER_ADMIN' where id=current_setting('phase6_test.manager')::uuid;
 select set_config('request.jwt.claim.sub',current_setting('phase6_test.manager'),true);
 set local role authenticated;
 select set_config('phase6_test.org',public.create_organization(jsonb_build_object('legal_name','Temporary phase 6 check','rut',current_setting('phase6_test.rut')))::text,true);
+reset role;
+update public.profiles set role='CONSULTANT' where id=current_setting('phase6_test.manager')::uuid;
+insert into public.organization_members(organization_id,user_id,role) values(current_setting('phase6_test.org')::uuid,current_setting('phase6_test.manager')::uuid,'CONSULTANT');
+set local role authenticated;
 select set_config('phase6_test.assessment',public.create_assessment(current_setting('phase6_test.org')::uuid,'Temporary phase 6 assessment')::text,true);
 select set_config('phase6_test.token',public.invite_client(current_setting('phase6_test.org')::uuid,current_setting('phase6_test.client')||'@example.test'),true);
 select set_config('request.jwt.claim.sub',current_setting('phase6_test.client'),true);

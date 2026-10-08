@@ -172,7 +172,7 @@ export default async function Page({
                   <td>
                     <Link
                       className="font-semibold text-teal-800 hover:underline"
-                      href={`/organizations/${o.id}`}
+                      href={`/assessments?organization=${o.id}`}
                     >
                       {o.legal_name}
                     </Link>
@@ -232,13 +232,11 @@ export default async function Page({
           {!s.rows.length && (
             <div className="empty">
               <p>Sin organizaciones para mostrar.</p>
-              {profile.role !== 'CLIENT' ? (
-                <Link className="text-teal-800 underline block mt-3" href="/organizations/new">
-                  Crear primera organización
-                </Link>
-              ) : (
-                <p className="mt-3">Abra su enlace de invitación para vincularse a una empresa.</p>
-              )}
+              <p className="mt-3">
+                {profile.role === 'SUPER_ADMIN'
+                  ? 'Agregue organizaciones desde Administración.'
+                  : 'Solicite al administrador la asignación de una organización.'}
+              </p>
             </div>
           )}
         </div>

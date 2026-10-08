@@ -59,7 +59,7 @@ export async function ProcessingList({
         )}
         {!scope && session.profile.role !== 'CLIENT' && (
           <Button variant="outline" asChild>
-            <Link href="/organizations">Elegir organización para registrar</Link>
+            <Link href="/dashboard">Elegir organización para registrar</Link>
           </Button>
         )}
       </div>

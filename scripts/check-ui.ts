@@ -71,10 +71,6 @@ try {
   assert.equal(await page.getByText('Segunda Empresa SpA', { exact: true }).count(), 0);
   const paths = [
     '/dashboard',
-    '/organizations',
-    '/organizations/new',
-    `/organizations/${fixture.orgA}`,
-    `/organizations/${fixture.orgA}/edit`,
     '/assessments',
     '/assessments/new',
     `/assessments/${fixture.assessment}`,
@@ -136,7 +132,13 @@ try {
     }
   }
   // Real Next.js Server Actions through browser, with SQL RLS from the fixture database.
-  await page.goto(`${base}/organizations/new`);
+  await context.clearCookies();
+  await page.goto(`${base}/login`);
+  await page.getByLabel('Email', { exact: true }).fill('admin@example.test');
+  await page.getByLabel('Contraseña', { exact: true }).fill('FixturePassword123');
+  await page.getByRole('button', { name: 'Entrar', exact: true }).click();
+  await page.waitForURL('**/dashboard');
+  await page.goto(`${base}/administration/organizations/new`);
   await page.getByLabel('Razón social', { exact: true }).fill('Empresa UI SpA');
   await page.getByLabel('RUT', { exact: true }).fill('76345678-1');
   await page.getByLabel('Industria', { exact: true }).fill('Tecnología');
@@ -145,6 +147,17 @@ try {
   const newOrg = page.url().split('/').at(-1)!;
   await page.getByRole('heading', { name: 'Empresa UI SpA', exact: true }).waitFor();
   assert.ok((await page.locator('body').innerText()).includes('Tecnología'));
+  await fixture.db.exec('reset role');
+  await fixture.db.query(
+    "insert into organization_members(organization_id,user_id,role) values($1,$2,'CONSULTANT')",
+    [newOrg, '10000000-0000-4000-8000-000000000001'],
+  );
+  await context.clearCookies();
+  await page.goto(`${base}/login`);
+  await page.getByLabel('Email', { exact: true }).fill('a@example.test');
+  await page.getByLabel('Contraseña', { exact: true }).fill('FixturePassword123');
+  await page.getByRole('button', { name: 'Entrar', exact: true }).click();
+  await page.waitForURL('**/dashboard');
   await page.goto(`${base}/assessments/new?organization=${newOrg}`);
   await page
     .getByLabel('Nombre de la evaluación', { exact: true })

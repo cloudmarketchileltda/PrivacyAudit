@@ -53,7 +53,7 @@ export default async function Page({
   return (
     <>
       <div>
-        <Link className="muted underline" href={`/organizations/${assessment.organization_id}`}>
+        <Link className="muted underline" href={`/assessments?organization=${assessment.organization_id}`}>
           {org?.legal_name}
         </Link>
         <h1 className="page-title mt-2 break-words">{assessment.name}</h1>

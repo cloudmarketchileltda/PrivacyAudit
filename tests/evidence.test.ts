@@ -276,7 +276,9 @@ test('Fase 5: archivos privados, versiones, revisión y comentarios con aislamie
     await db.query(`delete from evidence where id=$1`, [pending.id]);
     const archivePending = await reserve();
     await upload(archivePending.path);
+    await identity(db, ids.admin);
     await db.query(`update organizations set status='ARCHIVED' where id=$1`, [a]);
+    await identity(db, ids.a);
     await assert.rejects(db.query(`select finalize_evidence($1)`, [archivePending.id]));
     await assert.rejects(
       db.query(`insert into comments(organization_id,finding_id,body) values($1,$2,'Archivada')`, [
@@ -285,7 +287,9 @@ test('Fase 5: archivos privados, versiones, revisión y comentarios con aislamie
       ]),
     );
     assert.ok((await db.query(`select * from storage.objects`)).rows.length > 0);
+    await identity(db, ids.admin);
     await db.query(`update organizations set status='ACTIVE' where id=$1`, [a]);
+    await identity(db, ids.a);
     await db.query(`select manage_member($1,$2,null)`, [a, ids.client]);
     await identity(db, ids.client);
     for (const table of ['evidence', 'comments', 'storage.objects'])

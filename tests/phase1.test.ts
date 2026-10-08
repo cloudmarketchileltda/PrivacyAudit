@@ -30,10 +30,7 @@ test('Fase 1: RLS, roles, organizaciones, membresías e invitaciones', async () 
       ).rows.length,
       0,
     );
-    assert.equal(
-      (await db.query('delete from organizations where id=$1 returning id', [a])).rows.length,
-      0,
-    );
+    await assert.rejects(db.query('delete from organizations where id=$1 returning id', [a]));
     await assert.rejects(
       db.query(`insert into organization_members values($1,$2,'CONSULTANT',now(),now())`, [
         a,
@@ -134,7 +131,9 @@ test('Invitaciones rechazan cuentas sin confirmar, revocación, expiración y em
     await assert.rejects(db.query('select accept_invitation($1)', [expired]));
     await identity(db, ids.a);
     const archived = await invite();
+    await identity(db, ids.admin);
     await db.query("update organizations set status='ARCHIVED' where id=$1", [organization]);
+    await identity(db, ids.a);
     await assert.rejects(invite());
     await identity(db, ids.other);
     await assert.rejects(db.query('select accept_invitation($1)', [archived]));

@@ -15,9 +15,14 @@ select current_setting('processing_test.'||actor)::uuid,
  current_setting('processing_test.'||actor)||'@example.test',now(),'{"full_name":"Temporary phase 3 RLS check"}'::jsonb
 from unnest(array['a','b','client']) actor;
 update public.profiles set role='CONSULTANT' where id in(current_setting('processing_test.a')::uuid,current_setting('processing_test.b')::uuid);
+update public.profiles set role='SUPER_ADMIN' where id=current_setting('processing_test.a')::uuid;
 select set_config('request.jwt.claim.sub',current_setting('processing_test.a'),true);
 set local role authenticated;
 select set_config('processing_test.org',public.create_organization(jsonb_build_object('legal_name','Temporary phase 3 check','rut',current_setting('processing_test.rut')))::text,true);
+reset role;
+update public.profiles set role='CONSULTANT' where id=current_setting('processing_test.a')::uuid;
+insert into public.organization_members(organization_id,user_id,role) values(current_setting('processing_test.org')::uuid,current_setting('processing_test.a')::uuid,'CONSULTANT');
+set local role authenticated;
 with inserted as (
  insert into public.processing_activities(organization_id,name,purpose,data_subject_categories,personal_data_categories,created_by)
  values(current_setting('processing_test.org')::uuid,'Temporary processing','Test isolation',array['CLIENTS'],array['CONTACT'],current_setting('processing_test.b')::uuid) returning id
@@ -61,7 +66,9 @@ do $$ begin
  end;
 end $$;
 select set_config('request.jwt.claim.sub',current_setting('processing_test.a'),true);
+reset role;
 update public.organizations set status='ARCHIVED' where id=current_setting('processing_test.org')::uuid;
+set local role authenticated;
 do $$ begin
  update public.processing_activities set name='Archived edit' where id=current_setting('processing_test.activity')::uuid;
  if found then raise exception 'Archived organization update'; end if;

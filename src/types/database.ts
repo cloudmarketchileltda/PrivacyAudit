@@ -743,6 +743,7 @@ export interface Database {
       };
       finalize_evidence: { Args: { item: string }; Returns: undefined };
       finding_progress: { Args: { finding: string }; Returns: Json };
+      finish_organization_deletion: { Args: { org: string }; Returns: undefined };
       invite_client: { Args: { org: string; target_email: string }; Returns: string };
       manage_member: {
         Args: {
@@ -750,6 +751,11 @@ export interface Database {
           target: string;
           member_role: Database['public']['Enums']['app_role'] | null;
         };
+        Returns: undefined;
+      };
+      organization_deletion_files: { Args: { org: string }; Returns: string[] };
+      prepare_organization_deletion: {
+        Args: { org: string; confirmation: string };
         Returns: undefined;
       };
       purge_audit_logs: {

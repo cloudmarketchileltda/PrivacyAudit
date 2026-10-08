@@ -11,9 +11,14 @@ do $$ begin
  if exists(select 1 from public.profiles where id=current_setting('privacy_test.a')::uuid and role<>'CLIENT') then raise exception 'Metadata escalated role'; end if;
 end $$;
 update public.profiles set role='CONSULTANT' where id in(current_setting('privacy_test.a')::uuid,current_setting('privacy_test.b')::uuid);
+update public.profiles set role='SUPER_ADMIN' where id=current_setting('privacy_test.a')::uuid;
 select set_config('request.jwt.claim.sub',current_setting('privacy_test.a'),true);
 set local role authenticated;
 select set_config('privacy_test.org',public.create_organization('{"legal_name":"Temporary RLS check A","rut":"76123456-0"}')::text,true);
+reset role;
+update public.profiles set role='CONSULTANT' where id=current_setting('privacy_test.a')::uuid;
+insert into public.organization_members(organization_id,user_id,role) values(current_setting('privacy_test.org')::uuid,current_setting('privacy_test.a')::uuid,'CONSULTANT');
+set local role authenticated;
 select set_config('privacy_test.assessment',public.create_assessment(current_setting('privacy_test.org')::uuid,'Temporary assessment','')::text,true);
 do $$ begin
  if (select count(*) from public.assessment_controls where assessment_id=current_setting('privacy_test.assessment')::uuid)<>52 then raise exception 'Snapshot count mismatch'; end if;

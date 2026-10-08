@@ -10,6 +10,8 @@ Cambio de cuentas autorizado el 7 de octubre de 2026: registro público cerrado;
 
 Cambio de membresías autorizado el 7 de octubre de 2026: grillas administrativas separadas; CLIENT con una sola organización como máximo y CONSULTANT con varias. Asignación directa por SUPER_ADMIN, transaccional y auditada. Mantener esta cardinalidad también en invitaciones y RPC heredadas.
 
+Cambio de organizaciones autorizado el 8 de octubre de 2026: CRUD exclusivo de SUPER_ADMIN desde Administración. El borrado confirmado elimina todos los datos de la organización y sus archivos; conservar cuentas de usuario y catálogo global. Esta operación es la excepción explícita a la conservación de hallazgos, tareas y evidencias confirmadas. Borrar blobs con Storage API, nunca solo metadata SQL.
+
 Convención de acciones desde el 8 de octubre de 2026: usar las variantes compartidas de `Button`; azul (`default`/`role`) para acciones generales y cambio de rol, verde (`edit`) para modificar/guardar, rojo (`destructive`) para eliminar. Botones de acciones en grillas con icono, `aria-label` y `title`. Navegación/cancelación/filtros pueden usar `outline` o `ghost`.
 
 Stack: Next.js App Router, TypeScript estricto, Tailwind 4, componentes shadcn/ui, React Hook Form, Zod y Supabase SSR. Server Components por defecto. Validar entradas en servidor y aplicar RLS. Ninguna clave service role en la aplicación. Relaciones con FK y snapshots de controles para preservar historia.
