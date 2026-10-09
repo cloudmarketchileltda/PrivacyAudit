@@ -1,7 +1,9 @@
 import { contactInput, type ContactInput } from '../_shared/account-contact.ts';
+import { passwordPolicy } from '../_shared/password-policy.ts';
 export type MutationInput = {
   target: string;
-  operation: 'UPDATE' | 'DELETE';
+  operation: 'UPDATE' | 'DELETE' | 'RESET_PASSWORD';
+  password?: string;
   full_name?: string;
   email?: string;
   confirmation?: string;
@@ -15,6 +17,16 @@ export function mutationInput(value: unknown): MutationInput | null {
     !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(d.target)
   )
     return null;
+  if (d.operation === 'RESET_PASSWORD') {
+    if (
+      typeof d.password !== 'string' ||
+      d.password.length < passwordPolicy.minLength ||
+      d.password.length > passwordPolicy.maxLength ||
+      d.password !== d.password_confirmation
+    )
+      return null;
+    return { target: d.target, operation: 'RESET_PASSWORD', password: d.password };
+  }
   if (d.operation === 'DELETE')
     return d.confirmation === 'ELIMINAR CUENTA'
       ? { target: d.target, operation: 'DELETE', confirmation: d.confirmation }
@@ -59,7 +71,7 @@ export function mutationHandler(deps: {
         return reply(400, { error: 'Datos inválidos.' });
       }
       const input = mutationInput(value);
-      if (!input || (input.operation === 'DELETE' && input.target === actor.id))
+      if (!input || (input.operation !== 'UPDATE' && input.target === actor.id))
         return reply(400, { error: 'Datos inválidos o cuenta protegida.' });
       if (!(await deps.mutate(input, token)))
         return reply(400, {

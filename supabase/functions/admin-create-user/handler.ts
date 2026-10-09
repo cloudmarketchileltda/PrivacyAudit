@@ -1,4 +1,5 @@
 import { contactInput, type ContactInput } from '../_shared/account-contact.ts';
+import { passwordPolicy } from '../_shared/password-policy.ts';
 export type AccountInput = {
   full_name: string;
   email: string;
@@ -31,8 +32,8 @@ export function accountInput(value: unknown): AccountInput | null {
     full_name.length > 160 ||
     email.length > 254 ||
     !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
-    data.password.length < 10 ||
-    data.password.length > 128 ||
+    data.password.length < passwordPolicy.minLength ||
+    data.password.length > passwordPolicy.maxLength ||
     !['CLIENT', 'CONSULTANT'].includes(data.role)
   )
     return null;

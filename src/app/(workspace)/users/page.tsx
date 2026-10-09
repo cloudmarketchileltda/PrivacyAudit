@@ -73,8 +73,8 @@ export default async function Page({
           </label>
           <p className="muted">
             La cuenta quedará habilitada por el administrador sin correo de confirmación. Comparta
-            las credenciales de forma segura. El usuario puede cambiar su contraseña mediante Mi
-            cuenta o Recuperar acceso.
+            las credenciales de forma segura. El usuario puede cambiar su contraseña en Mi cuenta;
+            si la olvida, el administrador puede restablecerla desde esta grilla.
           </p>
         </ActionForm>
       </section>
@@ -96,11 +96,12 @@ export default async function Page({
       >
         <table className="data-table">
           <colgroup>
+            <col style={{ width: '26%' }} />
             <col style={{ width: '30%' }} />
-            <col style={{ width: '34%' }} />
-            <col style={{ width: '12%' }} />
-            <col style={{ width: '12%' }} />
-            <col style={{ width: '12%' }} />
+            <col style={{ width: '11%' }} />
+            <col style={{ width: '11%' }} />
+            <col style={{ width: '11%' }} />
+            <col style={{ width: '11%' }} />
           </colgroup>
           <thead>
             <tr>
@@ -108,6 +109,7 @@ export default async function Page({
               <th>Correo electrónico</th>
               <th>Modificar rol</th>
               <th>Modificar cuenta</th>
+              <th>Contraseña</th>
               <th>Eliminar</th>
             </tr>
           </thead>
@@ -132,7 +134,7 @@ export default async function Page({
                     {account.email}
                   </p>
                 </td>
-                {(['role', 'edit', 'delete'] as const).map((kind) => (
+                {(['role', 'edit', 'password', 'delete'] as const).map((kind) => (
                   <td key={kind}>
                     <AccountAction
                       key={`${kind}:${JSON.stringify(account)}`}

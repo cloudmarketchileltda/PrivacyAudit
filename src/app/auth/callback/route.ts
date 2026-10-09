@@ -8,7 +8,7 @@ export async function GET(request: Request) {
   const code = url.searchParams.get('code');
   const token_hash = url.searchParams.get('token_hash');
   const type = url.searchParams.get('type');
-  const allowed = ['signup', 'invite', 'recovery', 'email', 'email_change', 'magiclink'];
+  const allowed = ['signup', 'invite', 'email', 'email_change', 'magiclink'];
   const result = code
     ? await db.auth.exchangeCodeForSession(code)
     : token_hash && type && allowed.includes(type)

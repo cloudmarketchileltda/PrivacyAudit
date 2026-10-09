@@ -1,12 +1,13 @@
 'use client';
 import { useActionState, useEffect, useId, useRef } from 'react';
-import { Pencil, ShieldCheck, Trash2, X } from 'lucide-react';
+import { KeyRound, Pencil, ShieldCheck, Trash2, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Field, type ActionState } from '@/components/forms';
 import { manageAccount } from './actions';
 import { setRole } from '@/features/organizations/actions';
 import { ContactFields, type AccountContact } from '@/features/account/contact-fields';
+import { generalConfig } from '@/config/general';
 export type Account = {
   id: string;
   full_name: string;
@@ -19,10 +20,11 @@ export function AccountAction({
   self,
 }: {
   account: Account;
-  kind: 'role' | 'edit' | 'delete';
+  kind: 'role' | 'edit' | 'delete' | 'password';
   self: boolean;
 }) {
   const dialog = useRef<HTMLDialogElement>(null);
+  const form = useRef<HTMLFormElement>(null);
   const titleId = useId();
   const router = useRouter();
   const [state, action, pending] = useActionState(
@@ -30,11 +32,25 @@ export function AccountAction({
     {} as ActionState,
   );
   const label =
-    kind === 'role' ? 'Cambiar rol' : kind === 'edit' ? 'Modificar cuenta' : 'Eliminar cuenta';
-  const variant = kind === 'delete' ? 'destructive' : kind;
-  const Icon = kind === 'role' ? ShieldCheck : kind === 'edit' ? Pencil : Trash2;
+    kind === 'role'
+      ? 'Cambiar rol'
+      : kind === 'edit'
+        ? 'Modificar cuenta'
+        : kind === 'password'
+          ? 'Restablecer contraseña'
+          : 'Eliminar cuenta';
+  const variant = kind === 'delete' ? 'destructive' : kind === 'password' ? 'edit' : kind;
+  const Icon =
+    kind === 'role'
+      ? ShieldCheck
+      : kind === 'edit'
+        ? Pencil
+        : kind === 'password'
+          ? KeyRound
+          : Trash2;
   useEffect(() => {
     if (state.success) {
+      form.current?.reset();
       dialog.current?.close();
       router.refresh();
     }
@@ -48,7 +64,7 @@ export function AccountAction({
         aria-label={`${label}: ${account.full_name}`}
         title={label}
         disabled={
-          (kind === 'role' && self) ||
+          ((kind === 'role' || kind === 'password') && self) ||
           (kind === 'delete' && (self || account.role === 'SUPER_ADMIN'))
         }
         onClick={() => dialog.current?.showModal()}
@@ -81,7 +97,7 @@ export function AccountAction({
         <p className="muted mb-4 break-words">
           {account.full_name} · {account.email}
         </p>
-        <form action={action} className="space-y-4">
+        <form ref={form} action={action} className="space-y-4">
           <input type="hidden" name="target" value={account.id} />
           <fieldset disabled={pending} className="space-y-4">
             {kind === 'role' ? (
@@ -98,7 +114,9 @@ export function AccountAction({
                 <input
                   type="hidden"
                   name="operation"
-                  value={kind === 'edit' ? 'UPDATE' : 'DELETE'}
+                  value={
+                    kind === 'edit' ? 'UPDATE' : kind === 'password' ? 'RESET_PASSWORD' : 'DELETE'
+                  }
                 />
                 {kind === 'edit' ? (
                   <>
@@ -117,9 +135,36 @@ export function AccountAction({
                     />
                     <ContactFields contact={account} />
                     <p className="muted">
-                      La contraseña se cambia desde Mi cuenta o mediante Recuperar acceso. La
+                      La contraseña se cambia desde Mi cuenta o con Restablecer contraseña. La
                       contraseña actual nunca se muestra.
                     </p>
+                  </>
+                ) : kind === 'password' ? (
+                  <>
+                    <p className="text-sm">
+                      Establezca una nueva contraseña sin enviar correo ni enlace. Compártala de
+                      forma segura y solicite al usuario que la cambie desde Mi cuenta. Se cerrarán
+                      sus sesiones; los tokens de acceso ya emitidos pueden seguir válidos hasta
+                      vencer.
+                    </p>
+                    <Field
+                      label="Nueva contraseña"
+                      name="password"
+                      type="password"
+                      required
+                      autoComplete="new-password"
+                      minLength={generalConfig.account.passwordMinLength}
+                      maxLength={generalConfig.account.passwordMaxLength}
+                    />
+                    <Field
+                      label="Confirmar nueva contraseña"
+                      name="password_confirmation"
+                      type="password"
+                      required
+                      autoComplete="new-password"
+                      minLength={generalConfig.account.passwordMinLength}
+                      maxLength={generalConfig.account.passwordMaxLength}
+                    />
                   </>
                 ) : (
                   <>
@@ -157,6 +202,11 @@ export function AccountAction({
           )}
         </form>
       </dialog>
+      {kind === 'password' && state.success && (
+        <p role="status" className="text-sm mt-2">
+          Contraseña restablecida.
+        </p>
+      )}
     </>
   );
 }

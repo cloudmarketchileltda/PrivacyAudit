@@ -55,6 +55,7 @@ export function Field({
   required = false,
   autoComplete,
   maxLength,
+  minLength,
 }: {
   label: string;
   name: string;
@@ -63,6 +64,7 @@ export function Field({
   required?: boolean;
   autoComplete?: string;
   maxLength?: number;
+  minLength?: number;
 }) {
   return (
     <label className="form-label">
@@ -75,6 +77,7 @@ export function Field({
         required={required}
         autoComplete={autoComplete}
         maxLength={maxLength}
+        minLength={minLength}
       />
     </label>
   );

@@ -2,10 +2,9 @@
 import { redirect } from 'next/navigation';
 import { z } from '@/lib/validation';
 import { createClient } from '@/lib/supabase/server';
-import { appUrl, safeNext } from '@/lib/config';
+import { safeNext } from '@/lib/config';
 import { requireUser } from './queries';
 import type { ActionState } from '@/components/forms';
-import { passwordSchema } from '@/features/account/schemas';
 export async function login(_: ActionState, data: FormData): Promise<ActionState> {
   const parsed = z
     .object({ email: z.email(), password: z.string().min(1) })
@@ -16,26 +15,6 @@ export async function login(_: ActionState, data: FormData): Promise<ActionState
   if (error)
     return { error: 'No fue posible iniciar sesión. Revise sus datos o confirme su email.' };
   redirect(safeNext(data.get('next')?.toString()));
-}
-export async function recover(_: ActionState, data: FormData): Promise<ActionState> {
-  const email = z.email().safeParse(data.get('email'));
-  if (!email.success) return { error: 'Ingrese un email válido.' };
-  const db = await createClient();
-  await db.auth.resetPasswordForEmail(email.data, {
-    redirectTo: `${appUrl()}/auth/callback?next=/reset-password`,
-  });
-  return {
-    success: 'Si existe una cuenta con ese email, recibirá instrucciones para recuperar el acceso.',
-  };
-}
-export async function resetPassword(_: ActionState, data: FormData): Promise<ActionState> {
-  const password = passwordSchema.safeParse(Object.fromEntries(data));
-  if (!password.success)
-    return { error: 'Use de 10 a 128 caracteres y confirme la misma contraseña.' };
-  const { db } = await requireUser();
-  const { error } = await db.auth.updateUser({ password: password.data.password });
-  if (error) return { error: 'No se pudo cambiar la contraseña. Solicite un nuevo enlace.' };
-  return { success: 'Contraseña actualizada. Puede volver al dashboard.' };
 }
 export async function logout() {
   const db = await createClient();

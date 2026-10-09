@@ -3,7 +3,7 @@ import { revalidatePath } from 'next/cache';
 import { z } from '@/lib/validation';
 import { requireUser } from '@/features/auth/queries';
 import type { ActionState } from '@/components/forms';
-import { profileSchema } from '@/features/account/schemas';
+import { profileSchema, passwordSchema } from '@/features/account/schemas';
 import { generalConfig } from '@/config/general';
 const schema = profileSchema.extend({
   email: z.email().max(generalConfig.account.emailMaxLength),
@@ -30,11 +30,12 @@ export async function createAccount(_: ActionState, form: FormData): Promise<Act
   revalidatePath('/administration/memberships');
   return {
     success:
-      'Cuenta creada y habilitada. Comparta las credenciales de forma segura; el usuario puede cambiar su contraseña en Mi cuenta o mediante Recuperar acceso. Asigne después su organización.',
+      'Cuenta creada y habilitada. Comparta las credenciales de forma segura; el usuario puede cambiar su contraseña en Mi cuenta. Asigne después su organización.',
   };
 }
 
 const mutationSchema = z.discriminatedUnion('operation', [
+  passwordSchema.safeExtend({ operation: z.literal('RESET_PASSWORD'), target: z.uuid() }),
   profileSchema.extend({
     operation: z.literal('UPDATE'),
     target: z.uuid(),
@@ -51,22 +52,34 @@ export async function manageAccount(_: ActionState, form: FormData): Promise<Act
   if (profile.role !== 'SUPER_ADMIN') return { error: 'Acción exclusiva del administrador.' };
   const input = mutationSchema.safeParse(Object.fromEntries(form));
   if (!input.success)
-    return { error: 'Revise el nombre, correo o la confirmación ELIMINAR CUENTA.' };
-  if (input.data.operation === 'DELETE' && input.data.target === user.id)
-    return { error: 'No puede eliminar su propia cuenta.' };
+    return {
+      error:
+        'Revise los datos y la confirmación. La nueva contraseña debe tener de 10 a 128 caracteres y coincidir con su confirmación.',
+    };
+  if (input.data.operation !== 'UPDATE' && input.data.target === user.id)
+    return {
+      error: 'Use Mi cuenta para cambiar su contraseña. No puede eliminar su propia cuenta.',
+    };
   const { error } = await db.functions.invoke('admin-manage-user', { body: input.data });
   if (error)
     return {
       error:
         input.data.operation === 'DELETE'
           ? 'No se pudo eliminar. Las cuentas administrativas y las cuentas con registros históricos asociados están protegidas.'
-          : 'No se pudo actualizar. Revise si el correo ya existe y la disponibilidad del servicio.',
+          : input.data.operation === 'RESET_PASSWORD'
+            ? 'No se pudo restablecer la contraseña. Revise la política de contraseña y la disponibilidad del servicio.'
+            : 'No se pudo actualizar. Revise si el correo ya existe y la disponibilidad del servicio.',
     };
   revalidatePath('/users');
   revalidatePath('/administration/memberships');
   revalidatePath('/administration/audit');
   revalidatePath('/', 'layout');
   return {
-    success: input.data.operation === 'DELETE' ? 'Cuenta eliminada.' : 'Cuenta actualizada.',
+    success:
+      input.data.operation === 'DELETE'
+        ? 'Cuenta eliminada.'
+        : input.data.operation === 'RESET_PASSWORD'
+          ? 'Contraseña restablecida sin correo. Compártala de forma segura y solicite al usuario que la cambie en Mi cuenta.'
+          : 'Cuenta actualizada.',
   };
 }

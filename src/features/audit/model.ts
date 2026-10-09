@@ -87,6 +87,7 @@ export const auditActionLabels: Record<string, string> = {
   AUDIT_PURGE: 'Borrado del log',
   AUTH_ACCOUNT_CREATED: 'Cuenta creada',
   AUTH_SIGN_IN: 'Inicio de sesión confirmado',
+  ADMIN_ACCOUNT_PASSWORD_RESET: 'Contraseña restablecida por administrador',
   AUTH_PASSWORD_CHANGED: 'Credencial actualizada (histórico)',
   AUTH_CREDENTIAL_UPDATED: 'Credencial actualizada',
   AUTH_SESSION_ENDED: 'Sesión terminada',

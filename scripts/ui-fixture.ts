@@ -262,6 +262,37 @@ export async function startFixture(port = 54331) {
           },
           async mutate(input) {
             await identity(db, actor);
+            if (input.operation === 'RESET_PASSWORD') {
+              const receipt = (
+                await db.query<{ id: string }>('select public.reserve_password_reset($1) id', [
+                  input.target,
+                ])
+              ).rows[0].id;
+              try {
+                await db.transaction(async (tx) => {
+                  await tx.exec('set local role supabase_auth_admin');
+                  await tx.query('update auth.users set encrypted_password=$2 where id=$1', [
+                    input.target,
+                    `fixture-hash-${receipt}`,
+                  ]);
+                  await tx.query(
+                    "update auth.users set raw_app_meta_data=raw_app_meta_data||jsonb_build_object('password_reset_receipt',$2::text) where id=$1",
+                    [input.target, receipt],
+                  );
+                });
+                accountPasswords.set(input.target, input.password!);
+                await identity(db, actor);
+                return (
+                  await db.query<{ done: boolean }>(
+                    'select public.password_reset_completed($1) done',
+                    [receipt],
+                  )
+                ).rows[0].done;
+              } finally {
+                await identity(db, actor);
+                await db.query('select public.cancel_password_reset($1)', [receipt]);
+              }
+            }
             const { rows } = await db.query<{ id: string }>(
               input.contact
                 ? 'select public.reserve_account_contact_mutation($1,$2,$3,$4,$5) id'

@@ -47,6 +47,11 @@ try {
   const errors: string[] = [];
   const results: unknown[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
+  await page.goto(`${base}/recover`);
+  await page.getByText(/contacte al administrador de PrivacyAudit/).waitFor();
+  assert.equal(await page.getByRole('button', { name: 'Solicitar enlace' }).count(), 0);
+  await page.goto(`${base}/reset-password`);
+  assert.equal(new URL(page.url()).pathname, '/recover');
   await page.goto(`${base}/signup`);
   assert.equal(new URL(page.url()).pathname, '/login');
   assert.equal(await page.getByRole('link', { name: 'Crear cuenta', exact: true }).count(), 0);
@@ -96,6 +101,39 @@ try {
     await dialog.waitFor({ state: 'hidden' });
     row = page.getByRole('row').filter({ hasText: `${name} editado` });
     await row.getByText(`${role.toLowerCase()}-edited@example.test`, { exact: true }).waitFor();
+    await row.getByRole('button', { name: `Restablecer contraseña: ${name} editado` }).click();
+    dialog = page.getByRole('dialog', { name: 'Restablecer contraseña', exact: true });
+    await dialog.getByLabel('Nueva contraseña', { exact: true }).fill('ResetPassword123!');
+    await dialog
+      .getByLabel('Confirmar nueva contraseña', { exact: true })
+      .fill('DifferentPassword123!');
+    await dialog.getByRole('button', { name: 'Restablecer contraseña', exact: true }).click();
+    await dialog.getByRole('alert').waitFor();
+    await dialog.getByLabel('Nueva contraseña', { exact: true }).fill('ResetPassword123!');
+    await dialog
+      .getByLabel('Confirmar nueva contraseña', { exact: true })
+      .fill('ResetPassword123!');
+    await dialog.getByRole('button', { name: 'Restablecer contraseña', exact: true }).click();
+    await dialog.waitFor({ state: 'hidden' });
+    await row.getByRole('status').waitFor();
+    assert.equal(
+      await row
+        .locator('dialog')
+        .filter({ has: page.locator('input[value="RESET_PASSWORD"]') })
+        .locator('input[name="password"]')
+        .inputValue(),
+      '',
+    );
+    await fixture.db.exec('reset role');
+    assert.equal(
+      (
+        await fixture.db.query(
+          "select * from audit_logs where action='ADMIN_ACCOUNT_PASSWORD_RESET' and entity_id=(select id from profiles where full_name=$1)",
+          [`${name} editado`],
+        )
+      ).rows.length,
+      1,
+    );
     await row.getByRole('button', { name: `Eliminar cuenta: ${name} editado` }).click();
     dialog = page.getByRole('dialog', { name: 'Eliminar cuenta', exact: true });
     await dialog.getByLabel('Escriba ELIMINAR CUENTA para confirmar').fill('ELIMINAR CUENTA');

@@ -792,6 +792,7 @@ export interface Database {
       can_manage_organization: { Args: { org: string }; Returns: boolean };
       cancel_account_mutation: { Args: { reservation_id: string }; Returns: undefined };
       cancel_account_provisioning: { Args: { reservation_id: string }; Returns: undefined };
+      cancel_password_reset: { Args: { receipt: string }; Returns: undefined };
       create_assessment: {
         Args: { org: string; title: string; details?: string };
         Returns: string;
@@ -824,6 +825,7 @@ export interface Database {
         Returns: undefined;
       };
       organization_deletion_files: { Args: { org: string }; Returns: string[] };
+      password_reset_completed: { Args: { receipt: string }; Returns: boolean };
       prepare_organization_deletion: {
         Args: { org: string; confirmation: string };
         Returns: undefined;
@@ -868,6 +870,7 @@ export interface Database {
         };
         Returns: string;
       };
+      reserve_password_reset: { Args: { target: string }; Returns: string };
       revoke_invitation: { Args: { invitation_id: string }; Returns: undefined };
       save_my_account: { Args: { account_name: string; contact: Json }; Returns: undefined };
       set_user_organizations: {

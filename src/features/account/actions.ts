@@ -39,7 +39,7 @@ export async function changeOwnPassword(_: ActionState, form: FormData): Promise
   if (error)
     return {
       error:
-        'No se pudo cambiar la contraseña. Revise la política de contraseña o utilice Recuperar acceso.',
+        'No se pudo cambiar la contraseña. Revise la política de contraseña o contacte al administrador.',
     };
   return {
     success: 'Contraseña actualizada. Use la nueva contraseña en su próximo inicio de sesión.',
