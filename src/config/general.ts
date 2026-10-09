@@ -11,6 +11,14 @@ const actionStyles = {
 } as const;
 
 export const generalConfig = {
+  retention: {
+    policyVersion: '2026-10-09',
+    audit:
+      'El historial está protegido contra modificaciones durante su conservación. No se purga por antigüedad. El borrado confirmado de una organización o evaluación elimina también su historial relacionado.',
+    backups:
+      'La eliminación se completa en la base activa y Storage. Pueden existir copias residuales de infraestructura; su plazo de expiración aún no está verificado y no se garantiza desaparición inmediata de los respaldos.',
+    export: { maxBytes: 512 * 1024 * 1024, maxSnapshotBytes: 64 * 1024 * 1024 },
+  },
   reports: {
     titleMaxLength: 200,
     textMinLength: 10,

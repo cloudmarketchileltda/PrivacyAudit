@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { database, users, identity, org, ids } from './db-helper';
-import { csvCell, csvRow, purgeSchema, chileDayStart } from '../src/features/audit/model';
+import { csvCell, csvRow, chileDayStart } from '../src/features/audit/model';
 test('Fase 6: notificaciones privadas, vencimientos, métricas y auditoría protegida', async () => {
   const db = await database();
   try {
@@ -182,21 +182,16 @@ test('Fase 6: notificaciones privadas, vencimientos, métricas y auditoría prot
     const expected = (
       await db.query<{ n: number }>(`select count(*)::int n from audit_logs where created_at<now()`)
     ).rows[0].n;
-    const removed = (
-      await db.query<{ n: number }>(
-        `select purge_audit_logs(now(),'Conservación de prueba','BORRAR LOG') n`,
-      )
-    ).rows[0].n;
-    assert.equal(Number(removed), expected);
-    assert.equal((await db.query(`select * from audit_logs`)).rows.length, 1);
-    assert.equal(
-      (await db.query<{ action: string }>(`select action from audit_logs`)).rows[0].action,
-      'AUDIT_PURGE',
+    await assert.rejects(
+      db.query(`select purge_audit_logs(now(),'Conservación de prueba','BORRAR LOG')`),
     );
-    await db.query(`select purge_audit_logs(now(),'Segunda conservación','BORRAR LOG')`);
     assert.equal(
-      (await db.query(`select * from audit_logs where action='AUDIT_PURGE'`)).rows.length,
-      2,
+      (
+        await db.query<{ n: number }>(
+          `select count(*)::int n from audit_logs where created_at<now()`,
+        )
+      ).rows[0].n,
+      expected,
     );
     await db.query(`select record_audit_export('{}',2)`);
     assert.equal(
@@ -222,19 +217,12 @@ test('Fase 6: notificaciones privadas, vencimientos, métricas y auditoría prot
     await db.close();
   }
 });
-test('CSV auditable: comillas, saltos, fórmulas y confirmación de borrado', () => {
+test('CSV auditable: comillas, saltos y fórmulas', () => {
   assert.equal(chileDayStart('2026-06-01'), '2026-06-01T04:00:00.000Z');
   assert.equal(chileDayStart('2026-10-07'), '2026-10-07T03:00:00.000Z');
   assert.equal(csvCell('a,"b"\nc'), '"a,""b""\nc"');
   for (const formula of ['=SUM(A1)', '+cmd', ' @x', '\t-2'])
     assert.ok(csvCell(formula).startsWith('"\''));
   assert.ok(csvRow({ metadata: { before: 'é' } }).includes('é'));
-  assert.equal(
-    purgeSchema.safeParse({
-      before_time: new Date(Date.now() + 60000).toISOString(),
-      reason: 'Motivo de prueba',
-      confirmation: 'BORRAR LOG',
-    }).success,
-    false,
-  );
+
 });

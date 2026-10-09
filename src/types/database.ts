@@ -830,6 +830,7 @@ export interface Database {
         Returns: undefined;
       };
       organization_deletion_files: { Args: { org: string }; Returns: string[] };
+      organization_export_snapshot: { Args: { org: string }; Returns: Json };
       password_reset_completed: { Args: { receipt: string }; Returns: boolean };
       prepare_assessment_deletion: {
         Args: { assessment: string; confirmation: string };
@@ -846,6 +847,10 @@ export interface Database {
       read_notifications: { Args: { notification?: string }; Returns: undefined };
       record_audit_export: { Args: { filters: Json; record_count: number }; Returns: undefined };
       record_evidence_download: { Args: { evidence: string }; Returns: undefined };
+      record_organization_export: {
+        Args: { org: string; manifest_sha256: string };
+        Returns: undefined;
+      };
       record_report_download: { Args: { report: string }; Returns: undefined };
       register_consultant: { Args: Record<string, never>; Returns: undefined };
       reserve_account_contact_mutation: {

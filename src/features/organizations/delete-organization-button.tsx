@@ -1,22 +1,27 @@
 'use client';
 import { useActionState, useEffect, useId, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { ActionState } from '@/components/forms';
 import { deleteOrganization } from './actions';
+import Link from 'next/link';
+import { generalConfig } from '@/config/general';
 export function DeleteOrganizationButton({ id, name }: { id: string; name: string }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const title = useId();
   const description = useId();
   const router = useRouter();
+  const pathname = usePathname();
   const [state, action, pending] = useActionState(deleteOrganization, {} as ActionState);
   useEffect(() => {
     if (state.success) {
       dialog.current?.close();
-      router.refresh();
+      if (pathname === `/administration/organizations/${id}`)
+        router.push('/administration/organizations');
+      else router.refresh();
     }
-  }, [state, router]);
+  }, [state, router, pathname, id]);
   return (
     <>
       <Button
@@ -48,9 +53,29 @@ export function DeleteOrganizationButton({ id, name }: { id: string; name: strin
           membresías, invitaciones, notificaciones y su historial de auditoría. Esta operación es
           permanente.
         </p>
+        <p className="text-sm mb-3">
+          Si desea conservar la información para consulta, archive la organización. Antes de
+          eliminar, puede exportar sus datos, historial, informes y archivos desde el resumen.
+        </p>
+        <Link
+          className="text-blue-800 underline text-sm"
+          href={`/administration/organizations/${id}`}
+        >
+          Archivar o exportar antes de eliminar
+        </Link>
+        <p className="muted my-4">{generalConfig.retention.backups}</p>
         <form action={action} className="space-y-4">
           <input type="hidden" name="id" value={id} />
-          <input type="hidden" name="confirmation" value="ELIMINAR ORGANIZACION" />
+          <label className="form-label">
+            Escriba ELIMINAR ORGANIZACION
+            <input
+              name="confirmation"
+              className="field"
+              required
+              pattern="ELIMINAR ORGANIZACION"
+              autoComplete="off"
+            />
+          </label>
           <div className="flex justify-end gap-3">
             <Button
               type="button"

@@ -4,7 +4,15 @@ import { z } from '@/lib/validation';
 import { requireUser } from '@/features/auth/queries';
 import { Button } from '@/components/ui/button';
 import { ActionForm, Field } from '@/components/forms';
-import { inviteClient, removeMember, revokeInvite } from '@/features/organizations/actions';
+import {
+  inviteClient,
+  removeMember,
+  revokeInvite,
+  setOrganizationArchived,
+} from '@/features/organizations/actions';
+import { ExportOrganizationButton } from '@/features/organizations/export-organization-button';
+import { DeleteOrganizationButton } from '@/features/organizations/delete-organization-button';
+import { generalConfig } from '@/config/general';
 import { formatDate } from '@/lib/utils';
 import type { Organization, Profile } from '@/types/domain';
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
@@ -79,6 +87,40 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           Evidencias
         </Link>
       </nav>
+      <section className="panel space-y-4">
+        <h2 className="section-title">Conservación y cierre de la organización</h2>
+        <p className="muted">
+          Archivar conserva datos, historial y archivos para consulta y detiene el trabajo
+          operativo. Puede reactivar la organización. Eliminar borra permanentemente toda su
+          información de la base activa y Storage; conserva cuentas y catálogo global.
+        </p>
+        <p className="muted">{generalConfig.retention.audit}</p>
+        <p className="muted">{generalConfig.retention.backups}</p>
+        <ActionForm
+          action={setOrganizationArchived}
+          label={org.status === 'ACTIVE' ? 'Archivar organización' : 'Reactivar organización'}
+          variant="edit"
+        >
+          <input type="hidden" name="id" value={id} />
+          <input
+            type="hidden"
+            name="status"
+            value={org.status === 'ACTIVE' ? 'ARCHIVED' : 'ACTIVE'}
+          />
+        </ActionForm>
+        {org.status === 'ARCHIVED' ? (
+          <ExportOrganizationButton id={id} />
+        ) : (
+          <p className="muted">
+            Archive primero para exportar todos los registros, historial, informes y archivos en ZIP
+            con índice SHA-256. Verifique y conserve su copia antes de eliminar.
+          </p>
+        )}
+        <div className="flex gap-3 items-center">
+          <DeleteOrganizationButton id={id} name={org.legal_name} />
+          <span className="text-sm">Eliminar definitivamente</span>
+        </div>
+      </section>
       <section className="panel">
         <h2 className="section-title">Información de la empresa</h2>
         <dl className="form-grid">

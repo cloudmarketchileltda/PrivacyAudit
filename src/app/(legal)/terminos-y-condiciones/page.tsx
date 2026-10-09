@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { generalConfig } from '@/config/general';
 import { LegalDocument } from '@/components/legal-document';
 
 export const metadata: Metadata = { title: 'Términos y condiciones' };
@@ -27,7 +28,7 @@ export default function TermsPage() {
         },
         {
           title: '5. Administración y eliminación',
-          text: 'El administrador gestiona cuentas, organizaciones y catálogo. El borrado confirmado de una organización elimina sus datos y archivos de manera permanente, manteniendo las cuentas y las definiciones globales compartidas. Las cuentas con relaciones de negocio protegidas no pueden eliminarse individualmente. Antes de solicitar una eliminación, la organización debe evaluar la información que necesita conservar por sus propios medios.',
+          text: `Política ${generalConfig.retention.policyVersion}. El administrador puede archivar una organización para conservarla en consulta y reactivarla posteriormente. Antes de eliminar puede generar una exportación ZIP de la organización archivada con registros, historial, informes y archivos, acompañada de un índice de tamaños y SHA-256. La exportación es opcional: no bloquea la eliminación confirmada. El destinatario debe verificar y conservar el paquete de forma segura; su preparación o descarga no acredita recepción ni conservación. El borrado definitivo elimina los datos de la organización y sus archivos de la base activa y Storage, conservando cuentas y catálogo global. ${generalConfig.retention.audit} ${generalConfig.retention.backups} La restauración de copias se realiza de forma aislada y exige excluir organizaciones eliminadas antes de reabrir el servicio. Las cuentas con relaciones de negocio protegidas no pueden eliminarse individualmente.`,
         },
         {
           title: '6. Disponibilidad y soporte',

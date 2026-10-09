@@ -70,6 +70,31 @@ export async function deleteOrganization(_: ActionState, data: FormData): Promis
   revalidatePath('/', 'layout');
   return { success: 'Organización y todos sus datos eliminados.' };
 }
+export async function setOrganizationArchived(
+  _: ActionState,
+  data: FormData,
+): Promise<ActionState> {
+  const parsed = z
+    .object({ id: z.uuid(), status: z.enum(['ACTIVE', 'ARCHIVED']) })
+    .safeParse(Object.fromEntries(data));
+  if (!parsed.success) return { error: 'Organización o estado inválido.' };
+  const { db, profile } = await requireUser();
+  if (profile.role !== 'SUPER_ADMIN') return { error: 'Acción exclusiva del administrador.' };
+  const { data: rows, error } = await db
+    .from('organizations')
+    .update({ status: parsed.data.status })
+    .eq('id', parsed.data.id)
+    .select('id');
+  if (error || !rows?.length)
+    return { error: 'No se pudo cambiar el estado. Revise si hay una eliminación pendiente.' };
+  revalidatePath('/', 'layout');
+  return {
+    success:
+      parsed.data.status === 'ARCHIVED'
+        ? 'Organización archivada. Sus datos y archivos se conservan para consulta.'
+        : 'Organización reactivada.',
+  };
+}
 export async function inviteClient(_: ActionState, data: FormData): Promise<ActionState> {
   const parsed = z.object({ org: z.uuid(), email: z.email() }).safeParse(Object.fromEntries(data));
   if (!parsed.success) return { error: 'Ingrese un email válido.' };

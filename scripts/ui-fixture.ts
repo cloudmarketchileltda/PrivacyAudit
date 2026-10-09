@@ -49,11 +49,13 @@ const functions = new Set([
   'purge_audit_logs',
   'record_audit_export',
   'record_evidence_download',
+  'organization_export_snapshot',
+  'record_organization_export',
   'create_report',
   'record_report_download',
 ]);
 function identifier(value: string) {
-  if (!/^[a-z_]+$/.test(value)) throw new Error('Invalid identifier');
+  if (!/^[a-z_][a-z0-9_]*$/.test(value)) throw new Error('Invalid identifier');
   return `"${value}"`;
 }
 function tokenFor(id: string) {

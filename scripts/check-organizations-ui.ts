@@ -1,3 +1,4 @@
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { chromium } from '@playwright/test';
 import { spawn } from 'node:child_process';
 import assert from 'node:assert/strict';
@@ -68,6 +69,12 @@ try {
         path,
       );
     }
+    assert.equal(
+      (
+        await context.request.get(`${base}/api/administration/organizations/${fixture.orgA}/export`)
+      ).status(),
+      403,
+    );
     await page.goto(`${base}/organizations/${fixture.orgA}/processing`);
     await page.getByRole('heading', { name: 'Tratamientos', exact: true }).waitFor();
   }
@@ -86,6 +93,34 @@ try {
   await page.getByLabel('Razón social', { exact: true }).fill('Empresa CRUD modificada');
   await page.getByRole('button', { name: 'Guardar organización', exact: true }).click();
   await page.waitForURL(/administration\/organizations\/[a-f0-9-]+$/);
+  assert.equal(
+    (
+      await context.request.get(`${base}/api/administration/organizations/${created}/export`)
+    ).status(),
+    409,
+  );
+  await page.getByRole('button', { name: 'Archivar organización', exact: true }).click();
+  await page.getByRole('button', { name: 'Reactivar organización', exact: true }).waitFor();
+  await mkdir('artifacts/closure-ui', { recursive: true });
+  const downloaded = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Exportar datos y archivos', exact: true }).click();
+  const download = await downloaded;
+  assert.equal(await download.failure(), null);
+  await download.saveAs('artifacts/closure-ui/organization.zip');
+  assert.equal(
+    (await readFile('artifacts/closure-ui/organization.zip')).subarray(0, 2).toString(),
+    'PK',
+  );
+  for (const width of [360, 768, 1440]) {
+    await page.setViewportSize({ width, height: 1000 });
+    assert.equal(
+      await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1),
+      false,
+    );
+    await page.screenshot({ path: `artifacts/closure-ui/closure-${width}.png`, fullPage: true });
+  }
+  await page.getByRole('button', { name: 'Reactivar organización', exact: true }).click();
+  await page.getByRole('button', { name: 'Archivar organización', exact: true }).waitFor();
   await page.goto(`${base}/administration/organizations`);
   row = page.getByRole('row').filter({ hasText: 'Empresa CRUD modificada' });
   await row.getByRole('button', { name: 'Eliminar organización: Empresa CRUD modificada' }).click();
@@ -98,6 +133,9 @@ try {
   for (const name of ['Empresa CRUD modificada', 'Empresa Demo SpA']) {
     row = page.getByRole('row').filter({ hasText: name });
     await row.getByRole('button', { name: `Eliminar organización: ${name}` }).click();
+    await dialog
+      .getByLabel('Escriba ELIMINAR ORGANIZACION', { exact: true })
+      .fill('ELIMINAR ORGANIZACION');
     await dialog.getByRole('button', { name: 'Eliminar', exact: true }).click();
     await dialog.waitFor({ state: 'hidden' });
     await row.waitFor({ state: 'detached' });
@@ -148,6 +186,14 @@ try {
   console.log(
     'Organizaciones UI: acceso exclusivo, CRUD, cancelación, modal, borrado relacionado y diseño responsivo verificados. Adaptador local; no prueba Auth/Storage remotos.',
   );
+} catch (error) {
+  await mkdir('artifacts/closure-ui', { recursive: true });
+  await writeFile('artifacts/closure-ui/server.log', logs);
+  for (const page of browser?.contexts().flatMap((context) => context.pages()) || []) {
+    await writeFile('artifacts/closure-ui/failure.txt', await page.locator('body').innerText());
+    await page.screenshot({ path: 'artifacts/closure-ui/failure.png', fullPage: true });
+  }
+  throw error;
 } finally {
   await browser?.close();
   server.kill('SIGTERM');

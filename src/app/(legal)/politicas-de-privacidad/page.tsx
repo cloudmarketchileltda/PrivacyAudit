@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { generalConfig } from '@/config/general';
 import { LegalDocument } from '@/components/legal-document';
 
 export const metadata: Metadata = { title: 'Políticas de Privacidad' };
@@ -23,7 +24,7 @@ export default function PrivacyPolicyPage() {
         },
         {
           title: '4. Conservación y eliminación',
-          text: 'Los registros operativos y las evidencias mantienen su historia durante el trabajo de la organización. El administrador puede eliminar de forma confirmada una organización y todos sus datos y archivos relacionados; las cuentas de usuario y el catálogo global se conservan. La eliminación individual de una cuenta está sujeta a sus relaciones de negocio e historial protegido. Los plazos y criterios definitivos de conservación se detallarán en la versión aprobada.',
+          text: `Política ${generalConfig.retention.policyVersion}. Las organizaciones activas o archivadas conservan sus datos e historial mientras permanezcan en el servicio, sin purga automática por antigüedad. Archivar mantiene la consulta y detiene el trabajo operativo. Solo SUPER_ADMIN puede exportar la organización archivada en un paquete con datos, historial, informes y archivos; la organización debe verificar y conservar su copia. ${generalConfig.retention.audit} ${generalConfig.retention.backups} El borrado confirmado conserva las cuentas y el catálogo global. Una restauración de infraestructura requiere revisión aislada y exclusión de organizaciones eliminadas antes de reabrir el acceso. Los datos propios de cuenta y las constancias administrativas globales se conservan conforme a su finalidad; no se ofrece conservación perpetua ni un plazo legal universal.`,
         },
         {
           title: '5. Solicitudes sobre datos personales',

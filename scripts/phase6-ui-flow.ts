@@ -99,16 +99,10 @@ export async function checkPhase6Flow(
       if (width === 1440 && path === '/administration/audit')
         await page.screenshot({ path: 'artifacts/ui/phase6-audit.png', fullPage: true });
     }
-  await page
-    .getByLabel('Borrar eventos anteriores a (hora local)', { exact: true })
-    .fill('2020-01-01T00:00');
-  await page.getByLabel('Motivo del borrado', { exact: true }).fill('Prueba de conservación');
-  await page.getByLabel('Escriba BORRAR LOG', { exact: true }).fill('BORRAR LOG');
-  await page.getByRole('button', { name: 'Borrar eventos anteriores', exact: true }).click();
-  await page.getByRole('status').filter({ hasText: 'Se eliminaron 0 eventos' }).waitFor();
+  await page.getByRole('heading', { name: 'Conservación del historial', exact: true }).waitFor();
   assert.equal(
-    (await fixture.db.query(`select * from audit_logs where action='AUDIT_PURGE'`)).rows.length,
-    1,
+    await page.getByRole('button', { name: 'Borrar eventos anteriores', exact: true }).count(),
+    0,
   );
   // Current assignment removes stale notices from the former assignee.
   await fixture.db.transaction(async (tx) => {
@@ -117,7 +111,7 @@ export async function checkPhase6Flow(
     await tx.query('update tasks set assigned_to=$1 where id=$2', [ids.a, task]);
   });
   results.push({
-    flow: 'phase6 notifications, tenant denial, read state, dashboard filters, admin audit CSV >1000 and confirmed purge',
+    flow: 'phase6 notifications, tenant denial, read state, dashboard filters, admin audit CSV >1000 and protected retention',
     passed: true,
   });
 }

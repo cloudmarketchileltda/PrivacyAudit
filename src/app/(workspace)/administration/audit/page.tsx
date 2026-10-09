@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { requireUser } from '@/features/auth/queries';
 import { auditActionLabels, auditEntityLabels, auditRoleLabels } from '@/features/audit/model';
 import { auditQuery } from '@/features/audit/queries';
-import { PurgeForm } from '@/features/audit/purge-form';
+import { generalConfig } from '@/config/general';
 import { Pagination, pageNumber } from '@/components/table-tools';
 import { Button } from '@/components/ui/button';
 import { formatDateTime } from '@/lib/utils';
@@ -178,8 +178,9 @@ export default async function Page({
       </div>
       <Pagination page={page} count={count || 0} path="/administration/audit" params={params} />
       <section className="panel p-5">
-        <h2 className="section-title">Conservación y borrado del log</h2>
-        <PurgeForm />
+        <h2 className="section-title">Conservación del historial</h2>
+        <p className="muted">{generalConfig.retention.audit}</p>
+        <p className="muted mt-3">{generalConfig.retention.backups}</p>
       </section>
     </>
   );

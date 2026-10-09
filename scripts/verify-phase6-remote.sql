@@ -55,12 +55,11 @@ select set_config('request.jwt.claim.sub',current_setting('phase6_test.admin'),t
 do $$ begin
  if not exists(select 1 from public.audit_logs where action='AUTH_SIGN_IN' and actor_id=current_setting('phase6_test.client')::uuid) then raise exception 'Missing trusted sign-in event';end if;
  if not exists(select 1 from public.audit_logs where entity_type='organization_members' and organization_ref=current_setting('phase6_test.org')::uuid) then raise exception 'Missing membership audit';end if;
- begin perform public.purge_audit_logs(now(),'Valid reason',null);raise exception 'Null confirmation accepted' using errcode='P0002';exception when raise_exception then null;end;
+ begin perform public.purge_audit_logs(now(),'Valid reason',null);raise exception 'Null confirmation accepted' using errcode='P0002';exception when insufficient_privilege then null;end;
 end $$;
--- No production log is removed even transiently; local tests prove actual removal and counts.
-select public.purge_audit_logs('1900-01-01T00:00:00Z','Temporary retention verification','BORRAR LOG');
+-- Discretionary purge is denied even to administrators; no production events are removed.
+do $$ begin begin perform public.purge_audit_logs('1900-01-01T00:00:00Z','Retention verification','BORRAR LOG');raise exception 'Purge still allowed' using errcode='P0002';exception when insufficient_privilege then null;end;end $$;
 select public.record_audit_export('{"verification":true}',0);
-do $$ begin if not exists(select 1 from public.audit_logs where action='AUDIT_PURGE' and actor_id=auth.uid()) then raise exception 'Missing purge receipt';end if;end $$;
 select set_config('request.jwt.claim.sub',current_setting('phase6_test.manager'),true);
 select public.manage_member(current_setting('phase6_test.org')::uuid,current_setting('phase6_test.client')::uuid,null);
 select set_config('request.jwt.claim.sub',current_setting('phase6_test.client'),true);

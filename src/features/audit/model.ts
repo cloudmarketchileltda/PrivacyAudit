@@ -1,14 +1,4 @@
 import { z } from '@/lib/validation';
-export const purgeSchema = z
-  .object({
-    before_time: z.iso.datetime({ offset: true }),
-    reason: z.string().trim().min(10).max(1000),
-    confirmation: z.literal('BORRAR LOG'),
-  })
-  .refine((v) => Date.parse(v.before_time) <= Date.now(), {
-    path: ['before_time'],
-    message: 'Seleccione una fecha pasada.',
-  });
 export function csvCell(value: unknown) {
   let text = value == null ? '' : typeof value === 'object' ? JSON.stringify(value) : String(value);
   if (/^[\s\uFEFF]*[=+\-@]/.test(text)) text = "'" + text;
@@ -84,7 +74,8 @@ export const auditActionLabels: Record<string, string> = {
   COMMENT: 'Comentario',
   DOWNLOAD: 'Descarga de evidencia',
   AUDIT_EXPORT: 'Exportación del log',
-  AUDIT_PURGE: 'Borrado del log',
+  ORGANIZATION_EXPORT_PREPARED: 'Exportación de organización preparada',
+  AUDIT_PURGE: 'Borrado del log (histórico)',
   AUTH_ACCOUNT_CREATED: 'Cuenta creada',
   AUTH_SIGN_IN: 'Inicio de sesión confirmado',
   ADMIN_ACCOUNT_PASSWORD_RESET: 'Contraseña restablecida por administrador',
