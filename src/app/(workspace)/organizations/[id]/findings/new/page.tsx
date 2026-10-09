@@ -16,7 +16,7 @@ export default async function Page({
   const scope = await organizationScope(id);
   if (!scope.canEdit) notFound();
   const [members, all, raw] = await Promise.all([
-    assignees(id),
+    assignees(id, true),
     allAssessments(scope.db),
     allResponses(scope.db),
   ]);

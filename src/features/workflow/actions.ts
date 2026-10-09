@@ -31,6 +31,33 @@ export async function saveWorkflow(_: ActionState, form: FormData): Promise<Acti
   };
   let saved: string | undefined;
   if (v.kind === 'finding') {
+    let previousAssignee: string | null = null;
+    if (v.id) {
+      const { data: previous, error } = await db
+        .from('findings')
+        .select('assigned_to')
+        .eq('id', v.id)
+        .eq('organization_id', v.organization_id)
+        .maybeSingle();
+      if (error || !previous) return { error: 'Hallazgo no disponible.' };
+      previousAssignee = previous.assigned_to;
+    }
+    if (v.assigned_to && (!v.id || v.assigned_to !== previousAssignee)) {
+      const [membership, account] = await Promise.all([
+        db
+          .from('organization_members')
+          .select('user_id')
+          .eq('organization_id', v.organization_id)
+          .eq('user_id', v.assigned_to)
+          .eq('role', 'CLIENT')
+          .maybeSingle(),
+        db.from('profiles').select('id').eq('id', v.assigned_to).eq('role', 'CLIENT').maybeSingle(),
+      ]);
+      if (membership.error || account.error || !membership.data || !account.data)
+        return {
+          error: 'El responsable debe ser un cliente de la misma organización o Sin asignar.',
+        };
+    }
     const values = {
       ...common,
       recommendation: v.recommendation,

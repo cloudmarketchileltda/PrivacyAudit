@@ -6,7 +6,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const { id } = await params;
   const { finding, organization, canEdit } = await findingScope(id);
   if (!canEdit) notFound();
-  const members = await assignees(organization.id);
+  const members = await assignees(organization.id, true);
   return (
     <>
       <h1 className="page-title">Editar hallazgo</h1>

@@ -26,6 +26,9 @@ test('Fase 4: referencias históricas, asignación, revisión, cierre e aislamie
     await db.query(`select accept_invitation($1)`, [token]);
     await identity(db, ids.b);
     const b = await org(db, 'Empresa B', '76234567-6');
+    await identity(db, ids.admin);
+    await db.query("select public.manage_member($1,$2,'CLIENT')", [b, ids.other]);
+    await identity(db, ids.b);
     const assessmentB = (
       await db.query<{ id: string }>(`select create_assessment($1,'Evaluación B') id`, [b])
     ).rows[0].id;
@@ -41,6 +44,27 @@ test('Fase 4: referencias históricas, asignación, revisión, cierre e aislamie
       );
     const finding = (await createFinding()).rows[0];
     assert.equal(finding.created_by, ids.a);
+    // Even a same-organization consultant or administrator is not a valid finding assignee.
+    await assert.rejects(
+      db.query('update findings set assigned_to=$1 where id=$2', [ids.a, finding.id]),
+      /cliente de la misma organización/,
+    );
+    await assert.rejects(
+      db.query('update findings set assigned_to=$1 where id=$2', [ids.admin, finding.id]),
+    );
+    await assert.rejects(
+      db.query(
+        "insert into findings(organization_id,assessment_id,title,assigned_to) values($1,$2,'Asignación inválida',$3)",
+        [a, assessment, ids.a],
+      ),
+      /cliente de la misma organización/,
+    );
+    await db.query('update findings set assigned_to=null where id=$1', [finding.id]);
+    await db.query('update findings set assigned_to=$1 where id=$2', [ids.client, finding.id]);
+    await assert.rejects(
+      db.query('update findings set assigned_to=$1 where id=$2', [ids.other, finding.id]),
+    );
+
     await assert.rejects(createFinding(a, assessmentB));
     await assert.rejects(
       db.query(`update findings set assigned_to=$1 where id=$2`, [ids.b, finding.id]),

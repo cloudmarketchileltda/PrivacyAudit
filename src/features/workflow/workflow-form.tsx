@@ -119,12 +119,29 @@ export function WorkflowForm({
           })}
           aria-invalid={Boolean(errors[key])}
         >
+          {finding &&
+            key === 'assigned_to' &&
+            initial.id &&
+            initial.assigned_to &&
+            !members.some((member) => member.id === initial.assigned_to) && (
+              <option value={initial.assigned_to} disabled>
+                Responsable histórico (no disponible para nuevas asignaciones)
+              </option>
+            )}
           {Object.entries(options).map(([value, label]) => (
             <option key={value} value={value}>
               {label}
             </option>
           ))}
         </select>
+        {finding &&
+          key === 'assigned_to' &&
+          initial.id &&
+          initial.assigned_to &&
+          values.assigned_to === initial.assigned_to &&
+          !members.some((member) => member.id === initial.assigned_to) && (
+            <input type="hidden" name="assigned_to" value={initial.assigned_to} />
+          )}
         {error(key)}
       </div>
     );

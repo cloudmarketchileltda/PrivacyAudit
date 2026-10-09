@@ -177,6 +177,15 @@ try {
   // Phase 4: create a finding from a historical control and an assigned corrective task.
   await page.goto(`${base}/assessments/${fixture.assessment}/controls/${fixture.responseId}`);
   await page.getByRole('link', { name: 'Crear hallazgo desde este control', exact: true }).click();
+  await page.getByLabel('Responsable', { exact: true }).waitFor();
+  assert.deepEqual(
+    await page
+      .getByLabel('Responsable', { exact: true })
+      .locator('option')
+      .evaluateAll((options) => options.map((option) => (option as HTMLOptionElement).value)),
+    ['', '10000000-0000-4000-8000-000000000003'],
+  );
+
   await page
     .getByLabel('Título del hallazgo', { exact: true })
     .fill('Hallazgo creado desde navegador');

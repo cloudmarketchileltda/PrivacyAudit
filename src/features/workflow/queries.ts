@@ -48,14 +48,15 @@ export async function taskScope(id: string) {
     canEdit: scope.canEdit && !['CLOSED', 'ACCEPTED_RISK'].includes(scope.finding.status),
   };
 }
-export async function assignees(org?: string) {
+export async function assignees(org?: string, clientsOnly = false) {
   const { db } = await requireUser();
   let query = db.from('organization_members').select('user_id');
   if (org) query = query.eq('organization_id', org);
+  if (clientsOnly) query = query.eq('role', 'CLIENT');
   const { data: members, error } = await query;
   if (error) throw new Error('No se pudieron cargar los responsables.');
   if (!members.length) return [];
-  const { data, error: profileError } = await db
+  let profiles = db
     .from('profiles')
     .select('id,full_name')
     .in(
@@ -63,6 +64,8 @@ export async function assignees(org?: string) {
       members.map((m) => m.user_id),
     )
     .order('full_name');
+  if (clientsOnly) profiles = profiles.eq('role', 'CLIENT');
+  const { data, error: profileError } = await profiles;
   if (profileError) throw new Error('No se pudieron cargar los responsables.');
   return data;
 }
