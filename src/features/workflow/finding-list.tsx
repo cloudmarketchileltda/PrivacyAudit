@@ -46,6 +46,13 @@ export async function FindingList({
     assignees(scope?.organization.id),
   ]);
   if (error || orgError) throw new Error('No se pudieron cargar los hallazgos.');
+  const assessmentIds = [...new Set(data.map((row) => row.assessment_id))];
+  const { data: assessments, error: assessmentError } =
+    !plan && assessmentIds.length
+      ? await db.from('assessments').select('id,name').in('id', assessmentIds)
+      : { data: [], error: null };
+  if (assessmentError) throw new Error('No se pudieron cargar las evaluaciones de los hallazgos.');
+  const assessmentNames = new Map(assessments.map((assessment) => [assessment.id, assessment.name]));
   const rows = await Promise.all(
     data.map(async (row) => {
       const { data: progress, error } = await db.rpc('finding_progress', { finding: row.id });
@@ -58,8 +65,14 @@ export async function FindingList({
     <>
       <div className="flex flex-wrap justify-between items-center gap-4">
         <div>
-          {scope && <p className="muted">{scope.organization.legal_name}</p>}
-          <h1 className="page-title">{plan ? 'Plan de acción' : 'Hallazgos'}</h1>
+          {plan && scope && <p className="muted">{scope.organization.legal_name}</p>}
+          <h1 className="page-title">
+            {plan
+              ? 'Plan de acción'
+              : scope
+                ? `Hallazgos ${scope.organization.legal_name}`
+                : 'Hallazgos'}
+          </h1>
           <p className="muted mt-2">
             {plan
               ? 'Acciones correctivas y progreso de tareas aprobadas.'
@@ -72,7 +85,7 @@ export async function FindingList({
               Nuevo hallazgo
             </Link>
           </Button>
-        ) : !scope && profile.role !== 'CLIENT' ? (
+        ) : plan && !scope && profile.role !== 'CLIENT' ? (
           <Button asChild variant="outline">
             <Link href="/dashboard">Elegir organización</Link>
           </Button>
@@ -176,6 +189,7 @@ export async function FindingList({
             <tr>
               <th>Hallazgo</th>
               <th>Organización</th>
+              {!plan && <th>Evaluación</th>}
               <th>Severidad</th>
               <th>Responsable</th>
               <th>Fecha objetivo</th>
@@ -198,6 +212,11 @@ export async function FindingList({
                 <td className="min-w-36">
                   {orgs.find((o) => o.id === row.organization_id)?.legal_name}
                 </td>
+                {!plan && (
+                  <td className="min-w-48 max-w-sm break-words">
+                    {assessmentNames.get(row.assessment_id) || 'Evaluación no disponible'}
+                  </td>
+                )}
                 <td>{severityLabels[row.severity]}</td>
                 <td className="max-w-48 break-words">
                   {row.assigned_to
