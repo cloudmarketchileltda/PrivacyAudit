@@ -112,4 +112,4 @@ Cambiar colores/tamaños/filas visibles requiere recompilar y redesplegar Next.j
 - INF-05: diez secciones del maestro, fuentes incorporadas y disclaimer. Resumen y conclusiones escritos por el profesional. No exigir evaluación completada para diagnósticos parciales; mostrar su estado, pendientes y métricas objetivas, sin certificación jurídica automática.
 - INF-06: snapshot de controles/hallazgos/tareas de una evaluación; tratamientos de toda la organización; evidencias confirmadas y revisadas vinculadas a esa evaluación o generales, incluidas versiones previas. La metodología explica este alcance. Auditar publicación y preparación de descarga, sin afirmar recepción del archivo.
 
-Implementación: `src/features/reports`, `/reports`, `/api/reports/[id]/download`, migración `20261009001355_phase7_reports.sql`. Pruebas: `tests/reports.test.ts` y `scripts/check-reports-ui.ts`.
+Implementación: `src/features/reports`, `/reports`, `/api/reports/[id]/download`, migración `20261009021625_phase7_reports.sql`. Pruebas: `tests/reports.test.ts` y `scripts/check-reports-ui.ts`.

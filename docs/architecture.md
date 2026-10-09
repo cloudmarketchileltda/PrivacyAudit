@@ -139,7 +139,7 @@ La migración `20261008142527_admin_control_catalog.sql` está aplicada en Priva
 
 ## Fase 7 autorizada el 8 de octubre de 2026
 
-Implementada localmente: generación de PDF e historial `reports`. El documento maestro se conserva, la fase 8 y la IA siguen pendientes. La migración y el redespliegue remoto quedan pendientes.
+Implementada localmente: generación de PDF e historial `reports`. El documento maestro se conserva, la fase 8 y la IA siguen pendientes. La migración ya está aplicada en PrivacyAudit `pbihajfbbcbbdvoqpggy`; pendiente comprobar el recorrido autenticado del frontend publicado. No se ejecutó despliegue Dokploy desde esta sesión.
 
 La publicación es una operación privada SECURITY DEFINER con comprobación de identidad/gestión actual, organización activa y locks compatibles con su eliminación. Se justifica el privilegio para construir una copia completa del informe, validar relaciones y auditar sin conceder INSERT al cliente. El wrapper público es SECURITY INVOKER, con grants explícitos; la tabla solo permite SELECT con RLS. Todas las secciones se capturan en una única sentencia SQL con la misma vista MVCC. La copia conserva FK reales a organización/evaluación/autor y snapshot versión 1 de datos variables.
 
