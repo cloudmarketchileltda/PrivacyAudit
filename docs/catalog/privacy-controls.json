@@ -1,0 +1,893 @@
+{
+  "reviewed_at": "2026-10-09",
+  "effective_from": "2026-12-01",
+  "current_source": "https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2023-05-09",
+  "future_source": "https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01",
+  "amendment_source": "https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272",
+  "controls": [
+    {
+      "code": "PR-001",
+      "title": "Responsable interno de privacidad",
+      "category": "Gobierno y responsabilidad",
+      "severity_if_failed": "MEDIUM",
+      "nature": "GESTION",
+      "current_articles": "11",
+      "future_articles": "3 e), 14, 49 y 50",
+      "scope": "Asignar una persona o función que coordine privacidad y permita escalar decisiones, sin confundirla con el responsable legal del tratamiento.",
+      "criteria": [
+        "Existe designación aprobada, con funciones, suplencia y canal de contacto",
+        "Dispone de acceso a dirección, tiempo y recursos acordes al volumen y riesgo de los tratamientos",
+        "Se distingue la coordinación interna del delegado de un modelo voluntario de prevención: este último exige revisar autonomía, idoneidad y conflictos de interés según el artículo 50"
+      ],
+      "evidence": "Designación, organigrama, descripción de funciones, presupuesto o asignación de horas y ruta de escalamiento.",
+      "verification": "Entrevistar al designado y comprobar que puede tramitar una solicitud o incidente. La ley no impone contratar universalmente un delegado; el control de coordinación es una práctica de gestión."
+    },
+    {
+      "code": "PR-002",
+      "title": "Funciones y responsabilidades documentadas",
+      "category": "Gobierno y responsabilidad",
+      "severity_if_failed": "MEDIUM",
+      "nature": "GESTION",
+      "current_articles": "7, 8 y 11",
+      "future_articles": "14, 14 bis, 15 bis y 49",
+      "scope": "Distribuir responsabilidades entre dirección, áreas de negocio, tecnología, seguridad, recursos humanos y proveedores para evitar que una obligación quede sin dueño.",
+      "criteria": [
+        "Se identifica quién decide finalidades y medios y quién ejecuta instrucciones como encargado",
+        "Cada actividad tiene responsables para licitud, transparencia, derechos, conservación y seguridad, con reemplazo ante ausencias",
+        "Personal y terceros conocen los deberes de confidencialidad y sus límites de actuación, que se mantienen al terminar la relación"
+      ],
+      "evidence": "Matriz de responsabilidades, perfiles de cargo, acuerdos de confidencialidad y contratos de encargados.",
+      "verification": "Recorrer un proceso real y comprobar que las funciones documentadas coinciden con quienes actúan. Una matriz concreta es una herramienta recomendada, no un formato legal obligatorio."
+    },
+    {
+      "code": "PR-003",
+      "title": "Programa de privacidad",
+      "category": "Gobierno y responsabilidad",
+      "severity_if_failed": "MEDIUM",
+      "nature": "GESTION",
+      "current_articles": "4, 7, 9, 11 y 12",
+      "future_articles": "3, 14, 48 y 49",
+      "scope": "Organizar las acciones de privacidad en un programa proporcional al riesgo, que conecte inventario, bases de licitud, derechos, proveedores y medidas de protección.",
+      "criteria": [
+        "El programa delimita procesos y datos cubiertos y registra brechas priorizadas",
+        "Cada acción tiene responsable, recursos, plazo y criterio verificable de cierre",
+        "La dirección aprueba y sigue el avance, distinguiendo el programa interno de un modelo de prevención o certificación voluntarios, que requieren condiciones adicionales"
+      ],
+      "evidence": "Programa aprobado, plan de acciones, presupuesto, seguimiento y actas de dirección.",
+      "verification": "Elegir acciones cerradas y verificar su ejecución efectiva. Tener un programa o usar este catálogo no equivale a una certificación ni demuestra por sí solo el cumplimiento de toda la ley."
+    },
+    {
+      "code": "PR-004",
+      "title": "Revisión periódica del programa",
+      "category": "Gobierno y responsabilidad",
+      "severity_if_failed": "MEDIUM",
+      "nature": "GESTION",
+      "current_articles": "9 y 11",
+      "future_articles": "3 d) y e), 14 quinquies y 49",
+      "scope": "Revisar la eficacia del programa cuando cambien procesos, proveedores, riesgos o normativa, y a intervalos definidos por la organización.",
+      "criteria": [
+        "Existe una frecuencia justificada por riesgo y revisión adicional tras incidentes o cambios relevantes",
+        "La revisión contrasta documentos con tratamientos reales, derechos atendidos y controles de seguridad",
+        "Se registran decisiones, responsables y cierre de las acciones correctivas"
+      ],
+      "evidence": "Plan de revisión, informes internos, actas, indicadores y comprobantes de corrección.",
+      "verification": "Comparar la última revisión con cambios ocurridos después. No atribuir a la ley una frecuencia anual universal; la periodicidad de este programa es un criterio de gestión."
+    },
+    {
+      "code": "PR-005",
+      "title": "Inventario de sistemas con datos personales",
+      "category": "Inventario de datos",
+      "severity_if_failed": "MEDIUM",
+      "nature": "GESTION",
+      "current_articles": "2, 11 y 12",
+      "future_articles": "2, 3 e), 14 ter y 14 quinquies",
+      "scope": "Identificar dónde se recopilan, almacenan, consultan y eliminan datos personales, incluyendo sistemas propios, nube, planillas, correos, papel y dispositivos.",
+      "criteria": [
+        "El inventario identifica sistema o repositorio, dueño, ubicación, entorno y proveedor",
+        "Relaciona cada sistema con actividad, categorías de datos y titulares, accesos, transferencias y conservación",
+        "Incluye repositorios informales y copias y se actualiza al incorporar, modificar o retirar sistemas"
+      ],
+      "evidence": "Inventario, diagramas de arquitectura, listado de aplicaciones, repositorios y contratos de nube.",
+      "verification": "Contrastar una muestra con compras, tecnología y áreas usuarias. El inventario es un medio de demostrar control, no un registro con formato legal universal."
+    },
+    {
+      "code": "PR-006",
+      "title": "Categorías de datos documentadas",
+      "category": "Inventario de datos",
+      "severity_if_failed": "MEDIUM",
+      "nature": "MIXTO",
+      "current_articles": "2 y 10",
+      "future_articles": "2, 14 ter d), 16, 16 bis, 16 ter y 16 quáter",
+      "scope": "Clasificar las categorías de información y de titulares para aplicar protección y requisitos de licitud acordes a su naturaleza.",
+      "criteria": [
+        "Cada actividad distingue datos identificatorios, contacto, laborales, financieros, sensibles y otras categorías que realmente utiliza",
+        "Se detectan datos de salud, biometría, niños y adolescentes y se revisa su régimen especial",
+        "La clasificación incluye datos inferidos o combinados y no considera anónimos los datos que aún permitan identificar o reidentificar a una persona"
+      ],
+      "evidence": "Diccionario de datos, formularios, esquema de bases, clasificación y análisis de datos especiales.",
+      "verification": "Revisar campos reales y muestras minimizadas; comprobar que clasificación y avisos coinciden. La clasificación documentada apoya obligaciones legales; no todos los ejemplos se aplican a toda organización."
+    },
+    {
+      "code": "PR-007",
+      "title": "Fuentes de obtención identificadas",
+      "category": "Inventario de datos",
+      "severity_if_failed": "MEDIUM",
+      "nature": "MIXTO",
+      "current_articles": "4 y 12",
+      "future_articles": "3 a), 14 b) y 14 ter j)",
+      "scope": "Determinar la procedencia de los datos y comprobar que su obtención permite el tratamiento concreto que se pretende realizar.",
+      "criteria": [
+        "Se registra si los datos provienen del titular, un proveedor, otro responsable o una fuente pública",
+        "Se conserva evidencia de origen, autorización o habilitación legal y condiciones de uso",
+        "Se revisa la procedencia de listas compradas, datos importados y extracción desde internet, sin asumir que disponibilidad pública permite cualquier uso"
+      ],
+      "evidence": "Registro de fuentes, contratos de adquisición, formularios de origen y comprobación de habilitación.",
+      "verification": "Rastrear datos de una actividad hasta su fuente y verificar licitud. Las excepciones de fuentes públicas del régimen anterior no deben trasladarse automáticamente al régimen reformado."
+    },
+    {
+      "code": "PR-008",
+      "title": "Mapa de circulación de datos",
+      "category": "Inventario de datos",
+      "severity_if_failed": "MEDIUM",
+      "nature": "GESTION",
+      "current_articles": "5, 8, 11 y 12",
+      "future_articles": "3 e), 14 ter, 15, 15 bis y 27",
+      "scope": "Representar el recorrido de datos desde su obtención hasta su eliminación, con accesos internos, proveedores, destinatarios, respaldos y países involucrados.",
+      "criteria": [
+        "El mapa cubre entradas, operaciones, salidas y copias de las actividades relevantes",
+        "Distingue circulación interna, encargo y cesión a otro responsable e identifica transferencias internacionales",
+        "Cada flujo se enlaza con propósito, fundamento, medidas y responsable de su autorización"
+      ],
+      "evidence": "Diagramas de flujo, integraciones, contratos, destinos de exportación y ubicaciones de nube.",
+      "verification": "Seguir una muestra de datos a través de una integración y verificar que no existan destinos omitidos. El diagrama es una herramienta de gestión, no una exigencia de formato específico."
+    },
+    {
+      "code": "PR-009",
+      "title": "Registro de actividades",
+      "category": "Actividades de tratamiento",
+      "severity_if_failed": "MEDIUM",
+      "nature": "GESTION",
+      "current_articles": "4, 9, 11 y 12",
+      "future_articles": "3 e), 14 y 14 ter",
+      "scope": "Mantener una relación de actividades de tratamiento suficientemente completa para demostrar qué se hace con los datos, por qué y bajo qué condiciones.",
+      "criteria": [
+        "Cada actividad registra finalidad, titulares, datos, origen, base de licitud y responsable",
+        "Incluye sistemas, encargados, destinatarios, transferencias, conservación y medidas principales",
+        "Las actividades nuevas o modificadas se incorporan y se relacionan con documentos y evidencias vigentes"
+      ],
+      "evidence": "Registro de actividades, inventario asociado, políticas y contratos vinculados.",
+      "verification": "Comparar el registro con procesos de ventas, personal y operación. Este catálogo propone un registro interno para rendición de cuentas; no importa automáticamente la obligación o el formato de un registro del RGPD europeo."
+    },
+    {
+      "code": "PR-010",
+      "title": "Finalidades de tratamiento documentadas",
+      "category": "Actividades de tratamiento",
+      "severity_if_failed": "MEDIUM",
+      "nature": "OBLIGACION",
+      "current_articles": "4 y 9",
+      "future_articles": "3 b), 12, 13 y 14 b)",
+      "scope": "Explicar la finalidad concreta de cada uso de datos, de forma que permita evaluar necesidad, licitud y coherencia con la información entregada al titular.",
+      "criteria": [
+        "Las finalidades están definidas por actividad y evitan expresiones abiertas como cualquier fin comercial",
+        "Cada dato y operación se vincula con una finalidad específica, explícita y lícita",
+        "Se separan usos distintos, como ejecutar un servicio, publicidad y análisis, y se controla cualquier reutilización"
+      ],
+      "evidence": "Registro de actividades, formularios, avisos y análisis de finalidades.",
+      "verification": "Comparar usos reales con finalidades documentadas e informadas. Una finalidad comercial o conveniente no constituye por sí misma una base jurídica."
+    },
+    {
+      "code": "PR-011",
+      "title": "Responsables de cada actividad",
+      "category": "Actividades de tratamiento",
+      "severity_if_failed": "MEDIUM",
+      "nature": "GESTION",
+      "current_articles": "2 n) y 11",
+      "future_articles": "2, 3 e), 14 y 15 bis",
+      "scope": "Identificar quién responde por cada actividad y quién tiene autoridad para aprobar cambios, coordinar derechos y aplicar medidas de protección.",
+      "criteria": [
+        "Cada actividad tiene un dueño interno identificado y un contacto suplente",
+        "Se distingue el responsable legal de quienes operan como encargados o áreas ejecutoras",
+        "El dueño conoce sistemas, proveedores, plazos y obligaciones del proceso y puede exigir correcciones"
+      ],
+      "evidence": "Registro de actividades con responsables, organigrama, designaciones y procedimientos.",
+      "verification": "Entrevistar al dueño de una actividad y simular una solicitud de corrección. La asignación interna no desplaza la responsabilidad legal de la organización."
+    },
+    {
+      "code": "PR-012",
+      "title": "Revisión de nuevas actividades",
+      "category": "Actividades de tratamiento",
+      "severity_if_failed": "MEDIUM",
+      "nature": "GESTION",
+      "current_articles": "4, 9 y 11",
+      "future_articles": "3, 14 quáter y 15 ter",
+      "scope": "Revisar antes del inicio las actividades nuevas y los cambios relevantes en datos, finalidades, proveedores o tecnologías.",
+      "criteria": [
+        "Existe un punto de revisión previo al uso de datos en producción",
+        "Se comprueban licitud, minimización, información, derechos, conservación y seguridad",
+        "La revisión determina si hay alto riesgo o supuestos de evaluación de impacto obligatoria y registra aprobación, condiciones o rechazo"
+      ],
+      "evidence": "Ficha de revisión de cambios, aprobación de proyecto, análisis de riesgo y evaluación de impacto cuando corresponda.",
+      "verification": "Examinar un proyecto reciente y comprobar que la revisión precedió a su puesta en marcha. No todo cambio exige evaluación formal de impacto, pero sí debe examinarse su aplicabilidad."
+    },
+    {
+      "code": "PR-013",
+      "title": "Minimización de datos recopilados",
+      "category": "Principios de tratamiento",
+      "severity_if_failed": "MEDIUM",
+      "nature": "OBLIGACION",
+      "current_articles": "9 y 11",
+      "future_articles": "3 c) y 14 quáter",
+      "scope": "Limitar la recopilación y el uso a datos necesarios y adecuados para la finalidad, evitando campos, copias o accesos que no puedan justificarse.",
+      "criteria": [
+        "Cada campo obligatorio tiene una necesidad vinculada con la finalidad y la base aplicable",
+        "Se eliminan campos y copias superfluos o se sustituyen por información menos identificable cuando permita cumplir el propósito",
+        "Los formularios y valores predeterminados no habilitan recopilación adicional sin justificación"
+      ],
+      "evidence": "Formularios antes y después, justificación de campos, esquemas y configuración de recopilación.",
+      "verification": "Elegir campos sensibles u opcionales y comprobar por qué se necesitan. La minimización explícita corresponde al régimen reformado; su antecedente actual se relaciona con finalidad y diligencia."
+    },
+    {
+      "code": "PR-014",
+      "title": "Exactitud y actualización",
+      "category": "Principios de tratamiento",
+      "severity_if_failed": "MEDIUM",
+      "nature": "OBLIGACION",
+      "current_articles": "6, 9 y 12",
+      "future_articles": "3 d), 6 y 14 c)",
+      "scope": "Mantener datos correctos, completos, actuales y pertinentes y corregirlos o bloquearlos cuando existan dudas fundadas sobre su exactitud.",
+      "criteria": [
+        "Se identifican datos cuya desactualización puede afectar al titular y mecanismos para corregirlos",
+        "Las solicitudes y errores detectados se gestionan con trazabilidad y actualización de los sistemas relacionados",
+        "Se comunican correcciones a destinatarios cuando corresponda y se evita seguir utilizando información objetada mientras deba bloquearse"
+      ],
+      "evidence": "Procedimiento de calidad, registros de corrección, controles de validación y comunicaciones a destinatarios.",
+      "verification": "Probar una corrección de extremo a extremo, sin exponer datos reales innecesarios. Una revisión periódica no reemplaza la obligación de corregir errores conocidos."
+    },
+    {
+      "code": "PR-015",
+      "title": "Uso compatible con la finalidad",
+      "category": "Principios de tratamiento",
+      "severity_if_failed": "MEDIUM",
+      "nature": "OBLIGACION",
+      "current_articles": "4 y 9",
+      "future_articles": "3 b), 12, 13 y 15",
+      "scope": "Evitar que datos obtenidos para un propósito se reutilicen en otro sin evaluar compatibilidad y la habilitación que permita ese nuevo tratamiento.",
+      "criteria": [
+        "Los usos secundarios se identifican antes de ejecutarlos y se comparan con la finalidad original",
+        "La decisión documenta compatibilidad o el supuesto legal aplicable, incluida nueva autorización del titular cuando corresponda",
+        "Los cambios aprobados se reflejan en avisos, registros, accesos y contratos, y los usos no habilitados se detienen"
+      ],
+      "evidence": "Análisis de compatibilidad, autorización del cambio, avisos y consentimientos adicionales cuando procedan.",
+      "verification": "Revisar usos de publicidad, analítica o intercambio de bases. Actualizar un aviso no legaliza por sí solo una finalidad incompatible."
+    },
+    {
+      "code": "PR-016",
+      "title": "Gestión de proporcionalidad",
+      "category": "Principios de tratamiento",
+      "severity_if_failed": "MEDIUM",
+      "nature": "MIXTO",
+      "current_articles": "9 y 11",
+      "future_articles": "3 c), 14 quáter, 14 quinquies y 15 ter",
+      "scope": "Justificar que el alcance del tratamiento y sus medidas sean proporcionados a la finalidad y a la afectación posible de los titulares.",
+      "criteria": [
+        "Se evalúan necesidad, volumen, precisión, acceso y duración de los datos usados",
+        "Se comparan alternativas menos invasivas y se documenta la opción elegida",
+        "Las medidas reducen riesgos de exposición, discriminación o vigilancia y se revisan si cambia el contexto"
+      ],
+      "evidence": "Análisis de necesidad y proporcionalidad, alternativas descartadas y medidas de reducción de riesgo.",
+      "verification": "Examinar un tratamiento intensivo y comprobar justificación y salvaguardas. La ficha de análisis es recomendada; la necesidad y proporcionalidad forman parte de deberes del régimen reformado."
+    },
+    {
+      "code": "PR-017",
+      "title": "Base de licitud documentada",
+      "category": "Bases de licitud",
+      "severity_if_failed": "HIGH",
+      "nature": "OBLIGACION",
+      "current_articles": "4, 10 y 20",
+      "future_articles": "3 a), 12, 13, 16 y 20",
+      "scope": "Identificar una fuente de licitud válida para cada finalidad y operación, conforme al régimen temporal, tipo de dato y carácter público o privado del responsable.",
+      "criteria": [
+        "El fundamento se documenta por finalidad, con la disposición o evidencia que lo sustenta",
+        "Se distingue consentimiento de habilitación legal y se verifican las condiciones de cada fuente, incluidas las reglas de datos sensibles y órganos públicos",
+        "Contrato e interés legítimo del artículo 13 reformado no se invocan como nuevas bases generales antes del 1 de diciembre de 2026 ni como excepciones automáticas para datos sensibles"
+      ],
+      "evidence": "Matriz de licitud, contratos pertinentes, artículos legales, consentimientos y análisis especializado.",
+      "verification": "Comprobar una muestra de actividades frente a la ley vigente en la fecha de tratamiento. La conveniencia del negocio o una política interna no son bases de licitud."
+    },
+    {
+      "code": "PR-018",
+      "title": "Registro del análisis de licitud",
+      "category": "Bases de licitud",
+      "severity_if_failed": "HIGH",
+      "nature": "MIXTO",
+      "current_articles": "4, 10, 11 y 20",
+      "future_articles": "3 a) y e), 12, 13 y 14 a)",
+      "scope": "Conservar el razonamiento y los antecedentes que permiten demostrar por qué se considera lícito un tratamiento, más allá de escribir una etiqueta de base jurídica.",
+      "criteria": [
+        "El análisis identifica finalidad, datos, titular, régimen vigente y fundamento concreto",
+        "Justifica necesidad contractual, obligación legal o ponderación del interés legítimo cuando esa fuente sea aplicable, con efectos sobre derechos y salvaguardas",
+        "La aprobación, fecha, autor y revisión ante cambios quedan trazables y los antecedentes permiten sostener la decisión"
+      ],
+      "evidence": "Informes de licitud, disposiciones citadas, contratos, evaluación de interés legítimo y actas de aprobación.",
+      "verification": "Intentar reconstruir la decisión con los documentos conservados. No exigir un formato universal de ponderación ni tratar el análisis interno como dictamen jurídico definitivo."
+    },
+    {
+      "code": "PR-019",
+      "title": "Gestión del consentimiento",
+      "category": "Bases de licitud",
+      "severity_if_failed": "HIGH",
+      "nature": "OBLIGACION",
+      "current_articles": "4 y 10",
+      "future_articles": "12, 14 ter k) y 16",
+      "scope": "Obtener y poder demostrar el consentimiento cuando sea la fuente aplicable, y permitir su revocación sin mantener usos que dependan exclusivamente de él.",
+      "criteria": [
+        "Se informa finalidad y condiciones antes de consentir y se registra la manifestación, fecha, versión y alcance",
+        "Hasta el 30 de noviembre de 2026 se observa la exigencia escrita del artículo 4 actual: desde el 1 de diciembre se prepara una manifestación previa, libre, informada, específica e inequívoca según el artículo 12",
+        "La revocación se tramita por medios equivalentes, sencillos y gratuitos en el régimen reformado, con cese de los usos dependientes y registro de excepciones legales de conservación"
+      ],
+      "evidence": "Textos y versiones de consentimiento, prueba de aceptación y revocación, configuración y registro de ejecución.",
+      "verification": "Probar aceptación y retirada y verificar que no haya casillas premarcadas ni consentimiento innecesario impuesto para servicios. Revocar no tiene efecto retroactivo y no elimina otras obligaciones legales válidas."
+    },
+    {
+      "code": "PR-020",
+      "title": "Revisión de tratamientos sensibles",
+      "category": "Bases de licitud",
+      "severity_if_failed": "HIGH",
+      "nature": "CONDICIONAL",
+      "current_articles": "2 g) y 10",
+      "future_articles": "16, 16 bis, 16 ter y 16 quáter",
+      "scope": "Aplicar un examen reforzado a datos sensibles, salud, biometría y datos de niños o adolescentes, considerando restricciones específicas y riesgos para sus titulares.",
+      "criteria": [
+        "Se identifican los tratamientos especiales y la condición que los habilita, sin trasladar sin análisis las bases generales",
+        "Se verifican consentimiento expreso o excepción legal pertinente, límites de finalidad y requisitos específicos de salud y biometría",
+        "Para niños y adolescentes se revisan interés superior, edad, autonomía y autorización de representantes cuando corresponda, junto con medidas de acceso, conservación y seguridad reforzadas"
+      ],
+      "evidence": "Clasificación, análisis legal específico, autorizaciones de representantes y medidas reforzadas.",
+      "verification": "Revisar los campos y usos reales antes de declarar No aplica. No asumir que un consentimiento general autoriza cualquier tratamiento de salud ni que se aplican idénticas reglas a todas las edades."
+    },
+    {
+      "code": "PR-021",
+      "title": "Información a titulares",
+      "category": "Información y transparencia",
+      "severity_if_failed": "MEDIUM",
+      "nature": "OBLIGACION",
+      "current_articles": "3, 4 y 12",
+      "future_articles": "3 g), 12, 13 d) y 14 ter",
+      "scope": "Entregar información clara y accesible que permita al titular comprender quién usa sus datos, para qué y cómo ejercer sus derechos.",
+      "criteria": [
+        "La información refleja responsable, datos, finalidades, fuentes de licitud, destinatarios y canales reales",
+        "En preparación del artículo 14 ter se incluyen conservación, origen, derechos, reclamación, revocación, transferencias y decisiones automatizadas cuando correspondan",
+        "El lenguaje y el medio son adecuados al público y el acceso es gratuito, sin esconder condiciones relevantes"
+      ],
+      "evidence": "Avisos vigentes, canales publicados, capturas y prueba de accesibilidad.",
+      "verification": "Contrastar información publicada con una actividad real y preguntar a un usuario qué comprendió. El contenido detallado del artículo 14 ter pertenece al régimen desde el 1 de diciembre de 2026."
+    },
+    {
+      "code": "PR-022",
+      "title": "Avisos en puntos de recopilación",
+      "category": "Información y transparencia",
+      "severity_if_failed": "MEDIUM",
+      "nature": "MIXTO",
+      "current_articles": "3 y 4",
+      "future_articles": "3 g), 12, 14 ter y 16 sexies",
+      "scope": "Presentar información pertinente donde se obtienen datos, en formularios digitales, papel, llamadas, aplicaciones o puntos físicos.",
+      "criteria": [
+        "Cada punto de recopilación informa propósito y responsable y facilita acceso al detalle antes de la aceptación cuando se requiera consentimiento",
+        "Se distinguen datos necesarios, voluntarios y usos adicionales y se incluyen avisos específicos cuando corresponda, como geolocalización",
+        "El aviso es legible, accesible y coherente con el texto completo y con el tratamiento efectivo"
+      ],
+      "evidence": "Inventario de puntos de captura, formularios, guiones, carteles y versiones de avisos.",
+      "verification": "Recorrer la captura como titular y comprobar que la información llega oportunamente. Un aviso por capas es una técnica recomendada, no un diseño universal impuesto por la ley."
+    },
+    {
+      "code": "PR-023",
+      "title": "Aviso de privacidad del sitio web",
+      "category": "Información y transparencia",
+      "severity_if_failed": "MEDIUM",
+      "nature": "OBLIGACION",
+      "current_articles": "4 y 12",
+      "future_articles": "14 ter",
+      "scope": "Mantener la información pública de privacidad en el sitio web o en un medio equivalente permitido, de manera actualizada y fácil de encontrar.",
+      "criteria": [
+        "El aviso identifica al responsable, representante y delegado si existe, junto con medios de contacto utilizables",
+        "Incluye los contenidos aplicables del artículo 14 ter: política y versión, datos y titulares, fines y licitud, destinatarios, seguridad, derechos, reclamación, origen y conservación",
+        "Añade garantías y países de transferencias, revocación y decisiones automatizadas cuando existan, y describe seguridad sin publicar secretos operativos"
+      ],
+      "evidence": "URL o medio equivalente, texto aprobado, fecha y versión, revisión de enlaces y concordancia con el inventario.",
+      "verification": "Probar acceso sin iniciar sesión y el contacto publicado. No exigir tener un sitio web si procede un medio equivalente; la obligación detallada del artículo 14 ter rige desde diciembre de 2026."
+    },
+    {
+      "code": "PR-024",
+      "title": "Información sobre cambios de finalidad",
+      "category": "Información y transparencia",
+      "severity_if_failed": "MEDIUM",
+      "nature": "OBLIGACION",
+      "current_articles": "4 y 9",
+      "future_articles": "3 b) y g), 12 y 14 ter",
+      "scope": "Comunicar cambios relevantes de propósito y revisar la licitud de la reutilización antes de comenzar a tratar datos bajo las nuevas condiciones.",
+      "criteria": [
+        "Existe análisis previo de compatibilidad y fundamento del nuevo uso",
+        "Se actualizan avisos y documentos y se informa de forma comprensible a titulares afectados según el caso",
+        "Cuando se requiere un consentimiento nuevo, se obtiene y acredita antes del uso, y quienes no lo otorgan quedan excluidos de ese uso"
+      ],
+      "evidence": "Análisis de cambio, versiones de avisos, comunicaciones y consentimiento cuando sea necesario.",
+      "verification": "Comparar fecha de autorización e información con inicio del nuevo uso. Una comunicación unilateral no sustituye una base jurídica ni el consentimiento exigible."
+    },
+    {
+      "code": "PR-025",
+      "title": "Canal de solicitudes de titulares",
+      "category": "Derechos de titulares",
+      "severity_if_failed": "MEDIUM",
+      "nature": "MIXTO",
+      "current_articles": "12, 13 y 16",
+      "future_articles": "4 a 11 y 14 ter c), f) y g)",
+      "scope": "Habilitar un canal conocido y utilizable para ejercer derechos y derivar cada solicitud a una persona con capacidad de resolverla.",
+      "criteria": [
+        "El contacto está publicado y admite solicitudes sin obstáculos injustificados ni cobros por tramitación",
+        "Se registra recepción, tipo de derecho, responsable y estado y se orienta al titular sin exigir información ajena a su solicitud",
+        "El procedimiento distingue derechos y vías judiciales actuales de los derechos y reclamaciones ante la Agencia del régimen reformado"
+      ],
+      "evidence": "Canal publicado, registros de solicitudes, acuses, instrucciones y pruebas de recepción.",
+      "verification": "Enviar una solicitud de prueba y comprobar su recepción y trazabilidad. La obligación se refiere a los derechos aplicables; no se exige una plataforma tecnológica específica."
+    },
+    {
+      "code": "PR-026",
+      "title": "Procedimiento de respuesta",
+      "category": "Derechos de titulares",
+      "severity_if_failed": "MEDIUM",
+      "nature": "OBLIGACION",
+      "current_articles": "12 a 16",
+      "future_articles": "4 a 11 y 41",
+      "scope": "Responder solicitudes de titulares con decisión fundada, dentro de los plazos aplicables, ejecutando los cambios y comunicándolos cuando corresponda.",
+      "criteria": [
+        "Para el régimen actual se contempla que la falta de pronunciamiento en dos días hábiles habilita el amparo judicial del artículo 16",
+        "Desde el 1 de diciembre de 2026 se prepara respuesta en 30 días corridos, prorrogable una sola vez hasta otros 30, y gestión del bloqueo temporal fundada con respuesta en dos días hábiles según el artículo 11",
+        "Se conservan solicitud, verificación, decisión, fecha, ejecución y envío íntegro, se fundamentan denegaciones y se informa la vía de reclamación aplicable, con aviso a destinatarios si procede"
+      ],
+      "evidence": "Procedimiento con plazos por régimen, expedientes minimizados, calendario, respuestas y comprobantes de ejecución.",
+      "verification": "Revisar casos de acceso, rectificación y supresión, y simular vencimiento y bloqueo. No confundir días corridos con hábiles ni aplicar anticipadamente el plazo más amplio de la reforma."
+    },
+    {
+      "code": "PR-027",
+      "title": "Verificación de identidad",
+      "category": "Derechos de titulares",
+      "severity_if_failed": "MEDIUM",
+      "nature": "MIXTO",
+      "current_articles": "11 a 13",
+      "future_articles": "11 y 14 quinquies",
+      "scope": "Verificar identidad y representación antes de entregar o modificar datos, con mecanismos proporcionales que no creen barreras ni recopilen información excesiva.",
+      "criteria": [
+        "Se valida que quien solicita sea el titular o su representante y que el mandato cubra la gestión cuando corresponda",
+        "El método considera riesgo y canal, limita copias de identidad y protege sus registros",
+        "Se identifica el destino seguro de respuesta y se documenta la comprobación sin conservar más datos de los necesarios, atendiendo las instrucciones aplicables de la Agencia desde el nuevo régimen"
+      ],
+      "evidence": "Protocolo de identificación, verificaciones, mandatos y canales de respuesta.",
+      "verification": "Simular solicitud de un tercero y una representación válida. No exigir siempre una copia íntegra de la cédula si otro método suficiente está disponible."
+    },
+    {
+      "code": "PR-028",
+      "title": "Criterios de conservación",
+      "category": "Conservación y eliminación",
+      "severity_if_failed": "MEDIUM",
+      "nature": "OBLIGACION",
+      "current_articles": "6, 9 y 15",
+      "future_articles": "3 c), 7, 14 ter i) y 16 quinquies",
+      "scope": "Definir cuánto tiempo se conserva cada categoría de datos, desde qué hito se cuenta y qué fundamento permite ese plazo.",
+      "criteria": [
+        "Cada actividad tiene plazo o criterio determinable y responsable de ejecutarlo",
+        "Se distinguen necesidad de la finalidad, mandatos legales, defensa de derechos y excepciones específicas, con acceso limitado mientras proceda conservar",
+        "Al terminar el fundamento se elimina o anonimiza de forma efectiva y los plazos informados coinciden con la práctica"
+      ],
+      "evidence": "Tabla de conservación, normas sectoriales verificadas, contratos, reglas de archivo y calendario.",
+      "verification": "Revisar una categoría con antigüedad superior al plazo y comprobar su destino. No fijar un plazo único para todos los datos ni conservar indefinidamente por conveniencia."
+    },
+    {
+      "code": "PR-029",
+      "title": "Procedimiento de eliminación",
+      "category": "Conservación y eliminación",
+      "severity_if_failed": "MEDIUM",
+      "nature": "OBLIGACION",
+      "current_articles": "6 y 12",
+      "future_articles": "3 c), 7, 14 d) y 15 bis",
+      "scope": "Eliminar o anonimizar datos cuando corresponda, cubriendo sistemas, documentos, encargados y copias y evitando su reintroducción tras una restauración.",
+      "criteria": [
+        "El procedimiento identifica datos, fundamento, alcance y excepciones legales antes de actuar",
+        "La ejecución alcanza repositorios y proveedores y documenta borrado, devolución o anonimización verificable",
+        "Los respaldos tienen vencimiento, acceso restringido y controles para no restituir al uso ordinario datos ya eliminados, con limitaciones justificadas y trazables"
+      ],
+      "evidence": "Procedimiento, órdenes y comprobantes de eliminación, acuerdos con proveedores y pruebas de restauración.",
+      "verification": "Seguir una eliminación hasta copias y encargados. Marcar inactivo o quitar un nombre no equivale necesariamente a borrar ni anonimizar."
+    },
+    {
+      "code": "PR-030",
+      "title": "Revisión de datos históricos",
+      "category": "Conservación y eliminación",
+      "severity_if_failed": "MEDIUM",
+      "nature": "MIXTO",
+      "current_articles": "6 y 9",
+      "future_articles": "3 c) y d), 7 y 16 quinquies",
+      "scope": "Revisar información antigua, archivos migrados y repositorios sin uso para detectar datos caducos, innecesarios o retenidos sin fundamento.",
+      "criteria": [
+        "Se identifican archivos históricos, copias y sistemas retirados con fecha y dueño",
+        "Se decide conservar, corregir, restringir, eliminar o anonimizar con fundamento documentado",
+        "Si se invocan fines históricos, estadísticos o científicos del régimen reformado, se verifican sus condiciones específicas y se anonimizan los resultados que se publiquen"
+      ],
+      "evidence": "Inventario histórico, muestreo de antigüedad, decisiones de depuración y comprobantes.",
+      "verification": "Revisar carpetas y sistemas heredados y comprobar que histórico no se usa como justificación automática de conservación indefinida."
+    },
+    {
+      "code": "PR-031",
+      "title": "Inventario de proveedores",
+      "category": "Encargados y proveedores",
+      "severity_if_failed": "MEDIUM",
+      "nature": "GESTION",
+      "current_articles": "8 y 11",
+      "future_articles": "14, 14 quinquies y 15 bis",
+      "scope": "Identificar proveedores que tratan o pueden acceder a datos personales, incluyendo soporte, almacenamiento, servicios externos y subencargados.",
+      "criteria": [
+        "El inventario indica servicio, datos, sistemas, contactos, países y duración",
+        "Se distingue encargado de otro responsable y se identifican subcontrataciones y permisos de acceso",
+        "Se relacionan contratos, evaluación de riesgo, garantías y fecha de revisión para cada proveedor"
+      ],
+      "evidence": "Inventario de proveedores, compras, contratos, cuentas de soporte y lista de subencargados.",
+      "verification": "Comparar el inventario con pagos, integraciones y accesos reales. El listado es una práctica para controlar obligaciones; no todos los proveedores son encargados."
+    },
+    {
+      "code": "PR-032",
+      "title": "Condiciones de tratamiento por proveedores",
+      "category": "Encargados y proveedores",
+      "severity_if_failed": "MEDIUM",
+      "nature": "OBLIGACION",
+      "current_articles": "7, 8 y 11",
+      "future_articles": "14 bis, 14 quinquies y 15 bis",
+      "scope": "Formalizar por escrito las instrucciones y condiciones del tratamiento por encargados, sin permitir que el proveedor determine usos propios no autorizados.",
+      "criteria": [
+        "El contrato precisa objeto, duración, finalidad, datos, titulares y derechos y obligaciones de las partes",
+        "Incluye instrucciones, confidencialidad, seguridad, apoyo a derechos, comunicación de incidentes y devolución o supresión al terminar",
+        "La subdelegación dispone de autorización previa, específica y escrita en el régimen reformado y mantiene las responsabilidades y condiciones pertinentes"
+      ],
+      "evidence": "Contrato o mandato firmado, anexos de tratamiento, instrucciones y autorizaciones de subdelegación.",
+      "verification": "Contrastar una operación real con el contrato y verificar cierre de servicio. Un acuerdo de confidencialidad aislado no reemplaza las condiciones del encargo."
+    },
+    {
+      "code": "PR-033",
+      "title": "Evaluación de proveedores",
+      "category": "Encargados y proveedores",
+      "severity_if_failed": "MEDIUM",
+      "nature": "GESTION",
+      "current_articles": "8 y 11",
+      "future_articles": "14 quinquies y 15 bis",
+      "scope": "Comprobar antes y durante la contratación que el proveedor puede cumplir las instrucciones y ofrecer protección acorde al riesgo.",
+      "criteria": [
+        "La evaluación considera tipo y volumen de datos, acceso, ubicación, subcontratación e historial relevante",
+        "Se verifican medidas y capacidades reales, con acciones sobre brechas y decisión de aceptar, restringir o sustituir",
+        "Se revisa al cambiar el servicio o ante incidentes y se mantiene evidencia de seguimiento"
+      ],
+      "evidence": "Cuestionarios, informes, pruebas, compromisos correctivos y decisión de contratación.",
+      "verification": "Examinar un proveedor de riesgo alto y verificar sus garantías. No exigir una certificación comercial específica como requisito universal de la ley."
+    },
+    {
+      "code": "PR-034",
+      "title": "Identificación de transferencias",
+      "category": "Transferencias de datos",
+      "severity_if_failed": "MEDIUM",
+      "nature": "MIXTO",
+      "current_articles": "4, 5 y 12",
+      "future_articles": "14 ter h), 15, 15 bis y 27",
+      "scope": "Detectar comunicaciones, cesiones y transferencias al exterior, incluyendo accesos remotos, nube, soporte y flujos dentro de grupos empresariales.",
+      "criteria": [
+        "Se identifican datos, emisor, receptor, propósito, frecuencia, país y forma de acceso",
+        "Cada flujo se clasifica como encargo, cesión o transferencia internacional y se conecta con habilitación y garantías",
+        "No se presume que pertenecer al mismo grupo, usar nube o cifrar elimina la necesidad de análisis"
+      ],
+      "evidence": "Mapa de transferencias, contratos, ubicaciones de almacenamiento y soporte, integraciones.",
+      "verification": "Revisar dónde operan proveedores y personal con acceso. El inventario es soporte de gestión de las obligaciones específicas de cada flujo."
+    },
+    {
+      "code": "PR-035",
+      "title": "Destinatarios de datos documentados",
+      "category": "Transferencias de datos",
+      "severity_if_failed": "MEDIUM",
+      "nature": "OBLIGACION",
+      "current_articles": "4, 5 y 12",
+      "future_articles": "5, 14 ter d), 15 y 15 bis",
+      "scope": "Conocer a quién se comunican datos y bajo qué finalidad y condiciones, distinguiendo al destinatario que decide usos propios del encargado.",
+      "criteria": [
+        "Los destinatarios o sus categorías se identifican por actividad y en la información al titular cuando corresponda",
+        "Se documenta la base de la cesión y el instrumento escrito o electrónico del régimen reformado con partes, datos y finalidad",
+        "Se limita el intercambio al alcance autorizado y se pueden comunicar rectificaciones, supresiones u oposiciones a receptores pertinentes"
+      ],
+      "evidence": "Registro de destinatarios, instrumentos de cesión, contratos de encargo y comunicaciones de actualización.",
+      "verification": "Rastrear una cesión y verificar destinatario, propósito y fundamento. No tratar como encargado a quien decide sus propias finalidades."
+    },
+    {
+      "code": "PR-036",
+      "title": "Análisis de transferencias internacionales",
+      "category": "Transferencias de datos",
+      "severity_if_failed": "MEDIUM",
+      "nature": "CONDICIONAL",
+      "current_articles": "4, 5, 8 y 11",
+      "future_articles": "27, 28 y 29; 14 ter h)",
+      "scope": "Evaluar la habilitación y garantías antes de transferir datos a otros países, además de la licitud general del tratamiento.",
+      "criteria": [
+        "Se identifican país, receptor, finalidad, frecuencia y transferencias posteriores",
+        "Desde el nuevo régimen se acredita adecuación o garantías válidas mediante instrumentos, reglas corporativas o mecanismos previstos por los artículos 27 y 28, comprobando las decisiones o aprobaciones que correspondan",
+        "Las excepciones sin adecuación ni garantías se analizan para transferencias específicas y no habituales, sin usar un consentimiento genérico para justificar servicios recurrentes"
+      ],
+      "evidence": "Análisis por flujo, decisión de adecuación aplicable, cláusulas y garantías, autorizaciones y aviso al titular.",
+      "verification": "Comprobar garantías y derechos exigibles con asesoría especializada. No presumir publicada una lista de países o aprobadas cláusulas por la Agencia sin verificarlo. No aplica exige demostrar ausencia de transferencias."
+    },
+    {
+      "code": "PR-037",
+      "title": "Gestión de accesos",
+      "category": "Seguridad de la información",
+      "severity_if_failed": "HIGH",
+      "nature": "MIXTO",
+      "current_articles": "7 y 11",
+      "future_articles": "3 f) y h), 14 bis y 14 quinquies",
+      "scope": "Restringir acceso a datos personales a personas y servicios autorizados según funciones y riesgo, desde el alta hasta la baja.",
+      "criteria": [
+        "Las cuentas y permisos tienen dueño, autorización y alcance mínimo necesario",
+        "Se controlan altas, cambios, bajas, cuentas de servicio y accesos de terceros y se evita compartir credenciales personales",
+        "Se aplican autenticación y trazabilidad adecuadas al riesgo, con protección especial de accesos administrativos y datos sensibles"
+      ],
+      "evidence": "Matriz de accesos, altas y bajas, configuración de autenticación y registros de acceso.",
+      "verification": "Probar que una cuenta sin autorización no accede y que una baja retira permisos. MFA y otras tecnologías son medidas a justificar por riesgo, no una marca o solución universal prescrita por la ley."
+    },
+    {
+      "code": "PR-038",
+      "title": "Revisión de privilegios",
+      "category": "Seguridad de la información",
+      "severity_if_failed": "HIGH",
+      "nature": "GESTION",
+      "current_articles": "7 y 11",
+      "future_articles": "14 bis y 14 quinquies",
+      "scope": "Revisar privilegios existentes para retirar accesos innecesarios, acumulados o incompatibles con la función actual.",
+      "criteria": [
+        "La revisión tiene frecuencia definida por riesgo y cubre cuentas inactivas, terceros, servicios y administradores",
+        "El dueño del proceso confirma necesidad y se corrigen excesos con fecha y responsable",
+        "Cambios de función y desvinculaciones disparan revisión sin esperar al ciclo ordinario"
+      ],
+      "evidence": "Recertificación de permisos, listados de cuentas, solicitudes y pruebas de retiro.",
+      "verification": "Muestrear un permiso retirado y uno mantenido. La frecuencia y el formato de recertificación son criterios de gestión; la protección efectiva de acceso es el deber subyacente."
+    },
+    {
+      "code": "PR-039",
+      "title": "Protección de respaldos",
+      "category": "Seguridad de la información",
+      "severity_if_failed": "HIGH",
+      "nature": "MIXTO",
+      "current_articles": "7 y 11",
+      "future_articles": "14 quinquies b) y c), 3 c)",
+      "scope": "Proteger copias de respaldo y comprobar que permitan recuperar disponibilidad e integridad sin ampliar indebidamente acceso o conservación.",
+      "criteria": [
+        "Los respaldos tienen alcance, frecuencia, ubicación, plazo y responsables según riesgo",
+        "Se restringe acceso y se aplican protección del medio, cifrado o separación cuando corresponda, con control de proveedores y países",
+        "Se prueba restauración y se evita reactivar datos borrados o privilegios revocados después de una recuperación"
+      ],
+      "evidence": "Política de respaldos, configuración, bitácoras, control de acceso y pruebas de recuperación.",
+      "verification": "Restaurar una muestra en entorno controlado y revisar antigüedad de copias. Cifrado y otros medios se seleccionan según riesgo y estado de la técnica, sin exigir una arquitectura única."
+    },
+    {
+      "code": "PR-040",
+      "title": "Medidas de seguridad documentadas",
+      "category": "Seguridad de la información",
+      "severity_if_failed": "HIGH",
+      "nature": "OBLIGACION",
+      "current_articles": "7 y 11",
+      "future_articles": "3 f), 14 quinquies y 14 septies",
+      "scope": "Establecer medidas técnicas y organizativas capaces de proteger confidencialidad, integridad, disponibilidad y resiliencia de los datos.",
+      "criteria": [
+        "El análisis considera naturaleza, volumen, contexto, finalidad, tecnología, costos y probabilidad y gravedad de riesgos para titulares",
+        "Las medidas están implementadas y se comprueban periódicamente, incluyendo prevención de acceso indebido, recuperación y gestión de vulnerabilidades según corresponda",
+        "Se registran responsables, resultados de pruebas, brechas y correcciones y se revisan instrucciones diferenciadas de la Agencia cuando sean aplicables"
+      ],
+      "evidence": "Análisis de riesgos, política, configuraciones, pruebas de seguridad y planes correctivos.",
+      "verification": "Verificar funcionamiento mediante muestras, no solo existencia de políticas. No asumir que certificación ISO, cifrado universal o un producto concreto garantizan cumplimiento."
+    },
+    {
+      "code": "PR-041",
+      "title": "Procedimiento de incidentes",
+      "category": "Gestión de incidentes",
+      "severity_if_failed": "HIGH",
+      "nature": "OBLIGACION",
+      "current_articles": "11",
+      "future_articles": "14 quinquies y 14 sexies",
+      "scope": "Disponer de un procedimiento para detectar, contener, investigar y remediar vulneraciones de seguridad y decidir las comunicaciones legalmente exigibles.",
+      "criteria": [
+        "El procedimiento define detección, preservación de antecedentes, contención, evaluación y recuperación con responsables y escalamiento",
+        "Desde el régimen reformado contempla comunicar a la Agencia sin dilaciones indebidas cuando exista riesgo razonable para derechos y libertades, sin inventar un plazo general de 72 horas",
+        "Contempla comunicación adicional a titulares o representantes para los supuestos del artículo 14 sexies, como datos sensibles, niños menores de catorce años o datos económicos, financieros, bancarios o comerciales, y obligaciones sectoriales"
+      ],
+      "evidence": "Plan de respuesta, matriz de decisión, contactos, simulacros y modelos de comunicación.",
+      "verification": "Simular una vulneración y documentar evaluación de riesgo y decisión de comunicar. Este control describe un proceso de la organización; no incorpora envíos externos en PrivacyAudit."
+    },
+    {
+      "code": "PR-042",
+      "title": "Registro de incidentes",
+      "category": "Gestión de incidentes",
+      "severity_if_failed": "HIGH",
+      "nature": "OBLIGACION",
+      "current_articles": "11",
+      "future_articles": "14 sexies",
+      "scope": "Registrar antecedentes y decisiones de incidentes para reconstruir qué ocurrió, cómo se protegieron los titulares y qué mejoras se ejecutaron.",
+      "criteria": [
+        "Cada caso identifica fechas, naturaleza, efectos, categorías de datos y cantidad aproximada de afectados cuando se conozca",
+        "Se conservan decisiones de riesgo, contención, recuperación y medidas preventivas junto con las comunicaciones exigidas y su envío",
+        "El registro limita acceso y retención de datos del incidente y distingue hechos confirmados, hipótesis y actualizaciones"
+      ],
+      "evidence": "Registro de incidentes y comunicaciones, cronología, informe técnico y comprobantes de acciones.",
+      "verification": "Reconstruir un caso cerrado y verificar su consistencia. El artículo 14 sexies exige registrar las comunicaciones con sus antecedentes; extender el registro a todo incidente es una práctica recomendada."
+    },
+    {
+      "code": "PR-043",
+      "title": "Responsables de respuesta",
+      "category": "Gestión de incidentes",
+      "severity_if_failed": "HIGH",
+      "nature": "GESTION",
+      "current_articles": "11",
+      "future_articles": "14 quinquies y 14 sexies",
+      "scope": "Asignar y preparar a quienes coordinan respuesta técnica, decisiones legales, comunicaciones y relación con proveedores ante un incidente.",
+      "criteria": [
+        "Existe equipo o funciones designadas con suplencia y contactos disponibles",
+        "Se define quién evalúa riesgo, autoriza medidas y realiza comunicaciones requeridas, con participación de dirección según impacto",
+        "Los proveedores conocen su obligación de avisar al responsable y el equipo practica escalamiento y respuesta"
+      ],
+      "evidence": "Roles de respuesta, contactos, acuerdos con proveedores, actas y simulacros.",
+      "verification": "Activar un ejercicio fuera de la operación habitual y comprobar disponibilidad y decisiones. La composición del equipo es proporcional al contexto, no un número de cargos exigido universalmente."
+    },
+    {
+      "code": "PR-044",
+      "title": "Revisión de proyectos nuevos",
+      "category": "Privacidad desde el diseño",
+      "severity_if_failed": "MEDIUM",
+      "nature": "MIXTO",
+      "current_articles": "4, 9 y 11",
+      "future_articles": "14 quáter y 15 ter",
+      "scope": "Integrar protección de datos en el diseño de proyectos, productos, adquisiciones y modificaciones antes de tratar datos y durante su operación.",
+      "criteria": [
+        "El proceso revisa finalidades, licitud, minimización, derechos, proveedores y conservación antes del lanzamiento",
+        "Las especificaciones incorporan controles técnicos y organizativos y se comprueba su implementación",
+        "Se registran riesgos pendientes y condiciones de aprobación y se determina si corresponde evaluación de impacto"
+      ],
+      "evidence": "Checklist de diseño, requisitos de proyecto, revisiones y pruebas de aceptación.",
+      "verification": "Seleccionar un proyecto y seguir un requisito de privacidad hasta su prueba. El checklist es soporte recomendado; la protección desde el diseño es un deber del régimen reformado."
+    },
+    {
+      "code": "PR-045",
+      "title": "Evaluación previa de riesgos",
+      "category": "Privacidad desde el diseño",
+      "severity_if_failed": "MEDIUM",
+      "nature": "CONDICIONAL",
+      "current_articles": "11",
+      "future_articles": "14 quáter, 14 quinquies y 15 ter",
+      "scope": "Evaluar riesgos para derechos y libertades antes de iniciar un tratamiento y realizar una evaluación de impacto cuando sea obligatoria.",
+      "criteria": [
+        "El examen identifica naturaleza, alcance, contexto, finalidad y riesgos y decide documentadamente si el tratamiento puede producir alto riesgo",
+        "Se realiza previamente una evaluación de impacto en supuestos obligatorios del artículo 15 ter: evaluación sistemática y exhaustiva basada en tratamiento automatizado con efectos jurídicos significativos, tratamiento a gran escala, observación o monitoreo sistemático de zonas de acceso público o datos sensibles y especialmente protegidos en supuestos de excepción al consentimiento",
+        "La evaluación describe operaciones y fines, necesidad y proporcionalidad, riesgos y mitigaciones, considera listas e instrucciones aplicables de la Agencia y registra decisión y seguimiento"
+      ],
+      "evidence": "Examen de aplicabilidad, evaluación de impacto cuando proceda, mitigaciones y aprobación previa.",
+      "verification": "Comprobar que la evaluación precede al inicio y que las medidas se ejecutaron. No exigir evaluación formal para todo proyecto ni declarar No aplica sin analizar los supuestos legales."
+    },
+    {
+      "code": "PR-046",
+      "title": "Configuración de privacidad",
+      "category": "Privacidad desde el diseño",
+      "severity_if_failed": "MEDIUM",
+      "nature": "OBLIGACION",
+      "current_articles": "9 y 11",
+      "future_articles": "3 c) y 14 quáter",
+      "scope": "Configurar sistemas para tratar por defecto solo los datos necesarios y limitar exposición, duración y accesibilidad desde su primera utilización.",
+      "criteria": [
+        "Los valores iniciales restringen recopilación, uso, conservación y acceso al mínimo requerido por finalidad",
+        "Las funciones opcionales, exportaciones y visibilidad se habilitan deliberadamente con autorización y fundamento",
+        "Se comprueban valores por defecto tras cambios de versión y en cuentas nuevas, sin depender de que el titular corrija configuraciones excesivas"
+      ],
+      "evidence": "Configuraciones iniciales, especificaciones, capturas y pruebas con cuentas nuevas.",
+      "verification": "Crear una cuenta o instancia de prueba y verificar qué datos quedan accesibles y por cuánto tiempo. La protección por defecto no se limita a tener un aviso o una opción de baja."
+    },
+    {
+      "code": "PR-047",
+      "title": "Formación del personal",
+      "category": "Capacitación",
+      "severity_if_failed": "MEDIUM",
+      "nature": "GESTION",
+      "current_articles": "7 y 11",
+      "future_articles": "14 bis, 14 quinquies y 49",
+      "scope": "Preparar al personal para reconocer y ejecutar sus obligaciones de privacidad en las tareas que realmente desempeña.",
+      "criteria": [
+        "La formación adapta contenidos a funciones y riesgo: confidencialidad, uso permitido, derechos, incidentes y manejo seguro",
+        "Incluye ejemplos operativos y verifica comprensión o capacidad de actuar",
+        "Se actualiza por cambios relevantes y se ofrecen refuerzos cuando se detectan errores"
+      ],
+      "evidence": "Plan de formación, materiales por rol, participación y ejercicios de comprensión.",
+      "verification": "Preguntar al personal cómo reporta una pérdida o atiende una solicitud. La ley sustenta deberes de protección; no establece universalmente horas anuales o un curso comercial concreto."
+    },
+    {
+      "code": "PR-048",
+      "title": "Registro de capacitaciones",
+      "category": "Capacitación",
+      "severity_if_failed": "MEDIUM",
+      "nature": "GESTION",
+      "current_articles": "7 y 11",
+      "future_articles": "3 e), 14 bis, 14 quinquies y 49",
+      "scope": "Conservar constancia suficiente de la formación impartida para identificar cobertura, pendientes y necesidades de refuerzo.",
+      "criteria": [
+        "El registro identifica contenido y versión, fecha, participantes o grupos, rol e instructor o medio",
+        "Permite detectar personal no formado y documenta seguimiento y comprobación de comprensión",
+        "Se protege el registro como dato personal y se conserva con plazo y acceso justificados"
+      ],
+      "evidence": "Registro de asistencia, contenidos, evaluaciones y seguimiento de pendientes.",
+      "verification": "Conciliar una muestra de personas con funciones de riesgo frente al registro. La asistencia es evidencia de gestión y no demuestra por sí sola que el comportamiento sea correcto."
+    },
+    {
+      "code": "PR-049",
+      "title": "Inducción en privacidad",
+      "category": "Capacitación",
+      "severity_if_failed": "MEDIUM",
+      "nature": "GESTION",
+      "current_articles": "7 y 11",
+      "future_articles": "14 bis y 14 quinquies",
+      "scope": "Incorporar instrucciones de privacidad al ingreso o cambio de función antes de conceder acceso a datos personales.",
+      "criteria": [
+        "La inducción informa usos autorizados, confidencialidad, medidas básicas, canales de derechos e incidentes",
+        "La persona conoce sus responsabilidades y confirma recepción, y las cuentas se habilitan conforme a su función",
+        "Se adapta la inducción a temporales, terceros y cambios de puesto y se refuerzan condiciones de salida"
+      ],
+      "evidence": "Checklist de ingreso, material, constancia de recepción y autorizaciones de acceso.",
+      "verification": "Revisar una incorporación reciente y comprobar orden de inducción y acceso. Este mecanismo es una práctica para materializar deberes de protección, no un formulario legal único."
+    },
+    {
+      "code": "PR-050",
+      "title": "Repositorio documental",
+      "category": "Documentación y evidencias",
+      "severity_if_failed": "MEDIUM",
+      "nature": "GESTION",
+      "current_articles": "4, 8 y 11",
+      "future_articles": "3 e), 12, 14 y 14 quinquies",
+      "scope": "Mantener documentos y evidencias localizables que permitan demostrar decisiones y ejecución de privacidad sin recopilar datos personales innecesarios.",
+      "criteria": [
+        "El repositorio identifica documentos vigentes, dueño, actividad relacionada y permisos de acceso",
+        "Conserva evidencias de licitud, contratos, derechos, medidas y revisiones con trazabilidad y plazos adecuados",
+        "Evita duplicados sin control y minimiza datos de titulares en evidencias, usando muestras anonimizadas o redactadas cuando sea posible"
+      ],
+      "evidence": "Índice documental, permisos, enlaces a registros y muestras de evidencias.",
+      "verification": "Solicitar la evidencia de un control y comprobar que puede localizarse, entenderse y atribuirse. No se exige una plataforma específica ni conservar toda evidencia indefinidamente."
+    },
+    {
+      "code": "PR-051",
+      "title": "Versionado de documentos",
+      "category": "Documentación y evidencias",
+      "severity_if_failed": "MEDIUM",
+      "nature": "GESTION",
+      "current_articles": "4 y 8",
+      "future_articles": "12, 14 ter a) y 3 e)",
+      "scope": "Controlar versiones para saber qué instrucciones, políticas y avisos estaban vigentes cuando se obtuvo consentimiento o se tomó una decisión.",
+      "criteria": [
+        "Cada documento relevante tiene identificador, versión, fecha, autor y estado",
+        "Se conserva historial necesario para reconstruir cambios y se retiran versiones obsoletas de los puntos de uso",
+        "Consentimientos y decisiones enlazan la versión aplicable y los cambios relevantes se comunican a sus destinatarios"
+      ],
+      "evidence": "Historial de versiones, políticas y avisos fechados, registro de publicación y enlaces de consentimiento.",
+      "verification": "Reconstruir el texto mostrado en una fecha pasada y verificar el vigente. La fecha y versión de la política pública tiene respaldo específico en el artículo 14 ter; el versionado del resto es una práctica de gestión."
+    },
+    {
+      "code": "PR-052",
+      "title": "Revisión y aprobación documental",
+      "category": "Documentación y evidencias",
+      "severity_if_failed": "MEDIUM",
+      "nature": "GESTION",
+      "current_articles": "4, 8 y 11",
+      "future_articles": "3 e), 14 ter y 14 quinquies",
+      "scope": "Asegurar que políticas, procedimientos y avisos sean revisados por personas competentes, aprobados y coherentes con los tratamientos efectivos.",
+      "criteria": [
+        "Se define quién redacta, revisa y aprueba cada tipo documental y con qué criterio",
+        "La aprobación comprueba coherencia con inventario, licitud, contratos y operación y registra fecha y condiciones",
+        "Se programa revisión por riesgo y ante cambios legales, de sistemas o de finalidades y se verifica publicación y aplicación"
+      ],
+      "evidence": "Actas o flujos de aprobación, matriz documental, calendario y comprobación de aplicación.",
+      "verification": "Revisar un documento aprobado y contrastarlo con la práctica. La aprobación interna apoya rendición de cuentas y no reemplaza revisión jurídica profesional cuando se requiera."
+    }
+  ]
+}

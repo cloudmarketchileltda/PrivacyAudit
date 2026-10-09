@@ -1,7 +1,8 @@
--- Generado desde docs/catalog/privacy-controls.json por scripts/privacy-control-catalog.ts.
--- Catálogo orientativo, revisión jurídica PENDING; las evaluaciones conservan sus snapshots.
-insert into public.controls(code,title,description,category,objective,guidance,normative_reference,legal_review_status,severity_if_failed,requires_evidence,active,sort_order) values
-('PR-001','Responsable interno de privacidad','Alcance
+-- Revisión del catálogo inicial de 52 controles. No modifica snapshots ni definiciones personalizadas.
+-- Fuentes y criterios: docs/catalog/privacy-controls.json y docs/references/control-catalog.md.
+-- Solo sustituir el conjunto de textos originales sin revisión jurídica; conservar identidad y configuración.
+with content(code,title,old_description,old_objective,description,objective,guidance,normative_reference) as (values
+('PR-001','Responsable interno de privacidad','Revisar cómo la organización gestiona responsable interno de privacidad y registrar los antecedentes observados.','Documentar el estado de responsable interno de privacidad.','Alcance
 Asignar una persona o función que coordine privacidad y permita escalar decisiones, sin confundirla con el responsable legal del tratamiento.
 
 Cumplimiento esperado del control
@@ -10,7 +11,7 @@ Cumplimiento esperado del control
 3. Se distingue la coordinación interna del delegado de un modelo voluntario de prevención: este último exige revisar autonomía, idoneidad y conflictos de interés según el artículo 50.
 
 Naturaleza y aplicabilidad
-Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Gobierno y responsabilidad','Asignar una persona o función que coordine privacidad y permita escalar decisiones, sin confundirla con el responsable legal del tratamiento.','Evidencias sugeridas
+Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Asignar una persona o función que coordine privacidad y permita escalar decisiones, sin confundirla con el responsable legal del tratamiento.','Evidencias sugeridas
 Designación, organigrama, descripción de funciones, presupuesto o asignación de horas y ruta de escalamiento.
 
 Cómo verificar
@@ -28,8 +29,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,1),
-('PR-002','Funciones y responsabilidades documentadas','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-002','Funciones y responsabilidades documentadas','Revisar cómo la organización gestiona funciones y responsabilidades documentadas y registrar los antecedentes observados.','Documentar el estado de funciones y responsabilidades documentadas.','Alcance
 Distribuir responsabilidades entre dirección, áreas de negocio, tecnología, seguridad, recursos humanos y proveedores para evitar que una obligación quede sin dueño.
 
 Cumplimiento esperado del control
@@ -38,7 +39,7 @@ Cumplimiento esperado del control
 3. Personal y terceros conocen los deberes de confidencialidad y sus límites de actuación, que se mantienen al terminar la relación.
 
 Naturaleza y aplicabilidad
-Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Gobierno y responsabilidad','Distribuir responsabilidades entre dirección, áreas de negocio, tecnología, seguridad, recursos humanos y proveedores para evitar que una obligación quede sin dueño.','Evidencias sugeridas
+Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Distribuir responsabilidades entre dirección, áreas de negocio, tecnología, seguridad, recursos humanos y proveedores para evitar que una obligación quede sin dueño.','Evidencias sugeridas
 Matriz de responsabilidades, perfiles de cargo, acuerdos de confidencialidad y contratos de encargados.
 
 Cómo verificar
@@ -56,8 +57,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,2),
-('PR-003','Programa de privacidad','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-003','Programa de privacidad','Revisar cómo la organización gestiona programa de privacidad y registrar los antecedentes observados.','Documentar el estado de programa de privacidad.','Alcance
 Organizar las acciones de privacidad en un programa proporcional al riesgo, que conecte inventario, bases de licitud, derechos, proveedores y medidas de protección.
 
 Cumplimiento esperado del control
@@ -66,7 +67,7 @@ Cumplimiento esperado del control
 3. La dirección aprueba y sigue el avance, distinguiendo el programa interno de un modelo de prevención o certificación voluntarios, que requieren condiciones adicionales.
 
 Naturaleza y aplicabilidad
-Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Gobierno y responsabilidad','Organizar las acciones de privacidad en un programa proporcional al riesgo, que conecte inventario, bases de licitud, derechos, proveedores y medidas de protección.','Evidencias sugeridas
+Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Organizar las acciones de privacidad en un programa proporcional al riesgo, que conecte inventario, bases de licitud, derechos, proveedores y medidas de protección.','Evidencias sugeridas
 Programa aprobado, plan de acciones, presupuesto, seguimiento y actas de dirección.
 
 Cómo verificar
@@ -84,8 +85,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,3),
-('PR-004','Revisión periódica del programa','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-004','Revisión periódica del programa','Revisar cómo la organización gestiona revisión periódica del programa y registrar los antecedentes observados.','Documentar el estado de revisión periódica del programa.','Alcance
 Revisar la eficacia del programa cuando cambien procesos, proveedores, riesgos o normativa, y a intervalos definidos por la organización.
 
 Cumplimiento esperado del control
@@ -94,7 +95,7 @@ Cumplimiento esperado del control
 3. Se registran decisiones, responsables y cierre de las acciones correctivas.
 
 Naturaleza y aplicabilidad
-Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Gobierno y responsabilidad','Revisar la eficacia del programa cuando cambien procesos, proveedores, riesgos o normativa, y a intervalos definidos por la organización.','Evidencias sugeridas
+Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Revisar la eficacia del programa cuando cambien procesos, proveedores, riesgos o normativa, y a intervalos definidos por la organización.','Evidencias sugeridas
 Plan de revisión, informes internos, actas, indicadores y comprobantes de corrección.
 
 Cómo verificar
@@ -112,8 +113,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,4),
-('PR-005','Inventario de sistemas con datos personales','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-005','Inventario de sistemas con datos personales','Revisar cómo la organización gestiona inventario de sistemas con datos personales y registrar los antecedentes observados.','Documentar el estado de inventario de sistemas con datos personales.','Alcance
 Identificar dónde se recopilan, almacenan, consultan y eliminan datos personales, incluyendo sistemas propios, nube, planillas, correos, papel y dispositivos.
 
 Cumplimiento esperado del control
@@ -122,7 +123,7 @@ Cumplimiento esperado del control
 3. Incluye repositorios informales y copias y se actualiza al incorporar, modificar o retirar sistemas.
 
 Naturaleza y aplicabilidad
-Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Inventario de datos','Identificar dónde se recopilan, almacenan, consultan y eliminan datos personales, incluyendo sistemas propios, nube, planillas, correos, papel y dispositivos.','Evidencias sugeridas
+Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Identificar dónde se recopilan, almacenan, consultan y eliminan datos personales, incluyendo sistemas propios, nube, planillas, correos, papel y dispositivos.','Evidencias sugeridas
 Inventario, diagramas de arquitectura, listado de aplicaciones, repositorios y contratos de nube.
 
 Cómo verificar
@@ -140,8 +141,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,5),
-('PR-006','Categorías de datos documentadas','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-006','Categorías de datos documentadas','Revisar cómo la organización gestiona categorías de datos documentadas y registrar los antecedentes observados.','Documentar el estado de categorías de datos documentadas.','Alcance
 Clasificar las categorías de información y de titulares para aplicar protección y requisitos de licitud acordes a su naturaleza.
 
 Cumplimiento esperado del control
@@ -150,7 +151,7 @@ Cumplimiento esperado del control
 3. La clasificación incluye datos inferidos o combinados y no considera anónimos los datos que aún permitan identificar o reidentificar a una persona.
 
 Naturaleza y aplicabilidad
-Combina obligaciones legales con criterios operativos recomendados para demostrar su ejecución. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Inventario de datos','Clasificar las categorías de información y de titulares para aplicar protección y requisitos de licitud acordes a su naturaleza.','Evidencias sugeridas
+Combina obligaciones legales con criterios operativos recomendados para demostrar su ejecución. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Clasificar las categorías de información y de titulares para aplicar protección y requisitos de licitud acordes a su naturaleza.','Evidencias sugeridas
 Diccionario de datos, formularios, esquema de bases, clasificación y análisis de datos especiales.
 
 Cómo verificar
@@ -168,8 +169,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,6),
-('PR-007','Fuentes de obtención identificadas','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-007','Fuentes de obtención identificadas','Revisar cómo la organización gestiona fuentes de obtención identificadas y registrar los antecedentes observados.','Documentar el estado de fuentes de obtención identificadas.','Alcance
 Determinar la procedencia de los datos y comprobar que su obtención permite el tratamiento concreto que se pretende realizar.
 
 Cumplimiento esperado del control
@@ -178,7 +179,7 @@ Cumplimiento esperado del control
 3. Se revisa la procedencia de listas compradas, datos importados y extracción desde internet, sin asumir que disponibilidad pública permite cualquier uso.
 
 Naturaleza y aplicabilidad
-Combina obligaciones legales con criterios operativos recomendados para demostrar su ejecución. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Inventario de datos','Determinar la procedencia de los datos y comprobar que su obtención permite el tratamiento concreto que se pretende realizar.','Evidencias sugeridas
+Combina obligaciones legales con criterios operativos recomendados para demostrar su ejecución. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Determinar la procedencia de los datos y comprobar que su obtención permite el tratamiento concreto que se pretende realizar.','Evidencias sugeridas
 Registro de fuentes, contratos de adquisición, formularios de origen y comprobación de habilitación.
 
 Cómo verificar
@@ -196,8 +197,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,7),
-('PR-008','Mapa de circulación de datos','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-008','Mapa de circulación de datos','Revisar cómo la organización gestiona mapa de circulación de datos y registrar los antecedentes observados.','Documentar el estado de mapa de circulación de datos.','Alcance
 Representar el recorrido de datos desde su obtención hasta su eliminación, con accesos internos, proveedores, destinatarios, respaldos y países involucrados.
 
 Cumplimiento esperado del control
@@ -206,7 +207,7 @@ Cumplimiento esperado del control
 3. Cada flujo se enlaza con propósito, fundamento, medidas y responsable de su autorización.
 
 Naturaleza y aplicabilidad
-Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Inventario de datos','Representar el recorrido de datos desde su obtención hasta su eliminación, con accesos internos, proveedores, destinatarios, respaldos y países involucrados.','Evidencias sugeridas
+Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Representar el recorrido de datos desde su obtención hasta su eliminación, con accesos internos, proveedores, destinatarios, respaldos y países involucrados.','Evidencias sugeridas
 Diagramas de flujo, integraciones, contratos, destinos de exportación y ubicaciones de nube.
 
 Cómo verificar
@@ -224,8 +225,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,8),
-('PR-009','Registro de actividades','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-009','Registro de actividades','Revisar cómo la organización gestiona registro de actividades y registrar los antecedentes observados.','Documentar el estado de registro de actividades.','Alcance
 Mantener una relación de actividades de tratamiento suficientemente completa para demostrar qué se hace con los datos, por qué y bajo qué condiciones.
 
 Cumplimiento esperado del control
@@ -234,7 +235,7 @@ Cumplimiento esperado del control
 3. Las actividades nuevas o modificadas se incorporan y se relacionan con documentos y evidencias vigentes.
 
 Naturaleza y aplicabilidad
-Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Actividades de tratamiento','Mantener una relación de actividades de tratamiento suficientemente completa para demostrar qué se hace con los datos, por qué y bajo qué condiciones.','Evidencias sugeridas
+Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Mantener una relación de actividades de tratamiento suficientemente completa para demostrar qué se hace con los datos, por qué y bajo qué condiciones.','Evidencias sugeridas
 Registro de actividades, inventario asociado, políticas y contratos vinculados.
 
 Cómo verificar
@@ -252,8 +253,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,9),
-('PR-010','Finalidades de tratamiento documentadas','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-010','Finalidades de tratamiento documentadas','Revisar cómo la organización gestiona finalidades de tratamiento documentadas y registrar los antecedentes observados.','Documentar el estado de finalidades de tratamiento documentadas.','Alcance
 Explicar la finalidad concreta de cada uso de datos, de forma que permita evaluar necesidad, licitud y coherencia con la información entregada al titular.
 
 Cumplimiento esperado del control
@@ -262,7 +263,7 @@ Cumplimiento esperado del control
 3. Se separan usos distintos, como ejecutar un servicio, publicidad y análisis, y se controla cualquier reutilización.
 
 Naturaleza y aplicabilidad
-Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Actividades de tratamiento','Explicar la finalidad concreta de cada uso de datos, de forma que permita evaluar necesidad, licitud y coherencia con la información entregada al titular.','Evidencias sugeridas
+Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Explicar la finalidad concreta de cada uso de datos, de forma que permita evaluar necesidad, licitud y coherencia con la información entregada al titular.','Evidencias sugeridas
 Registro de actividades, formularios, avisos y análisis de finalidades.
 
 Cómo verificar
@@ -280,8 +281,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,10),
-('PR-011','Responsables de cada actividad','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-011','Responsables de cada actividad','Revisar cómo la organización gestiona responsables de cada actividad y registrar los antecedentes observados.','Documentar el estado de responsables de cada actividad.','Alcance
 Identificar quién responde por cada actividad y quién tiene autoridad para aprobar cambios, coordinar derechos y aplicar medidas de protección.
 
 Cumplimiento esperado del control
@@ -290,7 +291,7 @@ Cumplimiento esperado del control
 3. El dueño conoce sistemas, proveedores, plazos y obligaciones del proceso y puede exigir correcciones.
 
 Naturaleza y aplicabilidad
-Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Actividades de tratamiento','Identificar quién responde por cada actividad y quién tiene autoridad para aprobar cambios, coordinar derechos y aplicar medidas de protección.','Evidencias sugeridas
+Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Identificar quién responde por cada actividad y quién tiene autoridad para aprobar cambios, coordinar derechos y aplicar medidas de protección.','Evidencias sugeridas
 Registro de actividades con responsables, organigrama, designaciones y procedimientos.
 
 Cómo verificar
@@ -308,8 +309,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,11),
-('PR-012','Revisión de nuevas actividades','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-012','Revisión de nuevas actividades','Revisar cómo la organización gestiona revisión de nuevas actividades y registrar los antecedentes observados.','Documentar el estado de revisión de nuevas actividades.','Alcance
 Revisar antes del inicio las actividades nuevas y los cambios relevantes en datos, finalidades, proveedores o tecnologías.
 
 Cumplimiento esperado del control
@@ -318,7 +319,7 @@ Cumplimiento esperado del control
 3. La revisión determina si hay alto riesgo o supuestos de evaluación de impacto obligatoria y registra aprobación, condiciones o rechazo.
 
 Naturaleza y aplicabilidad
-Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Actividades de tratamiento','Revisar antes del inicio las actividades nuevas y los cambios relevantes en datos, finalidades, proveedores o tecnologías.','Evidencias sugeridas
+Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Revisar antes del inicio las actividades nuevas y los cambios relevantes en datos, finalidades, proveedores o tecnologías.','Evidencias sugeridas
 Ficha de revisión de cambios, aprobación de proyecto, análisis de riesgo y evaluación de impacto cuando corresponda.
 
 Cómo verificar
@@ -336,8 +337,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,12),
-('PR-013','Minimización de datos recopilados','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-013','Minimización de datos recopilados','Revisar cómo la organización gestiona minimización de datos recopilados y registrar los antecedentes observados.','Documentar el estado de minimización de datos recopilados.','Alcance
 Limitar la recopilación y el uso a datos necesarios y adecuados para la finalidad, evitando campos, copias o accesos que no puedan justificarse.
 
 Cumplimiento esperado del control
@@ -346,7 +347,7 @@ Cumplimiento esperado del control
 3. Los formularios y valores predeterminados no habilitan recopilación adicional sin justificación.
 
 Naturaleza y aplicabilidad
-Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Principios de tratamiento','Limitar la recopilación y el uso a datos necesarios y adecuados para la finalidad, evitando campos, copias o accesos que no puedan justificarse.','Evidencias sugeridas
+Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Limitar la recopilación y el uso a datos necesarios y adecuados para la finalidad, evitando campos, copias o accesos que no puedan justificarse.','Evidencias sugeridas
 Formularios antes y después, justificación de campos, esquemas y configuración de recopilación.
 
 Cómo verificar
@@ -364,8 +365,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,13),
-('PR-014','Exactitud y actualización','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-014','Exactitud y actualización','Revisar cómo la organización gestiona exactitud y actualización y registrar los antecedentes observados.','Documentar el estado de exactitud y actualización.','Alcance
 Mantener datos correctos, completos, actuales y pertinentes y corregirlos o bloquearlos cuando existan dudas fundadas sobre su exactitud.
 
 Cumplimiento esperado del control
@@ -374,7 +375,7 @@ Cumplimiento esperado del control
 3. Se comunican correcciones a destinatarios cuando corresponda y se evita seguir utilizando información objetada mientras deba bloquearse.
 
 Naturaleza y aplicabilidad
-Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Principios de tratamiento','Mantener datos correctos, completos, actuales y pertinentes y corregirlos o bloquearlos cuando existan dudas fundadas sobre su exactitud.','Evidencias sugeridas
+Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Mantener datos correctos, completos, actuales y pertinentes y corregirlos o bloquearlos cuando existan dudas fundadas sobre su exactitud.','Evidencias sugeridas
 Procedimiento de calidad, registros de corrección, controles de validación y comunicaciones a destinatarios.
 
 Cómo verificar
@@ -392,8 +393,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,14),
-('PR-015','Uso compatible con la finalidad','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-015','Uso compatible con la finalidad','Revisar cómo la organización gestiona uso compatible con la finalidad y registrar los antecedentes observados.','Documentar el estado de uso compatible con la finalidad.','Alcance
 Evitar que datos obtenidos para un propósito se reutilicen en otro sin evaluar compatibilidad y la habilitación que permita ese nuevo tratamiento.
 
 Cumplimiento esperado del control
@@ -402,7 +403,7 @@ Cumplimiento esperado del control
 3. Los cambios aprobados se reflejan en avisos, registros, accesos y contratos, y los usos no habilitados se detienen.
 
 Naturaleza y aplicabilidad
-Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Principios de tratamiento','Evitar que datos obtenidos para un propósito se reutilicen en otro sin evaluar compatibilidad y la habilitación que permita ese nuevo tratamiento.','Evidencias sugeridas
+Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Evitar que datos obtenidos para un propósito se reutilicen en otro sin evaluar compatibilidad y la habilitación que permita ese nuevo tratamiento.','Evidencias sugeridas
 Análisis de compatibilidad, autorización del cambio, avisos y consentimientos adicionales cuando procedan.
 
 Cómo verificar
@@ -420,8 +421,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,15),
-('PR-016','Gestión de proporcionalidad','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-016','Gestión de proporcionalidad','Revisar cómo la organización gestiona gestión de proporcionalidad y registrar los antecedentes observados.','Documentar el estado de gestión de proporcionalidad.','Alcance
 Justificar que el alcance del tratamiento y sus medidas sean proporcionados a la finalidad y a la afectación posible de los titulares.
 
 Cumplimiento esperado del control
@@ -430,7 +431,7 @@ Cumplimiento esperado del control
 3. Las medidas reducen riesgos de exposición, discriminación o vigilancia y se revisan si cambia el contexto.
 
 Naturaleza y aplicabilidad
-Combina obligaciones legales con criterios operativos recomendados para demostrar su ejecución. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Principios de tratamiento','Justificar que el alcance del tratamiento y sus medidas sean proporcionados a la finalidad y a la afectación posible de los titulares.','Evidencias sugeridas
+Combina obligaciones legales con criterios operativos recomendados para demostrar su ejecución. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Justificar que el alcance del tratamiento y sus medidas sean proporcionados a la finalidad y a la afectación posible de los titulares.','Evidencias sugeridas
 Análisis de necesidad y proporcionalidad, alternativas descartadas y medidas de reducción de riesgo.
 
 Cómo verificar
@@ -448,8 +449,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,16),
-('PR-017','Base de licitud documentada','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-017','Base de licitud documentada','Revisar cómo la organización gestiona base de licitud documentada y registrar los antecedentes observados.','Documentar el estado de base de licitud documentada.','Alcance
 Identificar una fuente de licitud válida para cada finalidad y operación, conforme al régimen temporal, tipo de dato y carácter público o privado del responsable.
 
 Cumplimiento esperado del control
@@ -458,7 +459,7 @@ Cumplimiento esperado del control
 3. Contrato e interés legítimo del artículo 13 reformado no se invocan como nuevas bases generales antes del 1 de diciembre de 2026 ni como excepciones automáticas para datos sensibles.
 
 Naturaleza y aplicabilidad
-Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Bases de licitud','Identificar una fuente de licitud válida para cada finalidad y operación, conforme al régimen temporal, tipo de dato y carácter público o privado del responsable.','Evidencias sugeridas
+Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Identificar una fuente de licitud válida para cada finalidad y operación, conforme al régimen temporal, tipo de dato y carácter público o privado del responsable.','Evidencias sugeridas
 Matriz de licitud, contratos pertinentes, artículos legales, consentimientos y análisis especializado.
 
 Cómo verificar
@@ -476,8 +477,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','HIGH',true,true,17),
-('PR-018','Registro del análisis de licitud','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-018','Registro del análisis de licitud','Revisar cómo la organización gestiona registro del análisis de licitud y registrar los antecedentes observados.','Documentar el estado de registro del análisis de licitud.','Alcance
 Conservar el razonamiento y los antecedentes que permiten demostrar por qué se considera lícito un tratamiento, más allá de escribir una etiqueta de base jurídica.
 
 Cumplimiento esperado del control
@@ -486,7 +487,7 @@ Cumplimiento esperado del control
 3. La aprobación, fecha, autor y revisión ante cambios quedan trazables y los antecedentes permiten sostener la decisión.
 
 Naturaleza y aplicabilidad
-Combina obligaciones legales con criterios operativos recomendados para demostrar su ejecución. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Bases de licitud','Conservar el razonamiento y los antecedentes que permiten demostrar por qué se considera lícito un tratamiento, más allá de escribir una etiqueta de base jurídica.','Evidencias sugeridas
+Combina obligaciones legales con criterios operativos recomendados para demostrar su ejecución. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Conservar el razonamiento y los antecedentes que permiten demostrar por qué se considera lícito un tratamiento, más allá de escribir una etiqueta de base jurídica.','Evidencias sugeridas
 Informes de licitud, disposiciones citadas, contratos, evaluación de interés legítimo y actas de aprobación.
 
 Cómo verificar
@@ -504,8 +505,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','HIGH',true,true,18),
-('PR-019','Gestión del consentimiento','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-019','Gestión del consentimiento','Revisar cómo la organización gestiona gestión del consentimiento y registrar los antecedentes observados.','Documentar el estado de gestión del consentimiento.','Alcance
 Obtener y poder demostrar el consentimiento cuando sea la fuente aplicable, y permitir su revocación sin mantener usos que dependan exclusivamente de él.
 
 Cumplimiento esperado del control
@@ -514,7 +515,7 @@ Cumplimiento esperado del control
 3. La revocación se tramita por medios equivalentes, sencillos y gratuitos en el régimen reformado, con cese de los usos dependientes y registro de excepciones legales de conservación.
 
 Naturaleza y aplicabilidad
-Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Bases de licitud','Obtener y poder demostrar el consentimiento cuando sea la fuente aplicable, y permitir su revocación sin mantener usos que dependan exclusivamente de él.','Evidencias sugeridas
+Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Obtener y poder demostrar el consentimiento cuando sea la fuente aplicable, y permitir su revocación sin mantener usos que dependan exclusivamente de él.','Evidencias sugeridas
 Textos y versiones de consentimiento, prueba de aceptación y revocación, configuración y registro de ejecución.
 
 Cómo verificar
@@ -532,8 +533,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','HIGH',true,true,19),
-('PR-020','Revisión de tratamientos sensibles','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-020','Revisión de tratamientos sensibles','Revisar cómo la organización gestiona revisión de tratamientos sensibles y registrar los antecedentes observados.','Documentar el estado de revisión de tratamientos sensibles.','Alcance
 Aplicar un examen reforzado a datos sensibles, salud, biometría y datos de niños o adolescentes, considerando restricciones específicas y riesgos para sus titulares.
 
 Cumplimiento esperado del control
@@ -542,7 +543,7 @@ Cumplimiento esperado del control
 3. Para niños y adolescentes se revisan interés superior, edad, autonomía y autorización de representantes cuando corresponda, junto con medidas de acceso, conservación y seguridad reforzadas.
 
 Naturaleza y aplicabilidad
-Exigencia condicionada al tratamiento y a los supuestos legales; documentar su aplicabilidad antes de evaluar. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Bases de licitud','Aplicar un examen reforzado a datos sensibles, salud, biometría y datos de niños o adolescentes, considerando restricciones específicas y riesgos para sus titulares.','Evidencias sugeridas
+Exigencia condicionada al tratamiento y a los supuestos legales; documentar su aplicabilidad antes de evaluar. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Aplicar un examen reforzado a datos sensibles, salud, biometría y datos de niños o adolescentes, considerando restricciones específicas y riesgos para sus titulares.','Evidencias sugeridas
 Clasificación, análisis legal específico, autorizaciones de representantes y medidas reforzadas.
 
 Cómo verificar
@@ -560,8 +561,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','HIGH',true,true,20),
-('PR-021','Información a titulares','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-021','Información a titulares','Revisar cómo la organización gestiona información a titulares y registrar los antecedentes observados.','Documentar el estado de información a titulares.','Alcance
 Entregar información clara y accesible que permita al titular comprender quién usa sus datos, para qué y cómo ejercer sus derechos.
 
 Cumplimiento esperado del control
@@ -570,7 +571,7 @@ Cumplimiento esperado del control
 3. El lenguaje y el medio son adecuados al público y el acceso es gratuito, sin esconder condiciones relevantes.
 
 Naturaleza y aplicabilidad
-Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Información y transparencia','Entregar información clara y accesible que permita al titular comprender quién usa sus datos, para qué y cómo ejercer sus derechos.','Evidencias sugeridas
+Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Entregar información clara y accesible que permita al titular comprender quién usa sus datos, para qué y cómo ejercer sus derechos.','Evidencias sugeridas
 Avisos vigentes, canales publicados, capturas y prueba de accesibilidad.
 
 Cómo verificar
@@ -588,8 +589,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,21),
-('PR-022','Avisos en puntos de recopilación','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-022','Avisos en puntos de recopilación','Revisar cómo la organización gestiona avisos en puntos de recopilación y registrar los antecedentes observados.','Documentar el estado de avisos en puntos de recopilación.','Alcance
 Presentar información pertinente donde se obtienen datos, en formularios digitales, papel, llamadas, aplicaciones o puntos físicos.
 
 Cumplimiento esperado del control
@@ -598,7 +599,7 @@ Cumplimiento esperado del control
 3. El aviso es legible, accesible y coherente con el texto completo y con el tratamiento efectivo.
 
 Naturaleza y aplicabilidad
-Combina obligaciones legales con criterios operativos recomendados para demostrar su ejecución. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Información y transparencia','Presentar información pertinente donde se obtienen datos, en formularios digitales, papel, llamadas, aplicaciones o puntos físicos.','Evidencias sugeridas
+Combina obligaciones legales con criterios operativos recomendados para demostrar su ejecución. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Presentar información pertinente donde se obtienen datos, en formularios digitales, papel, llamadas, aplicaciones o puntos físicos.','Evidencias sugeridas
 Inventario de puntos de captura, formularios, guiones, carteles y versiones de avisos.
 
 Cómo verificar
@@ -616,8 +617,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,22),
-('PR-023','Aviso de privacidad del sitio web','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-023','Aviso de privacidad del sitio web','Revisar cómo la organización gestiona aviso de privacidad del sitio web y registrar los antecedentes observados.','Documentar el estado de aviso de privacidad del sitio web.','Alcance
 Mantener la información pública de privacidad en el sitio web o en un medio equivalente permitido, de manera actualizada y fácil de encontrar.
 
 Cumplimiento esperado del control
@@ -626,7 +627,7 @@ Cumplimiento esperado del control
 3. Añade garantías y países de transferencias, revocación y decisiones automatizadas cuando existan, y describe seguridad sin publicar secretos operativos.
 
 Naturaleza y aplicabilidad
-Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Información y transparencia','Mantener la información pública de privacidad en el sitio web o en un medio equivalente permitido, de manera actualizada y fácil de encontrar.','Evidencias sugeridas
+Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Mantener la información pública de privacidad en el sitio web o en un medio equivalente permitido, de manera actualizada y fácil de encontrar.','Evidencias sugeridas
 URL o medio equivalente, texto aprobado, fecha y versión, revisión de enlaces y concordancia con el inventario.
 
 Cómo verificar
@@ -644,8 +645,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,23),
-('PR-024','Información sobre cambios de finalidad','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-024','Información sobre cambios de finalidad','Revisar cómo la organización gestiona información sobre cambios de finalidad y registrar los antecedentes observados.','Documentar el estado de información sobre cambios de finalidad.','Alcance
 Comunicar cambios relevantes de propósito y revisar la licitud de la reutilización antes de comenzar a tratar datos bajo las nuevas condiciones.
 
 Cumplimiento esperado del control
@@ -654,7 +655,7 @@ Cumplimiento esperado del control
 3. Cuando se requiere un consentimiento nuevo, se obtiene y acredita antes del uso, y quienes no lo otorgan quedan excluidos de ese uso.
 
 Naturaleza y aplicabilidad
-Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Información y transparencia','Comunicar cambios relevantes de propósito y revisar la licitud de la reutilización antes de comenzar a tratar datos bajo las nuevas condiciones.','Evidencias sugeridas
+Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Comunicar cambios relevantes de propósito y revisar la licitud de la reutilización antes de comenzar a tratar datos bajo las nuevas condiciones.','Evidencias sugeridas
 Análisis de cambio, versiones de avisos, comunicaciones y consentimiento cuando sea necesario.
 
 Cómo verificar
@@ -672,8 +673,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,24),
-('PR-025','Canal de solicitudes de titulares','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-025','Canal de solicitudes de titulares','Revisar cómo la organización gestiona canal de solicitudes de titulares y registrar los antecedentes observados.','Documentar el estado de canal de solicitudes de titulares.','Alcance
 Habilitar un canal conocido y utilizable para ejercer derechos y derivar cada solicitud a una persona con capacidad de resolverla.
 
 Cumplimiento esperado del control
@@ -682,7 +683,7 @@ Cumplimiento esperado del control
 3. El procedimiento distingue derechos y vías judiciales actuales de los derechos y reclamaciones ante la Agencia del régimen reformado.
 
 Naturaleza y aplicabilidad
-Combina obligaciones legales con criterios operativos recomendados para demostrar su ejecución. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Derechos de titulares','Habilitar un canal conocido y utilizable para ejercer derechos y derivar cada solicitud a una persona con capacidad de resolverla.','Evidencias sugeridas
+Combina obligaciones legales con criterios operativos recomendados para demostrar su ejecución. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Habilitar un canal conocido y utilizable para ejercer derechos y derivar cada solicitud a una persona con capacidad de resolverla.','Evidencias sugeridas
 Canal publicado, registros de solicitudes, acuses, instrucciones y pruebas de recepción.
 
 Cómo verificar
@@ -700,8 +701,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,25),
-('PR-026','Procedimiento de respuesta','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-026','Procedimiento de respuesta','Revisar cómo la organización gestiona procedimiento de respuesta y registrar los antecedentes observados.','Documentar el estado de procedimiento de respuesta.','Alcance
 Responder solicitudes de titulares con decisión fundada, dentro de los plazos aplicables, ejecutando los cambios y comunicándolos cuando corresponda.
 
 Cumplimiento esperado del control
@@ -710,7 +711,7 @@ Cumplimiento esperado del control
 3. Se conservan solicitud, verificación, decisión, fecha, ejecución y envío íntegro, se fundamentan denegaciones y se informa la vía de reclamación aplicable, con aviso a destinatarios si procede.
 
 Naturaleza y aplicabilidad
-Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Derechos de titulares','Responder solicitudes de titulares con decisión fundada, dentro de los plazos aplicables, ejecutando los cambios y comunicándolos cuando corresponda.','Evidencias sugeridas
+Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Responder solicitudes de titulares con decisión fundada, dentro de los plazos aplicables, ejecutando los cambios y comunicándolos cuando corresponda.','Evidencias sugeridas
 Procedimiento con plazos por régimen, expedientes minimizados, calendario, respuestas y comprobantes de ejecución.
 
 Cómo verificar
@@ -728,8 +729,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,26),
-('PR-027','Verificación de identidad','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-027','Verificación de identidad','Revisar cómo la organización gestiona verificación de identidad y registrar los antecedentes observados.','Documentar el estado de verificación de identidad.','Alcance
 Verificar identidad y representación antes de entregar o modificar datos, con mecanismos proporcionales que no creen barreras ni recopilen información excesiva.
 
 Cumplimiento esperado del control
@@ -738,7 +739,7 @@ Cumplimiento esperado del control
 3. Se identifica el destino seguro de respuesta y se documenta la comprobación sin conservar más datos de los necesarios, atendiendo las instrucciones aplicables de la Agencia desde el nuevo régimen.
 
 Naturaleza y aplicabilidad
-Combina obligaciones legales con criterios operativos recomendados para demostrar su ejecución. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Derechos de titulares','Verificar identidad y representación antes de entregar o modificar datos, con mecanismos proporcionales que no creen barreras ni recopilen información excesiva.','Evidencias sugeridas
+Combina obligaciones legales con criterios operativos recomendados para demostrar su ejecución. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Verificar identidad y representación antes de entregar o modificar datos, con mecanismos proporcionales que no creen barreras ni recopilen información excesiva.','Evidencias sugeridas
 Protocolo de identificación, verificaciones, mandatos y canales de respuesta.
 
 Cómo verificar
@@ -756,8 +757,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,27),
-('PR-028','Criterios de conservación','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-028','Criterios de conservación','Revisar cómo la organización gestiona criterios de conservación y registrar los antecedentes observados.','Documentar el estado de criterios de conservación.','Alcance
 Definir cuánto tiempo se conserva cada categoría de datos, desde qué hito se cuenta y qué fundamento permite ese plazo.
 
 Cumplimiento esperado del control
@@ -766,7 +767,7 @@ Cumplimiento esperado del control
 3. Al terminar el fundamento se elimina o anonimiza de forma efectiva y los plazos informados coinciden con la práctica.
 
 Naturaleza y aplicabilidad
-Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Conservación y eliminación','Definir cuánto tiempo se conserva cada categoría de datos, desde qué hito se cuenta y qué fundamento permite ese plazo.','Evidencias sugeridas
+Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Definir cuánto tiempo se conserva cada categoría de datos, desde qué hito se cuenta y qué fundamento permite ese plazo.','Evidencias sugeridas
 Tabla de conservación, normas sectoriales verificadas, contratos, reglas de archivo y calendario.
 
 Cómo verificar
@@ -784,8 +785,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,28),
-('PR-029','Procedimiento de eliminación','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-029','Procedimiento de eliminación','Revisar cómo la organización gestiona procedimiento de eliminación y registrar los antecedentes observados.','Documentar el estado de procedimiento de eliminación.','Alcance
 Eliminar o anonimizar datos cuando corresponda, cubriendo sistemas, documentos, encargados y copias y evitando su reintroducción tras una restauración.
 
 Cumplimiento esperado del control
@@ -794,7 +795,7 @@ Cumplimiento esperado del control
 3. Los respaldos tienen vencimiento, acceso restringido y controles para no restituir al uso ordinario datos ya eliminados, con limitaciones justificadas y trazables.
 
 Naturaleza y aplicabilidad
-Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Conservación y eliminación','Eliminar o anonimizar datos cuando corresponda, cubriendo sistemas, documentos, encargados y copias y evitando su reintroducción tras una restauración.','Evidencias sugeridas
+Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Eliminar o anonimizar datos cuando corresponda, cubriendo sistemas, documentos, encargados y copias y evitando su reintroducción tras una restauración.','Evidencias sugeridas
 Procedimiento, órdenes y comprobantes de eliminación, acuerdos con proveedores y pruebas de restauración.
 
 Cómo verificar
@@ -812,8 +813,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,29),
-('PR-030','Revisión de datos históricos','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-030','Revisión de datos históricos','Revisar cómo la organización gestiona revisión de datos históricos y registrar los antecedentes observados.','Documentar el estado de revisión de datos históricos.','Alcance
 Revisar información antigua, archivos migrados y repositorios sin uso para detectar datos caducos, innecesarios o retenidos sin fundamento.
 
 Cumplimiento esperado del control
@@ -822,7 +823,7 @@ Cumplimiento esperado del control
 3. Si se invocan fines históricos, estadísticos o científicos del régimen reformado, se verifican sus condiciones específicas y se anonimizan los resultados que se publiquen.
 
 Naturaleza y aplicabilidad
-Combina obligaciones legales con criterios operativos recomendados para demostrar su ejecución. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Conservación y eliminación','Revisar información antigua, archivos migrados y repositorios sin uso para detectar datos caducos, innecesarios o retenidos sin fundamento.','Evidencias sugeridas
+Combina obligaciones legales con criterios operativos recomendados para demostrar su ejecución. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Revisar información antigua, archivos migrados y repositorios sin uso para detectar datos caducos, innecesarios o retenidos sin fundamento.','Evidencias sugeridas
 Inventario histórico, muestreo de antigüedad, decisiones de depuración y comprobantes.
 
 Cómo verificar
@@ -840,8 +841,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,30),
-('PR-031','Inventario de proveedores','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-031','Inventario de proveedores','Revisar cómo la organización gestiona inventario de proveedores y registrar los antecedentes observados.','Documentar el estado de inventario de proveedores.','Alcance
 Identificar proveedores que tratan o pueden acceder a datos personales, incluyendo soporte, almacenamiento, servicios externos y subencargados.
 
 Cumplimiento esperado del control
@@ -850,7 +851,7 @@ Cumplimiento esperado del control
 3. Se relacionan contratos, evaluación de riesgo, garantías y fecha de revisión para cada proveedor.
 
 Naturaleza y aplicabilidad
-Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Encargados y proveedores','Identificar proveedores que tratan o pueden acceder a datos personales, incluyendo soporte, almacenamiento, servicios externos y subencargados.','Evidencias sugeridas
+Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Identificar proveedores que tratan o pueden acceder a datos personales, incluyendo soporte, almacenamiento, servicios externos y subencargados.','Evidencias sugeridas
 Inventario de proveedores, compras, contratos, cuentas de soporte y lista de subencargados.
 
 Cómo verificar
@@ -868,8 +869,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,31),
-('PR-032','Condiciones de tratamiento por proveedores','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-032','Condiciones de tratamiento por proveedores','Revisar cómo la organización gestiona condiciones de tratamiento por proveedores y registrar los antecedentes observados.','Documentar el estado de condiciones de tratamiento por proveedores.','Alcance
 Formalizar por escrito las instrucciones y condiciones del tratamiento por encargados, sin permitir que el proveedor determine usos propios no autorizados.
 
 Cumplimiento esperado del control
@@ -878,7 +879,7 @@ Cumplimiento esperado del control
 3. La subdelegación dispone de autorización previa, específica y escrita en el régimen reformado y mantiene las responsabilidades y condiciones pertinentes.
 
 Naturaleza y aplicabilidad
-Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Encargados y proveedores','Formalizar por escrito las instrucciones y condiciones del tratamiento por encargados, sin permitir que el proveedor determine usos propios no autorizados.','Evidencias sugeridas
+Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Formalizar por escrito las instrucciones y condiciones del tratamiento por encargados, sin permitir que el proveedor determine usos propios no autorizados.','Evidencias sugeridas
 Contrato o mandato firmado, anexos de tratamiento, instrucciones y autorizaciones de subdelegación.
 
 Cómo verificar
@@ -896,8 +897,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,32),
-('PR-033','Evaluación de proveedores','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-033','Evaluación de proveedores','Revisar cómo la organización gestiona evaluación de proveedores y registrar los antecedentes observados.','Documentar el estado de evaluación de proveedores.','Alcance
 Comprobar antes y durante la contratación que el proveedor puede cumplir las instrucciones y ofrecer protección acorde al riesgo.
 
 Cumplimiento esperado del control
@@ -906,7 +907,7 @@ Cumplimiento esperado del control
 3. Se revisa al cambiar el servicio o ante incidentes y se mantiene evidencia de seguimiento.
 
 Naturaleza y aplicabilidad
-Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Encargados y proveedores','Comprobar antes y durante la contratación que el proveedor puede cumplir las instrucciones y ofrecer protección acorde al riesgo.','Evidencias sugeridas
+Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Comprobar antes y durante la contratación que el proveedor puede cumplir las instrucciones y ofrecer protección acorde al riesgo.','Evidencias sugeridas
 Cuestionarios, informes, pruebas, compromisos correctivos y decisión de contratación.
 
 Cómo verificar
@@ -924,8 +925,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,33),
-('PR-034','Identificación de transferencias','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-034','Identificación de transferencias','Revisar cómo la organización gestiona identificación de transferencias y registrar los antecedentes observados.','Documentar el estado de identificación de transferencias.','Alcance
 Detectar comunicaciones, cesiones y transferencias al exterior, incluyendo accesos remotos, nube, soporte y flujos dentro de grupos empresariales.
 
 Cumplimiento esperado del control
@@ -934,7 +935,7 @@ Cumplimiento esperado del control
 3. No se presume que pertenecer al mismo grupo, usar nube o cifrar elimina la necesidad de análisis.
 
 Naturaleza y aplicabilidad
-Combina obligaciones legales con criterios operativos recomendados para demostrar su ejecución. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Transferencias de datos','Detectar comunicaciones, cesiones y transferencias al exterior, incluyendo accesos remotos, nube, soporte y flujos dentro de grupos empresariales.','Evidencias sugeridas
+Combina obligaciones legales con criterios operativos recomendados para demostrar su ejecución. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Detectar comunicaciones, cesiones y transferencias al exterior, incluyendo accesos remotos, nube, soporte y flujos dentro de grupos empresariales.','Evidencias sugeridas
 Mapa de transferencias, contratos, ubicaciones de almacenamiento y soporte, integraciones.
 
 Cómo verificar
@@ -952,8 +953,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,34),
-('PR-035','Destinatarios de datos documentados','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-035','Destinatarios de datos documentados','Revisar cómo la organización gestiona destinatarios de datos documentados y registrar los antecedentes observados.','Documentar el estado de destinatarios de datos documentados.','Alcance
 Conocer a quién se comunican datos y bajo qué finalidad y condiciones, distinguiendo al destinatario que decide usos propios del encargado.
 
 Cumplimiento esperado del control
@@ -962,7 +963,7 @@ Cumplimiento esperado del control
 3. Se limita el intercambio al alcance autorizado y se pueden comunicar rectificaciones, supresiones u oposiciones a receptores pertinentes.
 
 Naturaleza y aplicabilidad
-Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Transferencias de datos','Conocer a quién se comunican datos y bajo qué finalidad y condiciones, distinguiendo al destinatario que decide usos propios del encargado.','Evidencias sugeridas
+Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Conocer a quién se comunican datos y bajo qué finalidad y condiciones, distinguiendo al destinatario que decide usos propios del encargado.','Evidencias sugeridas
 Registro de destinatarios, instrumentos de cesión, contratos de encargo y comunicaciones de actualización.
 
 Cómo verificar
@@ -980,8 +981,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,35),
-('PR-036','Análisis de transferencias internacionales','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-036','Análisis de transferencias internacionales','Revisar cómo la organización gestiona análisis de transferencias internacionales y registrar los antecedentes observados.','Documentar el estado de análisis de transferencias internacionales.','Alcance
 Evaluar la habilitación y garantías antes de transferir datos a otros países, además de la licitud general del tratamiento.
 
 Cumplimiento esperado del control
@@ -990,7 +991,7 @@ Cumplimiento esperado del control
 3. Las excepciones sin adecuación ni garantías se analizan para transferencias específicas y no habituales, sin usar un consentimiento genérico para justificar servicios recurrentes.
 
 Naturaleza y aplicabilidad
-Exigencia condicionada al tratamiento y a los supuestos legales; documentar su aplicabilidad antes de evaluar. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Transferencias de datos','Evaluar la habilitación y garantías antes de transferir datos a otros países, además de la licitud general del tratamiento.','Evidencias sugeridas
+Exigencia condicionada al tratamiento y a los supuestos legales; documentar su aplicabilidad antes de evaluar. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Evaluar la habilitación y garantías antes de transferir datos a otros países, además de la licitud general del tratamiento.','Evidencias sugeridas
 Análisis por flujo, decisión de adecuación aplicable, cláusulas y garantías, autorizaciones y aviso al titular.
 
 Cómo verificar
@@ -1008,8 +1009,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,36),
-('PR-037','Gestión de accesos','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-037','Gestión de accesos','Revisar cómo la organización gestiona gestión de accesos y registrar los antecedentes observados.','Documentar el estado de gestión de accesos.','Alcance
 Restringir acceso a datos personales a personas y servicios autorizados según funciones y riesgo, desde el alta hasta la baja.
 
 Cumplimiento esperado del control
@@ -1018,7 +1019,7 @@ Cumplimiento esperado del control
 3. Se aplican autenticación y trazabilidad adecuadas al riesgo, con protección especial de accesos administrativos y datos sensibles.
 
 Naturaleza y aplicabilidad
-Combina obligaciones legales con criterios operativos recomendados para demostrar su ejecución. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Seguridad de la información','Restringir acceso a datos personales a personas y servicios autorizados según funciones y riesgo, desde el alta hasta la baja.','Evidencias sugeridas
+Combina obligaciones legales con criterios operativos recomendados para demostrar su ejecución. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Restringir acceso a datos personales a personas y servicios autorizados según funciones y riesgo, desde el alta hasta la baja.','Evidencias sugeridas
 Matriz de accesos, altas y bajas, configuración de autenticación y registros de acceso.
 
 Cómo verificar
@@ -1036,8 +1037,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','HIGH',true,true,37),
-('PR-038','Revisión de privilegios','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-038','Revisión de privilegios','Revisar cómo la organización gestiona revisión de privilegios y registrar los antecedentes observados.','Documentar el estado de revisión de privilegios.','Alcance
 Revisar privilegios existentes para retirar accesos innecesarios, acumulados o incompatibles con la función actual.
 
 Cumplimiento esperado del control
@@ -1046,7 +1047,7 @@ Cumplimiento esperado del control
 3. Cambios de función y desvinculaciones disparan revisión sin esperar al ciclo ordinario.
 
 Naturaleza y aplicabilidad
-Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Seguridad de la información','Revisar privilegios existentes para retirar accesos innecesarios, acumulados o incompatibles con la función actual.','Evidencias sugeridas
+Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Revisar privilegios existentes para retirar accesos innecesarios, acumulados o incompatibles con la función actual.','Evidencias sugeridas
 Recertificación de permisos, listados de cuentas, solicitudes y pruebas de retiro.
 
 Cómo verificar
@@ -1064,8 +1065,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','HIGH',true,true,38),
-('PR-039','Protección de respaldos','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-039','Protección de respaldos','Revisar cómo la organización gestiona protección de respaldos y registrar los antecedentes observados.','Documentar el estado de protección de respaldos.','Alcance
 Proteger copias de respaldo y comprobar que permitan recuperar disponibilidad e integridad sin ampliar indebidamente acceso o conservación.
 
 Cumplimiento esperado del control
@@ -1074,7 +1075,7 @@ Cumplimiento esperado del control
 3. Se prueba restauración y se evita reactivar datos borrados o privilegios revocados después de una recuperación.
 
 Naturaleza y aplicabilidad
-Combina obligaciones legales con criterios operativos recomendados para demostrar su ejecución. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Seguridad de la información','Proteger copias de respaldo y comprobar que permitan recuperar disponibilidad e integridad sin ampliar indebidamente acceso o conservación.','Evidencias sugeridas
+Combina obligaciones legales con criterios operativos recomendados para demostrar su ejecución. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Proteger copias de respaldo y comprobar que permitan recuperar disponibilidad e integridad sin ampliar indebidamente acceso o conservación.','Evidencias sugeridas
 Política de respaldos, configuración, bitácoras, control de acceso y pruebas de recuperación.
 
 Cómo verificar
@@ -1092,8 +1093,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','HIGH',true,true,39),
-('PR-040','Medidas de seguridad documentadas','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-040','Medidas de seguridad documentadas','Revisar cómo la organización gestiona medidas de seguridad documentadas y registrar los antecedentes observados.','Documentar el estado de medidas de seguridad documentadas.','Alcance
 Establecer medidas técnicas y organizativas capaces de proteger confidencialidad, integridad, disponibilidad y resiliencia de los datos.
 
 Cumplimiento esperado del control
@@ -1102,7 +1103,7 @@ Cumplimiento esperado del control
 3. Se registran responsables, resultados de pruebas, brechas y correcciones y se revisan instrucciones diferenciadas de la Agencia cuando sean aplicables.
 
 Naturaleza y aplicabilidad
-Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Seguridad de la información','Establecer medidas técnicas y organizativas capaces de proteger confidencialidad, integridad, disponibilidad y resiliencia de los datos.','Evidencias sugeridas
+Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Establecer medidas técnicas y organizativas capaces de proteger confidencialidad, integridad, disponibilidad y resiliencia de los datos.','Evidencias sugeridas
 Análisis de riesgos, política, configuraciones, pruebas de seguridad y planes correctivos.
 
 Cómo verificar
@@ -1120,8 +1121,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','HIGH',true,true,40),
-('PR-041','Procedimiento de incidentes','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-041','Procedimiento de incidentes','Revisar cómo la organización gestiona procedimiento de incidentes y registrar los antecedentes observados.','Documentar el estado de procedimiento de incidentes.','Alcance
 Disponer de un procedimiento para detectar, contener, investigar y remediar vulneraciones de seguridad y decidir las comunicaciones legalmente exigibles.
 
 Cumplimiento esperado del control
@@ -1130,7 +1131,7 @@ Cumplimiento esperado del control
 3. Contempla comunicación adicional a titulares o representantes para los supuestos del artículo 14 sexies, como datos sensibles, niños menores de catorce años o datos económicos, financieros, bancarios o comerciales, y obligaciones sectoriales.
 
 Naturaleza y aplicabilidad
-Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Gestión de incidentes','Disponer de un procedimiento para detectar, contener, investigar y remediar vulneraciones de seguridad y decidir las comunicaciones legalmente exigibles.','Evidencias sugeridas
+Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Disponer de un procedimiento para detectar, contener, investigar y remediar vulneraciones de seguridad y decidir las comunicaciones legalmente exigibles.','Evidencias sugeridas
 Plan de respuesta, matriz de decisión, contactos, simulacros y modelos de comunicación.
 
 Cómo verificar
@@ -1148,8 +1149,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','HIGH',true,true,41),
-('PR-042','Registro de incidentes','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-042','Registro de incidentes','Revisar cómo la organización gestiona registro de incidentes y registrar los antecedentes observados.','Documentar el estado de registro de incidentes.','Alcance
 Registrar antecedentes y decisiones de incidentes para reconstruir qué ocurrió, cómo se protegieron los titulares y qué mejoras se ejecutaron.
 
 Cumplimiento esperado del control
@@ -1158,7 +1159,7 @@ Cumplimiento esperado del control
 3. El registro limita acceso y retención de datos del incidente y distingue hechos confirmados, hipótesis y actualizaciones.
 
 Naturaleza y aplicabilidad
-Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Gestión de incidentes','Registrar antecedentes y decisiones de incidentes para reconstruir qué ocurrió, cómo se protegieron los titulares y qué mejoras se ejecutaron.','Evidencias sugeridas
+Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Registrar antecedentes y decisiones de incidentes para reconstruir qué ocurrió, cómo se protegieron los titulares y qué mejoras se ejecutaron.','Evidencias sugeridas
 Registro de incidentes y comunicaciones, cronología, informe técnico y comprobantes de acciones.
 
 Cómo verificar
@@ -1176,8 +1177,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','HIGH',true,true,42),
-('PR-043','Responsables de respuesta','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-043','Responsables de respuesta','Revisar cómo la organización gestiona responsables de respuesta y registrar los antecedentes observados.','Documentar el estado de responsables de respuesta.','Alcance
 Asignar y preparar a quienes coordinan respuesta técnica, decisiones legales, comunicaciones y relación con proveedores ante un incidente.
 
 Cumplimiento esperado del control
@@ -1186,7 +1187,7 @@ Cumplimiento esperado del control
 3. Los proveedores conocen su obligación de avisar al responsable y el equipo practica escalamiento y respuesta.
 
 Naturaleza y aplicabilidad
-Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Gestión de incidentes','Asignar y preparar a quienes coordinan respuesta técnica, decisiones legales, comunicaciones y relación con proveedores ante un incidente.','Evidencias sugeridas
+Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Asignar y preparar a quienes coordinan respuesta técnica, decisiones legales, comunicaciones y relación con proveedores ante un incidente.','Evidencias sugeridas
 Roles de respuesta, contactos, acuerdos con proveedores, actas y simulacros.
 
 Cómo verificar
@@ -1204,8 +1205,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','HIGH',true,true,43),
-('PR-044','Revisión de proyectos nuevos','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-044','Revisión de proyectos nuevos','Revisar cómo la organización gestiona revisión de proyectos nuevos y registrar los antecedentes observados.','Documentar el estado de revisión de proyectos nuevos.','Alcance
 Integrar protección de datos en el diseño de proyectos, productos, adquisiciones y modificaciones antes de tratar datos y durante su operación.
 
 Cumplimiento esperado del control
@@ -1214,7 +1215,7 @@ Cumplimiento esperado del control
 3. Se registran riesgos pendientes y condiciones de aprobación y se determina si corresponde evaluación de impacto.
 
 Naturaleza y aplicabilidad
-Combina obligaciones legales con criterios operativos recomendados para demostrar su ejecución. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Privacidad desde el diseño','Integrar protección de datos en el diseño de proyectos, productos, adquisiciones y modificaciones antes de tratar datos y durante su operación.','Evidencias sugeridas
+Combina obligaciones legales con criterios operativos recomendados para demostrar su ejecución. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Integrar protección de datos en el diseño de proyectos, productos, adquisiciones y modificaciones antes de tratar datos y durante su operación.','Evidencias sugeridas
 Checklist de diseño, requisitos de proyecto, revisiones y pruebas de aceptación.
 
 Cómo verificar
@@ -1232,8 +1233,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,44),
-('PR-045','Evaluación previa de riesgos','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-045','Evaluación previa de riesgos','Revisar cómo la organización gestiona evaluación previa de riesgos y registrar los antecedentes observados.','Documentar el estado de evaluación previa de riesgos.','Alcance
 Evaluar riesgos para derechos y libertades antes de iniciar un tratamiento y realizar una evaluación de impacto cuando sea obligatoria.
 
 Cumplimiento esperado del control
@@ -1242,7 +1243,7 @@ Cumplimiento esperado del control
 3. La evaluación describe operaciones y fines, necesidad y proporcionalidad, riesgos y mitigaciones, considera listas e instrucciones aplicables de la Agencia y registra decisión y seguimiento.
 
 Naturaleza y aplicabilidad
-Exigencia condicionada al tratamiento y a los supuestos legales; documentar su aplicabilidad antes de evaluar. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Privacidad desde el diseño','Evaluar riesgos para derechos y libertades antes de iniciar un tratamiento y realizar una evaluación de impacto cuando sea obligatoria.','Evidencias sugeridas
+Exigencia condicionada al tratamiento y a los supuestos legales; documentar su aplicabilidad antes de evaluar. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Evaluar riesgos para derechos y libertades antes de iniciar un tratamiento y realizar una evaluación de impacto cuando sea obligatoria.','Evidencias sugeridas
 Examen de aplicabilidad, evaluación de impacto cuando proceda, mitigaciones y aprobación previa.
 
 Cómo verificar
@@ -1260,8 +1261,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,45),
-('PR-046','Configuración de privacidad','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-046','Configuración de privacidad','Revisar cómo la organización gestiona configuración de privacidad y registrar los antecedentes observados.','Documentar el estado de configuración de privacidad.','Alcance
 Configurar sistemas para tratar por defecto solo los datos necesarios y limitar exposición, duración y accesibilidad desde su primera utilización.
 
 Cumplimiento esperado del control
@@ -1270,7 +1271,7 @@ Cumplimiento esperado del control
 3. Se comprueban valores por defecto tras cambios de versión y en cuentas nuevas, sin depender de que el titular corrija configuraciones excesivas.
 
 Naturaleza y aplicabilidad
-Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Privacidad desde el diseño','Configurar sistemas para tratar por defecto solo los datos necesarios y limitar exposición, duración y accesibilidad desde su primera utilización.','Evidencias sugeridas
+Desarrolla obligaciones legales; aplicar las condiciones y el régimen temporal de la referencia normativa. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Configurar sistemas para tratar por defecto solo los datos necesarios y limitar exposición, duración y accesibilidad desde su primera utilización.','Evidencias sugeridas
 Configuraciones iniciales, especificaciones, capturas y pruebas con cuentas nuevas.
 
 Cómo verificar
@@ -1288,8 +1289,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,46),
-('PR-047','Formación del personal','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-047','Formación del personal','Revisar cómo la organización gestiona formación del personal y registrar los antecedentes observados.','Documentar el estado de formación del personal.','Alcance
 Preparar al personal para reconocer y ejecutar sus obligaciones de privacidad en las tareas que realmente desempeña.
 
 Cumplimiento esperado del control
@@ -1298,7 +1299,7 @@ Cumplimiento esperado del control
 3. Se actualiza por cambios relevantes y se ofrecen refuerzos cuando se detectan errores.
 
 Naturaleza y aplicabilidad
-Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Capacitación','Preparar al personal para reconocer y ejecutar sus obligaciones de privacidad en las tareas que realmente desempeña.','Evidencias sugeridas
+Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Preparar al personal para reconocer y ejecutar sus obligaciones de privacidad en las tareas que realmente desempeña.','Evidencias sugeridas
 Plan de formación, materiales por rol, participación y ejercicios de comprensión.
 
 Cómo verificar
@@ -1316,8 +1317,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,47),
-('PR-048','Registro de capacitaciones','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-048','Registro de capacitaciones','Revisar cómo la organización gestiona registro de capacitaciones y registrar los antecedentes observados.','Documentar el estado de registro de capacitaciones.','Alcance
 Conservar constancia suficiente de la formación impartida para identificar cobertura, pendientes y necesidades de refuerzo.
 
 Cumplimiento esperado del control
@@ -1326,7 +1327,7 @@ Cumplimiento esperado del control
 3. Se protege el registro como dato personal y se conserva con plazo y acceso justificados.
 
 Naturaleza y aplicabilidad
-Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Capacitación','Conservar constancia suficiente de la formación impartida para identificar cobertura, pendientes y necesidades de refuerzo.','Evidencias sugeridas
+Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Conservar constancia suficiente de la formación impartida para identificar cobertura, pendientes y necesidades de refuerzo.','Evidencias sugeridas
 Registro de asistencia, contenidos, evaluaciones y seguimiento de pendientes.
 
 Cómo verificar
@@ -1344,8 +1345,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,48),
-('PR-049','Inducción en privacidad','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-049','Inducción en privacidad','Revisar cómo la organización gestiona inducción en privacidad y registrar los antecedentes observados.','Documentar el estado de inducción en privacidad.','Alcance
 Incorporar instrucciones de privacidad al ingreso o cambio de función antes de conceder acceso a datos personales.
 
 Cumplimiento esperado del control
@@ -1354,7 +1355,7 @@ Cumplimiento esperado del control
 3. Se adapta la inducción a temporales, terceros y cambios de puesto y se refuerzan condiciones de salida.
 
 Naturaleza y aplicabilidad
-Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Capacitación','Incorporar instrucciones de privacidad al ingreso o cambio de función antes de conceder acceso a datos personales.','Evidencias sugeridas
+Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Incorporar instrucciones de privacidad al ingreso o cambio de función antes de conceder acceso a datos personales.','Evidencias sugeridas
 Checklist de ingreso, material, constancia de recepción y autorizaciones de acceso.
 
 Cómo verificar
@@ -1372,8 +1373,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,49),
-('PR-050','Repositorio documental','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-050','Repositorio documental','Revisar cómo la organización gestiona repositorio documental y registrar los antecedentes observados.','Documentar el estado de repositorio documental.','Alcance
 Mantener documentos y evidencias localizables que permitan demostrar decisiones y ejecución de privacidad sin recopilar datos personales innecesarios.
 
 Cumplimiento esperado del control
@@ -1382,7 +1383,7 @@ Cumplimiento esperado del control
 3. Evita duplicados sin control y minimiza datos de titulares en evidencias, usando muestras anonimizadas o redactadas cuando sea posible.
 
 Naturaleza y aplicabilidad
-Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Documentación y evidencias','Mantener documentos y evidencias localizables que permitan demostrar decisiones y ejecución de privacidad sin recopilar datos personales innecesarios.','Evidencias sugeridas
+Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Mantener documentos y evidencias localizables que permitan demostrar decisiones y ejecución de privacidad sin recopilar datos personales innecesarios.','Evidencias sugeridas
 Índice documental, permisos, enlaces a registros y muestras de evidencias.
 
 Cómo verificar
@@ -1400,8 +1401,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,50),
-('PR-051','Versionado de documentos','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-051','Versionado de documentos','Revisar cómo la organización gestiona versionado de documentos y registrar los antecedentes observados.','Documentar el estado de versionado de documentos.','Alcance
 Controlar versiones para saber qué instrucciones, políticas y avisos estaban vigentes cuando se obtuvo consentimiento o se tomó una decisión.
 
 Cumplimiento esperado del control
@@ -1410,7 +1411,7 @@ Cumplimiento esperado del control
 3. Consentimientos y decisiones enlazan la versión aplicable y los cambios relevantes se comunican a sus destinatarios.
 
 Naturaleza y aplicabilidad
-Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Documentación y evidencias','Controlar versiones para saber qué instrucciones, políticas y avisos estaban vigentes cuando se obtuvo consentimiento o se tomó una decisión.','Evidencias sugeridas
+Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Controlar versiones para saber qué instrucciones, políticas y avisos estaban vigentes cuando se obtuvo consentimiento o se tomó una decisión.','Evidencias sugeridas
 Historial de versiones, políticas y avisos fechados, registro de publicación y enlaces de consentimiento.
 
 Cómo verificar
@@ -1428,8 +1429,8 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,51),
-('PR-052','Revisión y aprobación documental','Alcance
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.'),
+('PR-052','Revisión y aprobación documental','Revisar cómo la organización gestiona revisión y aprobación documental y registrar los antecedentes observados.','Documentar el estado de revisión y aprobación documental.','Alcance
 Asegurar que políticas, procedimientos y avisos sean revisados por personas competentes, aprobados y coherentes con los tratamientos efectivos.
 
 Cumplimiento esperado del control
@@ -1438,7 +1439,7 @@ Cumplimiento esperado del control
 3. Se programa revisión por riesgo y ante cambios legales, de sistemas o de finalidades y se verifica publicación y aplicación.
 
 Naturaleza y aplicabilidad
-Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Documentación y evidencias','Asegurar que políticas, procedimientos y avisos sean revisados por personas competentes, aprobados y coherentes con los tratamientos efectivos.','Evidencias sugeridas
+Práctica de gestión para apoyar y demostrar obligaciones legales; su formato no es una exigencia legal universal. Los criterios de la reforma se evalúan como preparación hasta el 30 de noviembre de 2026 y como exigibles desde el 1 de diciembre de 2026 cuando corresponda. El resultado de este control no certifica el cumplimiento integral de la ley.','Asegurar que políticas, procedimientos y avisos sean revisados por personas competentes, aprobados y coherentes con los tratamientos efectivos.','Evidencias sugeridas
 Actas o flujos de aprobación, matriz documental, calendario y comprobación de aplicación.
 
 Cómo verificar
@@ -1456,5 +1457,13 @@ https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01
 Vigencia de la reforma: artículo primero transitorio de Ley 21.719.
 https://www.bcn.cl/leychile/Navegar/imprimir?idNorma=1209272
 
-Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.','PENDING','MEDIUM',true,true,52)
-on conflict(code) do nothing;
+Verificar además normativa sectorial, excepciones e instrucciones vigentes de la autoridad para el caso concreto. No se presume emitida ninguna instrucción, adecuación o modelo de la Agencia.')
+)
+update public.controls as c
+set description=v.description, objective=v.objective, guidance=v.guidance, normative_reference=v.normative_reference
+from content as v
+where c.code=v.code and c.title=v.title
+  and c.description=v.old_description and c.objective=v.old_objective
+  and c.guidance='Solicitar antecedentes al responsable, revisar documentación disponible y registrar alcance, limitaciones y observaciones. La aplicabilidad y el análisis jurídico requieren revisión profesional.'
+  and c.normative_reference='Pendiente de revisión jurídica. Validar normativa aplicable y referencias específicas antes de utilizar este control como criterio jurídico.'
+  and c.legal_review_status='PENDING';

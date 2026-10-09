@@ -317,3 +317,11 @@ El alta y el cambio de responsable de un hallazgo permiten únicamente Sin asign
 Migración: `20261009040745_finding_client_assignees.sql`. El frontend requiere redespliegue en Dokploy. Pruebas: `tests/workflow.test.ts` y selector del recorrido de navegador `scripts/check-ui.ts`.
 
 Estado: migración `20261009040745_finding_client_assignees.sql` aplicada en PrivacyAudit `pbihajfbbcbbdvoqpggy`; verificación SQL remota con rollback aprobada. Prueba focalizada: `npm run test:ui:finding-assignees`, incluye creación/edición, organización sin clientes y conservación de una asignación histórica después de retirar la membresía. Pendiente redesplegar Next.js en Dokploy.
+
+## Catálogo ampliado — 9 de octubre de 2026
+
+Los 52 controles PR-001 a PR-052 incluyen alcance, cumplimiento esperado, evidencias sugeridas, forma de verificación y referencias a artículos de Ley 19.628 actual y reformada por Ley 21.719. Los deberes del régimen desde el 1 de diciembre de 2026 se distinguen de los actuales y de las prácticas recomendadas. La revisión jurídica permanece PENDING; el catálogo no es exhaustivo ni certifica cumplimiento.
+
+Fuente editorial: `docs/catalog/privacy-controls.json`. Metodología y mapa normativo: `docs/references/control-catalog.md`. El script `scripts/privacy-control-catalog.ts --check` comprueba sincronización del seed y de esta migración; revisiones futuras requieren una migración nueva sin reescribir la aplicada.
+
+Migración `20261009043231_enrich_privacy_control_catalog.sql` aplicada a PrivacyAudit `pbihajfbbcbbdvoqpggy`: 52 definiciones actualizadas, configuración e identidades conservadas; 52 snapshots históricos intactos. La migración respeta textos personalizados y controles revisados. El seed para instalaciones nuevas contiene el mismo catálogo y no sobrescribe códigos existentes. Las nuevas evaluaciones incorporan el texto ampliado; las anteriores conservan su historia. Cambio de datos disponible sin redespliegue de Next.js; no modifica UI ni agrega comunicaciones externas.

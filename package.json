@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test --test-concurrency=2 tests/*.test.ts",
-    "test:db": "tsx --test --test-concurrency=2 tests/database.test.ts tests/workflow.test.ts tests/evidence.test.ts tests/phase6.test.ts tests/admin-accounts.test.ts tests/memberships.test.ts tests/account-management.test.ts tests/account-profile.test.ts tests/organizations.test.ts tests/controls.test.ts tests/reports.test.ts tests/password-reset.test.ts",
+    "test:db": "tsx --test --test-concurrency=2 tests/database.test.ts tests/workflow.test.ts tests/evidence.test.ts tests/phase6.test.ts tests/admin-accounts.test.ts tests/memberships.test.ts tests/account-management.test.ts tests/account-profile.test.ts tests/organizations.test.ts tests/controls.test.ts tests/reports.test.ts tests/password-reset.test.ts tests/control-catalog.test.ts",
     "test:ui": "tsx scripts/check-ui.ts",
     "test:ui:finding-assignees": "tsx scripts/check-finding-assignees-ui.ts",
     "test:ui:evidence": "tsx scripts/check-evidence-ui.ts",
