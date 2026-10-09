@@ -5,7 +5,7 @@ import { requireUser } from '@/features/auth/queries';
 import { z } from '@/lib/validation';
 import { Button } from '@/components/ui/button';
 import { Pagination, pageNumber, searchTerm } from '@/components/table-tools';
-import { taskLabels, severityLabels } from './schemas';
+import { taskLabels, severityLabels, findingCode } from './schemas';
 import { organizationScope, assignees } from './queries';
 import { WorkflowNav } from './nav';
 export async function TaskList({ params }: { params: Record<string, string | undefined> }) {
@@ -39,12 +39,29 @@ export async function TaskList({ params }: { params: Record<string, string | und
     assignees(scope?.organization.id),
   ]);
   if (error || orgError) throw new Error('No se pudieron cargar las tareas.');
+  const findingIds = [...new Set(data.map((task) => task.finding_id))];
+  const { data: findings, error: findingError } = findingIds.length
+    ? await db.from('findings').select('id,title,code,assessment_id').in('id', findingIds)
+    : { data: [], error: null };
+  if (findingError) throw new Error('No se pudieron cargar los hallazgos de las tareas.');
+  const assessmentIds = [...new Set(findings.map((finding) => finding.assessment_id))];
+  const { data: assessments, error: assessmentError } = assessmentIds.length
+    ? await db.from('assessments').select('id,name').in('id', assessmentIds)
+    : { data: [], error: null };
+  if (assessmentError) throw new Error('No se pudieron cargar las evaluaciones de las tareas.');
+  const findingsById = new Map(findings.map((finding) => [finding.id, finding]));
+  const findingNames = new Map(
+    findings.map((finding) => [finding.id, `${findingCode(finding.code)} · ${finding.title}`]),
+  );
+  const assessmentNames = new Map(assessments.map((assessment) => [assessment.id, assessment.name]));
   return (
     <>
       <div>
-        <h1 className="page-title">Tareas</h1>
+        <h1 className="page-title">
+          {scope ? `Tareas ${scope.organization.legal_name}` : 'Tareas'}
+        </h1>
         <p className="muted mt-2">
-          {scope?.organization.legal_name || 'Acciones asignadas y revisión del consultor.'}
+          Acciones asignadas y revisión del consultor.
           {profile.role === 'CLIENT' && ' Solo se muestran tareas asignadas a usted.'}
         </p>
       </div>
@@ -140,6 +157,8 @@ export async function TaskList({ params }: { params: Record<string, string | und
             <tr>
               <th>Tarea</th>
               <th>Organización</th>
+              <th>Evaluación</th>
+              <th>Hallazgo</th>
               <th>Prioridad</th>
               <th>Responsable</th>
               <th>Fecha objetivo</th>
@@ -159,6 +178,13 @@ export async function TaskList({ params }: { params: Record<string, string | und
                 </td>
                 <td className="min-w-36">
                   {orgs.find((o) => o.id === t.organization_id)?.legal_name}
+                </td>
+                <td className="min-w-48 max-w-sm break-words">
+                  {assessmentNames.get(findingsById.get(t.finding_id)?.assessment_id || '') ||
+                    'Evaluación no disponible'}
+                </td>
+                <td className="min-w-48 max-w-sm break-words">
+                  {findingNames.get(t.finding_id) || 'Hallazgo no disponible'}
                 </td>
                 <td>{severityLabels[t.priority]}</td>
                 <td>
