@@ -74,6 +74,8 @@ export const auditActionLabels: Record<string, string> = {
   ADMIN_ACCOUNT_DELETED: 'Cuenta eliminada por administrador',
   ACCOUNT_CONTACT_UPDATED: 'Datos de contacto actualizados',
   ADMIN_ORGANIZATION_DELETED: 'Organización y datos eliminados por administrador',
+  REPORT_GENERATED: 'Informe publicado',
+  REPORT_DOWNLOAD: 'Descarga de informe preparada',
   CREATE: 'Creación',
   UPDATE: 'Actualización',
   DELETE: 'Eliminación',
@@ -98,6 +100,7 @@ export const auditActionLabels: Record<string, string> = {
   AUTH_TOKEN_REVOKED: 'Token revocado',
 };
 export const auditEntityLabels: Record<string, string> = {
+  reports: 'Informes',
   authentication: 'Autenticación',
   administration: 'Administración',
   profiles: 'Usuarios y roles',

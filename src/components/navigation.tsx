@@ -19,6 +19,7 @@ export function Navigation({ admin }: { admin: boolean }) {
     ['/findings', 'Hallazgos', ListChecks],
     ['/tasks', 'Tareas', ClipboardList],
     ['/evidence', 'Evidencias', FolderOpen],
+    ['/reports', 'Informes', ClipboardList],
     ['/action-plan', 'Plan de acción', ListChecks],
     ...(admin ? [['/administration', 'Administración', Users] as const] : []),
     ['/account', 'Mi cuenta', UserRound],

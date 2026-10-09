@@ -70,7 +70,7 @@ export function evaluationMetrics(items: { status: ControlStatus }[]) {
   return { total, evaluated, progress: total ? Math.round((evaluated / total) * 100) : 0, counts };
 }
 
-const snapshotSchema = z.object({
+export const snapshotSchema = z.object({
   code: z.string(),
   title: z.string(),
   description: z.string(),

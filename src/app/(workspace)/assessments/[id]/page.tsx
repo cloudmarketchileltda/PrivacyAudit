@@ -31,7 +31,11 @@ export default async function Page({
   if (error || !data) notFound();
   const assessment = data as Assessment;
   const [{ data: org }, { data: manager }, responses] = await Promise.all([
-    db.from('organizations').select('legal_name').eq('id', assessment.organization_id).single(),
+    db
+      .from('organizations')
+      .select('legal_name,status')
+      .eq('id', assessment.organization_id)
+      .single(),
     db.rpc('can_manage_organization', { org: assessment.organization_id }),
     allResponses(db, id),
   ]);
@@ -53,7 +57,10 @@ export default async function Page({
   return (
     <>
       <div>
-        <Link className="muted underline" href={`/assessments?organization=${assessment.organization_id}`}>
+        <Link
+          className="muted underline"
+          href={`/assessments?organization=${assessment.organization_id}`}
+        >
           {org?.legal_name}
         </Link>
         <h1 className="page-title mt-2 break-words">{assessment.name}</h1>
@@ -61,6 +68,16 @@ export default async function Page({
           {assessmentLabels[assessment.status]} ·{' '}
           {assessment.description || 'Sin descripción de alcance'}
         </p>
+      </div>
+      <div className="flex flex-wrap gap-3">
+        <Button asChild variant="outline">
+          <Link href={`/reports?organization=${assessment.organization_id}`}>Ver informes</Link>
+        </Button>
+        {manager && org?.status === 'ACTIVE' && (
+          <Button asChild>
+            <Link href={`/reports/new?assessment=${id}`}>Publicar informe PDF</Link>
+          </Button>
+        )}
       </div>
       <section className="panel">
         <div className="flex flex-wrap gap-4 items-end justify-between">

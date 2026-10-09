@@ -12,7 +12,7 @@
 
 7. Fase 5 autorizada el 7 de octubre de 2026: evidencias, Storage privado, comentarios y revisión; verificar RLS de archivos y registros, recorridos de navegador y build. Fase 5 implementada.
 
-8. Fase 6 autorizada el 7 de octubre de 2026: dashboard operativo, métricas, filtros, notificaciones internas y auditoría administrativa ampliada solicitada por el usuario. Fase 6 implementada; fases 7 y 8 pendientes.
+8. Fase 6 autorizada el 7 de octubre de 2026: dashboard operativo, métricas, filtros, notificaciones internas y auditoría administrativa ampliada solicitada por el usuario. Fase 6 implementada; fase 7 implementada localmente tras autorización del 8 de octubre, fase 8 pendiente.
 
 ## Decisiones
 
@@ -31,7 +31,7 @@
 
 ## Límite
 
-La entrega anterior terminaba en fase 4: incorpora tratamientos, hallazgos, tareas, plan de acción y trazabilidad de estos nuevos flujos. La entrega anterior no incluía evidencias ni Storage. La fase 5 los incorpora; fase 6 incorpora notificaciones internas y auditoría ampliada. Informes e IA siguen pendientes. En fases anteriores, los comentarios de consultor pertenecían a la respuesta de control; fase 5 añade conversaciones independientes en hallazgos, tareas y evidencias. El cliente puede agregar su comentario al control mediante una RPC limitada a ese campo; no puede editar estados ni comentarios del consultor. La entidad independiente de comentarios se incorpora en fase 5.
+La entrega anterior terminaba en fase 4: incorpora tratamientos, hallazgos, tareas, plan de acción y trazabilidad de estos nuevos flujos. La entrega anterior no incluía evidencias ni Storage. La fase 5 los incorpora; fase 6 incorpora notificaciones internas y auditoría ampliada. Fase 7 incorpora informes; IA sigue aplazada. En fases anteriores, los comentarios de consultor pertenecían a la respuesta de control; fase 5 añade conversaciones independientes en hallazgos, tareas y evidencias. El cliente puede agregar su comentario al control mediante una RPC limitada a ese campo; no puede editar estados ni comentarios del consultor. La entidad independiente de comentarios se incorpora en fase 5.
 
 Los tratamientos usan FK a organización y autor; el borrado administrativo completo de la organización incluye sus tratamientos. Nombre, finalidad y al menos una categoría de titulares y datos son obligatorios. Base de licitud propuesta seleccionable con explicación editable, sin validación jurídica automática. Responsable interno, sistemas, destinatarios y proveedores son texto en esta fase, como permite el maestro; no representan nuevas entidades relacionadas.
 
@@ -39,7 +39,7 @@ Estados de tratamiento: DRAFT, ACTIVE y ARCHIVED. El consultor puede archivar y 
 
 ## Acuerdos para la continuación
 
-El 5 de octubre de 2026 el usuario acordó continuar el MVP incrementalmente según las fases 3–8 del documento maestro y posteriormente autorizó iniciar fase 3. El 6 de octubre de 2026 el usuario autorizó continuar con fase 4 pese al pendiente de validación con sesiones reales, que se conserva explícitamente. El 7 de octubre de 2026 el usuario autorizó fase 5. El usuario autorizó completar fase 6 con auditoría administrativa ampliada; las fases 7–8 siguen pendientes.
+El 5 de octubre de 2026 el usuario acordó continuar el MVP incrementalmente según las fases 3–8 del documento maestro y posteriormente autorizó iniciar fase 3. El 6 de octubre de 2026 el usuario autorizó continuar con fase 4 pese al pendiente de validación con sesiones reales, que se conserva explícitamente. El 7 de octubre de 2026 el usuario autorizó fase 5. El usuario autorizó completar fase 6 con auditoría administrativa ampliada; fase 7 autorizada el 8 de octubre de 2026 e implementada localmente; fase 8 pendiente.
 
 - Orden previsto: tratamientos; hallazgos, tareas y plan de acción; evidencias y revisión; dashboard y notificaciones internas; informe PDF; cierre con auditoría, seguridad, demo y revisión UX.
 - La IA queda aplazada hasta después de completar y validar el MVP. No implementar ahora asistentes de redacción, recomendaciones generadas ni integraciones con modelos.
@@ -136,3 +136,15 @@ La FK RESTRICT de `assessment_controls.control_id` prohíbe eliminar una definic
 ORG-04 prevalece sobre TODAS las reglas de conservación, inmutabilidad, archivo y restricciones de borrado para los datos de la organización, actuales y futuros. La finalización elimina las aplicaciones/snapshots y el resto del negocio aunque la organización esté archivada o existan controles aplicados y evidencias confirmadas. Las definiciones globales y cuentas son compartidas: se eliminan los datos/vínculos de la organización, conservando otras organizaciones. El control del catálogo solo queda disponible para borrado cuando se elimina su última aplicación. La limpieza SQL/Storage existente mantiene esta prioridad; no se agregan bypass de autorización ni GUC editables por clientes.
 
 La migración `20261008142527_admin_control_catalog.sql` está aplicada en PrivacyAudit (`pbihajfbbcbbdvoqpggy`). `scripts/verify-controls-remote.sql` pasó localmente y en Supabase con rollback: catálogo restringido, edición sin alterar snapshots, rechazo de borrado aplicado incluso inactivo, eliminación prioritaria de organización archivada y protección del control compartido hasta retirar su última aplicación. No se borraron organizaciones ni controles reales. Advisors sin nuevas advertencias; continúa la advertencia previa de protección de contraseñas filtradas ([referencia](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection)).
+
+## Fase 7 autorizada el 8 de octubre de 2026
+
+Implementada localmente: generación de PDF e historial `reports`. El documento maestro se conserva, la fase 8 y la IA siguen pendientes. La migración y el redespliegue remoto quedan pendientes.
+
+La publicación es una operación privada SECURITY DEFINER con comprobación de identidad/gestión actual, organización activa y locks compatibles con su eliminación. Se justifica el privilegio para construir una copia completa del informe, validar relaciones y auditar sin conceder INSERT al cliente. El wrapper público es SECURITY INVOKER, con grants explícitos; la tabla solo permite SELECT con RLS. Todas las secciones se capturan en una única sentencia SQL con la misma vista MVCC. La copia conserva FK reales a organización/evaluación/autor y snapshot versión 1 de datos variables.
+
+Decisión de acceso: un informe publicado es un documento compartido de la organización, con todas las tareas de la evaluación; la advertencia de publicación lo comunica. Las políticas operativas de tareas/evidencias mantienen su alcance anterior. Solo nombres profesionales y responsables, sin contactos privados ni credenciales. RLS y la RPC de descarga comprueban membresía actual.
+
+PDFKit en Node genera A4 con Noto Sans OFL local, tablas con cabecera repetida, texto fluido y números de página. Se incluye el renderer y sus fuentes en el standalone de Next.js; no depende de navegador/Python en producción. Se guarda la copia estructurada, sin otro blob. Actualizar el renderer en el futuro exige mantener compatibilidad con versión 1; se garantiza conservación de datos, no identidad binaria entre descargas. El snapshot se publica antes de preparar el PDF: un fallo de renderer se puede reintentar desde el mismo informe, sin perder ni regenerar datos.
+
+Tratamientos de toda la organización y evidencias generales se identifican en el alcance; controles/hallazgos/tareas son exclusivos de una evaluación. Revisiones incluyen decisiones previas sin sobrescribir; se excluyen cargas incompletas y pendientes. No se inventan conclusiones ni referencias. El borrado administrativo elimina informes antes de evaluaciones y permite el borrado de snapshots inmutables únicamente durante su finalización; se probó junto con ORG-04.

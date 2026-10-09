@@ -690,6 +690,39 @@ export interface Database {
         };
         Relationships: [];
       };
+      reports: {
+        Row: {
+          id: string;
+          organization_id: string;
+          assessment_id: string;
+          created_by: string;
+          title: string;
+          snapshot: Json;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          assessment_id: string;
+          created_by: string;
+          title: string;
+          snapshot: Json;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          organization_id?: string;
+          assessment_id?: string;
+          created_by?: string;
+          title?: string;
+          snapshot?: Json;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       tasks: {
         Row: {
           id: string;
@@ -764,6 +797,16 @@ export interface Database {
         Returns: string;
       };
       create_organization: { Args: { payload: Json }; Returns: string };
+      create_report: {
+        Args: {
+          assessment: string;
+          report_title: string;
+          executive_summary: string;
+          report_scope: string;
+          conclusions: string;
+        };
+        Returns: string;
+      };
       dashboard_summary: {
         Args: { search?: string; org_status?: string; attention?: string; page?: number };
         Returns: Json;
@@ -792,6 +835,7 @@ export interface Database {
       read_notifications: { Args: { notification?: string }; Returns: undefined };
       record_audit_export: { Args: { filters: Json; record_count: number }; Returns: undefined };
       record_evidence_download: { Args: { evidence: string }; Returns: undefined };
+      record_report_download: { Args: { report: string }; Returns: undefined };
       register_consultant: { Args: Record<string, never>; Returns: undefined };
       reserve_account_contact_mutation: {
         Args: {

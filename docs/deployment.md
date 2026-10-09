@@ -86,3 +86,9 @@ supabase functions deploy admin-manage-user --project-ref pbihajfbbcbbdvoqpggy
 ```
 
 Mantener `verify_jwt=false`: el handler verifica el JWT con `getUser` y el rol actual. Ninguna credencial privilegiada va en Next.js. Verificar con cuentas reales modificación de nombre/correo, rechazo de correo duplicado, borrado de una cuenta sin relaciones históricas y bloqueo de borrado de cuenta administrativa o con historial. El cambio de correo se habilita administrativamente sin enviar una notificación operativa ni acreditar propiedad del buzón. Verificar que cuentas y auditoría muestran diez filas y desplazamiento interno. El backend local de navegador reproduce operaciones SQL y autorización, pero no demuestra el comportamiento completo de GoTrue ni sesiones reales remotas.
+
+## Fase 7 informes PDF
+
+La migración local `20261009001355_phase7_reports.sql` está pendiente de aplicar a PrivacyAudit `pbihajfbbcbbdvoqpggy`. Revisar destino y dry-run antes de aplicar. Después publicar el código y redesplegar Next.js en Dokploy. No requiere desplegar Functions nuevas ni agregar variables, buckets o credenciales privilegiadas. El PDF usa Node/PDFKit con fuentes Noto Sans incluidas mediante `outputFileTracingIncludes`; el contenedor standalone debe conservar `src/features/reports/fonts` y los datos de PDFKit. La descarga no necesita Chrome, Python ni red externa.
+
+Verificar con sesiones reales: consultor publica desde una evaluación, cliente de esa organización descarga, otro cliente/consultor no puede acceder por UUID y la retirada de membresía retira acceso. Confirmar publicación/descarga en auditoría administrativa. El borrado completo debe retirar todos los informes antes de evaluaciones; probar únicamente en una organización desechable autorizada. Las pruebas locales no acreditan estos recorridos remotos.

@@ -22,6 +22,7 @@ const tables = new Set([
   'evidence',
   'comments',
   'notifications',
+  'reports',
 ]);
 const functions = new Set([
   'register_consultant',
@@ -47,6 +48,8 @@ const functions = new Set([
   'purge_audit_logs',
   'record_audit_export',
   'record_evidence_download',
+  'create_report',
+  'record_report_download',
 ]);
 function identifier(value: string) {
   if (!/^[a-z_]+$/.test(value)) throw new Error('Invalid identifier');

@@ -11,6 +11,12 @@ const actionStyles = {
 } as const;
 
 export const generalConfig = {
+  reports: {
+    titleMaxLength: 200,
+    textMinLength: 10,
+    textMaxLength: 5000,
+    timeZone: 'America/Santiago',
+  },
   account: {
     fullNameMaxLength: 160,
     emailMaxLength: 254,

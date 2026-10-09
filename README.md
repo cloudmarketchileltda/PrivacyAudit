@@ -12,7 +12,7 @@ Migración `20261008184033_account_contact_and_self_service.sql` aplicada en Pri
 
 El logo del menú vuelve al home (`/`, con el dashboard como destino del sistema configurado). El footer compartido aparece en todas las páginas y contiene Facebook, Instagram, LinkedIn, YouTube, tres páginas públicas con textos iniciales —`/politicas-de-privacidad`, `/terminos-y-condiciones`, `/aviso-legal`— y un enlace al [texto oficial de la Ley 21.719 en BCN](https://www.bcn.cl/leychile/navegar?idNorma=1209272). Los destinos se editan en `src/config/general.ts`, sección `site`; las redes usan URLs genéricas aprobadas por el usuario hasta recibir los perfiles reales. Los textos se mantienen en `src/app/(legal)` y quedan pendientes de completar con los datos del operador. Este cambio de frontend requiere redesplegar Next.js para verse en producción.
 
-Aplicación SaaS de gestión y diagnóstico de protección de datos, orientada a consultores y organizaciones chilenas. La implementación de esta entrega cubre las fases 1 a 6 del documento maestro `PrivacyAudit.docx`. Los resultados de evaluación requieren interpretación jurídica y profesional.
+Aplicación SaaS de gestión y diagnóstico de protección de datos, orientada a consultores y organizaciones chilenas. La implementación de esta entrega cubre las fases 1 a 7 del documento maestro `PrivacyAudit.docx`. Los resultados de evaluación requieren interpretación jurídica y profesional.
 
 ## Alcance
 
@@ -22,9 +22,10 @@ Aplicación SaaS de gestión y diagnóstico de protección de datos, orientada a
 - Fase 4: hallazgos desde controles históricos, tareas correctivas asignadas, envío a revisión por cliente, devolución con observaciones y aprobación por consultor, cierre justificado y plan de acción con filtros y progreso. Incluye historial protegido de cambios.
 - Fase 5: evidencias por organización, control histórico, hallazgo o tarea; archivos privados en Supabase Storage; entregas corregidas sin sobrescribir originales; revisión por consultor, comentarios cronológicos y trazabilidad. Búsqueda, filtros, orden y paginación de evidencias.
 - Fase 6: dashboard operativo con métricas objetivas y filtros, notificaciones internas por destinatario y auditoría ampliada en Administración, con exportación CSV y borrado exclusivo del administrador.
-- Las fases 7–8 quedan pendientes. No hay informe PDF. El perfil de tratamiento de fase 1 y el registro de actividades de fase 3 son módulos distintos.
+- Fase 7: informes PDF publicados por evaluación, copias inmutables, historial, acceso por organización y auditoría de publicación/descarga.
+- La fase 8 queda pendiente. El perfil de tratamiento de fase 1 y el registro de actividades de fase 3 son módulos distintos.
 
-Para la continuación acordada el 5 de octubre de 2026, la IA queda aplazada hasta completar y validar el MVP. Las notificaciones operativas externas (WhatsApp, email, SMS y otros canales) quedan fuera por ahora; se incorporan las notificaciones internas de fase 6 y se conservan los correos de autenticación existentes. La hoja de ruta y las condiciones de avance están en `docs/architecture.md`; las fases 7–8 todavía no están implementadas.
+Para la continuación acordada el 5 de octubre de 2026, la IA queda aplazada hasta completar y validar el MVP. Las notificaciones operativas externas (WhatsApp, email, SMS y otros canales) quedan fuera por ahora; se incorporan las notificaciones internas de fase 6 y se conservan los correos de autenticación existentes. La hoja de ruta y las condiciones de avance están en `docs/architecture.md`; la fase 7 está implementada localmente y la fase 8 permanece pendiente.
 
 ## Requisitos y ejecución
 
@@ -139,6 +140,7 @@ src/features/workflow/       Hallazgos, tareas y plan de acción
 src/features/evidence/       Carga, revisión, entregas y comentarios
 src/features/notifications/  Notificaciones internas y lectura por destinatario
 src/features/audit/          Filtros, CSV y conservación administrativa
+src/features/reports/        Publicación de snapshots e informes PDF
 src/lib/supabase/            Clientes de navegador y servidor
 supabase/                   Configuración, migraciones y seed
 scripts/                    Herramientas de verificación
@@ -285,3 +287,17 @@ No se elimina un control aplicado en ninguna organización, aunque esté inactiv
 **La eliminación completa de una organización prevalece sobre todas las otras reglas de conservación y eliminación de sus datos relacionados.** Se eliminan también aplicaciones/snapshots de controles, registros de organizaciones archivadas y evidencias confirmadas. Definiciones globales y cuentas compartidas permanecen; se retiran todos sus vínculos y datos de esa organización. Si el control ya no tiene aplicaciones en ninguna organización, el administrador puede eliminarlo. Esta precedencia queda documentada en las reglas y AGENTS.md y cubierta por pruebas SQL y navegador (`npm run test:ui:controls`).
 
 Migración `20261008142527_admin_control_catalog.sql` aplicada en PrivacyAudit `pbihajfbbcbbdvoqpggy`. Pruebas SQL locales y remotas con rollback, pruebas de navegador, lint, typecheck y build aprobados. La prueba completa de organizaciones cubre además archivo, riesgo aceptado, versiones de evidencias confirmadas y prioridad del borrado. Pendiente redesplegar Next.js en Dokploy y recorrer con sesiones y archivos reales.
+
+## Uso de fase 7
+
+1. Abra una evaluación de una organización activa y seleccione **Publicar informe PDF**. Solo el consultor con membresía de gestión o SUPER_ADMIN puede publicar.
+2. Complete título, resumen ejecutivo, alcance y conclusiones. Los tres textos profesionales admiten de 10 a 5.000 caracteres; no se generan conclusiones jurídicas automáticamente. Una evaluación no completada puede producir un diagnóstico parcial: el informe identifica su estado y pendientes.
+3. Publicar comparte inmediatamente el informe completo con todos los miembros actuales de la organización. Incluye el plan con todas las tareas y responsables de esa evaluación, aunque el cliente vea solo sus tareas en el módulo operativo. La advertencia del formulario explica este alcance. No incluye contactos privados de cuentas, correos de Auth ni blobs de evidencias.
+4. En **Informes**, abra una versión y seleccione **Descargar PDF**. Hay portada y diez secciones: resumen, alcance, metodología, avance, resultados por categoría, hallazgos por severidad, plan de acción, tratamientos, evidencias revisadas y conclusiones; incluye el disclaimer del maestro y paginación A4.
+5. Cada publicación conserva una copia histórica transaccional; ediciones posteriores de la organización/evaluación no alteran sus datos. No se permite editar ni borrar informes individualmente. Para corregir publique otro. La eliminación administrativa completa de una organización sí borra todos sus informes y auditoría asociada, conforme a ORG-04.
+
+Los controles/hallazgos/tareas son de la evaluación seleccionada; tratamientos de toda la organización (incluidos borradores y archivados, identificados); evidencias revisadas vinculadas a esa evaluación y documentos generales de la organización. Incluye versiones anteriores y decisiones de aceptación/rechazo/cambios con fecha y revisor. Excluye cargas incompletas y entregas pendientes; no adjunta los archivos originales. Avance de evaluación y progreso de tareas son métricas de registro/aprobación, sin score legal.
+
+La tabla `reports` conserva FK reales a organización, evaluación y autor; la RPC autorizada obtiene el snapshot íntegro en una sentencia SQL, sin truncamiento de 1.000 filas. RLS limita lectura por membresía actual. El PDF se prepara en servidor con PDFKit y fuentes Noto Sans OFL incorporadas; no requiere Chromium, Python ni servicios externos en producción. No guarda otro blob: cada descarga vuelve a representar la copia guardada con el renderer versión 1. La ruta autentica, vuelve a comprobar autorización al registrar la descarga y responde sin caché. `REPORT_GENERATED` registra publicación; `REPORT_DOWNLOAD` registra preparación, sin afirmar que el destinatario abrió o recibió el documento.
+
+Migración: `20261009001355_phase7_reports.sql`, generada por Supabase CLI y **pendiente de aplicar al proyecto remoto**. Antes de desplegar Next.js, identificar el proyecto PrivacyAudit `pbihajfbbcbbdvoqpggy`, revisar `supabase db push --dry-run` y aplicar la nueva migración con el procedimiento de despliegue. La publicación del código en GitHub fue solicitada por el usuario. No se modificaron proyectos Supabase remotos ni se desplegó en Dokploy en esta entrega. Se mantiene el maestro original. Comprobación local: `npm run test:ui:reports` (adaptador aislado, sin acreditar Auth/PostgREST reales); `npm test` y `npm run test:db` incluyen permisos, snapshots, borrado y generación PDF. Resultados en `docs/verification.md`.

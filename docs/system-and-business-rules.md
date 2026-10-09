@@ -14,7 +14,7 @@ Este archivo reúne las reglas vigentes; las validaciones ejecutables están en 
 
 ## Regla prioritaria de eliminación de organizaciones
 
-**ORG-04 prevalece sobre TODAS las demás reglas de conservación, inmutabilidad, archivo y restricciones de eliminación de datos relacionados con la organización.** Después de la confirmación administrativa, se debe eliminar toda su información: evaluaciones y aplicaciones/snapshots de controles, tratamientos, hallazgos, tareas, entregas y versiones de evidencias, archivos, comentarios, membresías, invitaciones, avisos y auditoría asociada. Ninguna otra regla puede dejar registros de esa organización ni bloquear la limpieza por estar aplicada, archivada, cerrada o confirmada. Mantener esta precedencia al incorporar futuras tablas, FK o triggers.
+**ORG-04 prevalece sobre TODAS las demás reglas de conservación, inmutabilidad, archivo y restricciones de eliminación de datos relacionados con la organización.** Después de la confirmación administrativa, se debe eliminar toda su información: evaluaciones y aplicaciones/snapshots de controles, tratamientos, hallazgos, tareas, entregas y versiones de evidencias, archivos, informes y sus snapshots, comentarios, membresías, invitaciones, avisos y auditoría asociada. Ninguna otra regla puede dejar registros de esa organización ni bloquear la limpieza por estar aplicada, archivada, cerrada o confirmada. Mantener esta precedencia al incorporar futuras tablas, FK o triggers.
 
 La prioridad opera dentro del borrado autorizado de la organización; no concede permisos de administrador a otros roles. Las cuentas y definiciones globales del catálogo son entidades compartidas: se elimina por completo su vinculación y los datos de la organización, sin destruir información de otras organizaciones. Storage debe completarse mediante su API antes de finalizar la limpieza SQL; si falla, el borrado sigue pendiente y se reintenta hasta completar, sin comunicar éxito parcial.
 
@@ -95,10 +95,21 @@ Implementación: migraciones de fases 5–6, `src/features/evidence`, `src/featu
 - UI-02: catálogo de controles, organizaciones administrativas, cuentas y auditoría muestran como máximo diez filas visibles, con scroll y encabezado fijo. Abrir los detalles del log no debe aumentar la altura ni la cantidad de filas visibles. La página contiene 20 resultados; el viewport y la paginación son valores distintos. Usar las configuraciones compartidas.
 - UI-03: el logo de navegación vuelve al home (`/`, que redirige al dashboard o configuración según el entorno). Todas las páginas comparten un footer con cuatro redes sociales, Políticas de Privacidad, Términos y condiciones, Aviso Legal y enlace oficial a la Ley 21.719 en BCN. Las tres páginas legales son públicas y contienen textos iniciales revisables. Las redes usan enlaces genéricos hasta recibir perfiles oficiales; destinos centralizados en `generalConfig.site`. El footer permanece en el flujo del documento, sin cubrir el contenido.
 - SYS-04: el producto presenta avance de evaluación y métricas de gestión; no afirma certificación o cumplimiento jurídico garantizado. Las referencias normativas requieren revisión profesional, sin inferencias jurídicas automáticas.
-- SYS-05: alcance autorizado hasta fase 6; no iniciar fase 7, IA ni integraciones externas sin petición del usuario. El MVP completo todavía incluye fases pendientes.
+- SYS-05: fase 7 autorizada por el usuario el 8 de octubre de 2026; alcance hasta fase 7. No iniciar fase 8, IA ni integraciones externas sin petición del usuario. El MVP completo todavía incluye fases pendientes.
 
 ## Archivo de configuración general
 
 `src/config/general.ts` es la fuente pública de variantes y tamaños de botones, filas visibles, alturas/anchos de las grillas, tamaño de página, máximo de página y longitud de búsqueda. `src/lib/config.ts` conserva la lectura del entorno y utilidades de URL; `.env` sigue destinado a valores de entorno, no a reglas del negocio.
 
 Cambiar colores/tamaños/filas visibles requiere recompilar y redesplegar Next.js. Cambiar `pageSize`, el máximo de página o el límite de búsqueda requiere revisar las RPC SQL que aplican el mismo contrato; no basta con cambiar el frontend. Los límites de archivos y las reglas de acceso pertenecen al dominio y a Supabase, no se desactivan con una preferencia visual. Este archivo general puede importarse en el navegador: no agregar secretos.
+
+## Informes fase 7
+
+- INF-01: solo SUPER_ADMIN o consultor gestor publica un informe de una evaluación perteneciente a una organización activa, sin eliminación pendiente. Validar en servidor y RPC. Título de 2–200 caracteres y resumen/alcance/conclusiones de 10–5.000; límites en `generalConfig.reports` y SQL sincronizados.
+- INF-02: publicación inmediata para todos los miembros actuales de la organización; el formulario advierte que el plan incluye todas las tareas y responsables de la evaluación. La copia no incorpora contactos privados de cuentas ni Auth ni archivos originales. Esta lectura del informe publicado no amplía la lectura directa de tareas/evidencias operativas.
+- INF-03: organización, evaluación y autor con FK reales. Copia transaccional inmutable, sin datos de negocio aportados por el navegador. No editar ni borrar individualmente; ORG-04 elimina siempre informes y auditoría al borrar su organización.
+- INF-04: lectura/descarga según membresía actual, con verificación también en SQL. Retirar una membresía retira acceso. Descarga autenticada sin caché; no URLs públicas ni service role en Next.js.
+- INF-05: diez secciones del maestro, fuentes incorporadas y disclaimer. Resumen y conclusiones escritos por el profesional. No exigir evaluación completada para diagnósticos parciales; mostrar su estado, pendientes y métricas objetivas, sin certificación jurídica automática.
+- INF-06: snapshot de controles/hallazgos/tareas de una evaluación; tratamientos de toda la organización; evidencias confirmadas y revisadas vinculadas a esa evaluación o generales, incluidas versiones previas. La metodología explica este alcance. Auditar publicación y preparación de descarga, sin afirmar recepción del archivo.
+
+Implementación: `src/features/reports`, `/reports`, `/api/reports/[id]/download`, migración `20261009001355_phase7_reports.sql`. Pruebas: `tests/reports.test.ts` y `scripts/check-reports-ui.ts`.
