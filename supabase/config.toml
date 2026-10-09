@@ -423,3 +423,7 @@ verify_jwt = false
 [functions.admin-delete-organization]
 # Custom authentication verifies getUser and the current profile role.
 verify_jwt = false
+
+[functions.assessment-delete]
+# getUser verifies identity; SQL revalidates current role/membership on every step.
+verify_jwt = false

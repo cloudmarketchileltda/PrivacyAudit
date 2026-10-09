@@ -5,6 +5,7 @@ import { z } from '@/lib/validation';
 import { requireUser } from '@/features/auth/queries';
 import { Button } from '@/components/ui/button';
 import { ActionForm, Field } from '@/components/forms';
+import { DeleteAssessmentButton } from '@/features/assessments/delete-assessment-button';
 import { updateAssessment } from '@/features/assessments/actions';
 import { allResponses } from '@/features/assessments/queries';
 import {
@@ -73,7 +74,7 @@ export default async function Page({
         <Button asChild variant="outline">
           <Link href={`/reports?organization=${assessment.organization_id}`}>Ver informes</Link>
         </Button>
-        {manager && org?.status === 'ACTIVE' && (
+        {manager && org?.status === 'ACTIVE' && !assessment.deletion_pending && (
           <Button asChild>
             <Link href={`/reports/new?assessment=${id}`}>Publicar informe PDF</Link>
           </Button>
@@ -108,8 +109,20 @@ export default async function Page({
           Requiere interpretación profesional.
         </p>
       </section>
-      {manager && (
-        <details className="panel">
+      {assessment.deletion_pending && (
+        <p role="status" className="error-message">
+          Evaluación en eliminación. Sus datos están bloqueados; un administrador o consultor
+          asignado debe reintentar Eliminar para completar el borrado.
+        </p>
+      )}
+      {manager && org?.status === 'ACTIVE' && (
+        <div className="flex items-center gap-3">
+          <DeleteAssessmentButton id={id} name={assessment.name} redirectAfterDelete />
+          <span className="muted">Eliminar evaluación y todos sus datos relacionados</span>
+        </div>
+      )}
+      {manager && org?.status === 'ACTIVE' && !assessment.deletion_pending && (
+        <details className="panel" id="edit-assessment" open={filters.edit === '1'}>
           <summary className="font-semibold text-sm cursor-pointer">
             Editar nombre, alcance y estado de la evaluación
           </summary>

@@ -34,6 +34,7 @@
     "node_modules",
     "supabase/functions/admin-create-user/index.ts",
     "supabase/functions/admin-manage-user/index.ts",
-    "supabase/functions/admin-delete-organization/index.ts"
+    "supabase/functions/admin-delete-organization/index.ts",
+    "supabase/functions/assessment-delete/index.ts"
   ]
 }

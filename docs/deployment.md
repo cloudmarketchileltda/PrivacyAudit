@@ -102,3 +102,9 @@ Comprobar con una cuenta de prueba autorizada: crear CLIENT/CONSULTANT, entrar c
 ## Responsables de hallazgos — 9 de octubre de 2026
 
 Aplicada 20261009040745_finding_client_assignees.sql en PrivacyAudit pbihajfbbcbbdvoqpggy. No repetir migración. El trigger ya rechaza responsables nuevos que no sean CLIENT miembros de la organización, incluyendo llamadas directas. Redesplegar main en Dokploy para que el selector solo ofrezca clientes y Sin asignar. No requiere nuevas Functions ni variables. No se migran asignaciones históricas ni se cambian las reglas de tareas.
+
+## Evaluaciones: edición y borrado integral (9 de octubre de 2026)
+
+Supabase PrivacyAudit `pbihajfbbcbbdvoqpggy` ya tiene aplicadas `20261009045525_assessment_edit_delete.sql` y `20261009045727_assessment_pending_notifications.sql`, y `assessment-delete` v1 ACTIVE. No volver a aplicar manualmente esas versiones. La Function valida sesión con getUser y autorización actual por RPC; usa la credencial privilegiada exclusivamente para eliminar blobs mediante Storage API. En `supabase/config.toml` mantiene `verify_jwt=false` porque implementa autenticación propia, igual que los handlers administrativos existentes.
+
+Redesplegar el frontend desde `main` en Dokploy para mostrar los botones de edición/eliminación en Evaluaciones. Verificar con una evaluación de prueba y sesiones reales: administrador y consultor asignado disponibles, cliente/no asignado rechazados, cancelación, eliminación de dependencias/archivos y conservación de otra evaluación. El borrado es permanente; no usar una evaluación real que deba conservarse. Si falla, el marcador permanece y se reintenta Eliminar. Organizaciones archivadas deben reactivarse para el borrado individual, o puede utilizarse el borrado completo administrativo de la organización.

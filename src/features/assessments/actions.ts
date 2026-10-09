@@ -5,6 +5,7 @@ import { z } from '@/lib/validation';
 import { requireUser, requireManager } from '@/features/auth/queries';
 import type { ActionState } from '@/components/forms';
 import { assessmentSchema, responseSchema } from './schemas';
+import { assessmentDeletionConfirmation } from '../../../supabase/functions/_shared/assessment-deletion';
 export async function createAssessment(_: ActionState, data: FormData): Promise<ActionState> {
   const parsed = assessmentSchema.safeParse(Object.fromEntries(data));
   if (!parsed.success)
@@ -36,7 +37,12 @@ export async function saveResponse(_: ActionState, data: FormData): Promise<Acti
   if (readError || !response) return { error: 'Control no disponible.' };
   await requireManager(response.organization_id);
   const { id, ...values } = parsed.data;
-  const { error } = await db.from('assessment_controls').update(values).eq('id', id);
+  const { error } = await db
+    .from('assessment_controls')
+    .update(values)
+    .eq('id', id)
+    .select('id')
+    .single();
   if (error)
     return {
       error: 'No se pudo guardar. Si la evaluación está completada, reábrala antes de editar.',
@@ -64,11 +70,11 @@ export async function updateAssessment(_: ActionState, data: FormData): Promise<
   if (!assessment) return { error: 'Evaluación no disponible.' };
   await requireManager(assessment.organization_id);
   const { id, ...values } = parsed.data;
-  const { error } = await db.from('assessments').update(values).eq('id', id);
+  const { error } = await db.from('assessments').update(values).eq('id', id).select('id').single();
   if (error)
     return {
       error:
-        'Para completar la evaluación debe evaluar todos los controles. Revise los pendientes.',
+        'No se pudo guardar. Revise los controles pendientes, el estado de la organización y si la evaluación está en eliminación.',
     };
   revalidatePath(`/assessments/${id}`);
   revalidatePath('/assessments');
@@ -92,4 +98,34 @@ export async function saveClientComment(_: ActionState, data: FormData): Promise
   if (error) return { error: 'No tiene permiso para comentar este control.' };
   revalidatePath(`/assessments/${response.assessment_id}`);
   return { success: 'Comentario del cliente guardado.' };
+}
+
+export async function deleteAssessment(_: ActionState, data: FormData): Promise<ActionState> {
+  const id = z.uuid().safeParse(data.get('id'));
+  if (!id.success || data.get('confirmation') !== assessmentDeletionConfirmation)
+    return { error: 'Confirme la eliminación de una evaluación válida.' };
+  const { db } = await requireUser();
+  const { data: assessment } = await db
+    .from('assessments')
+    .select('organization_id')
+    .eq('id', id.data)
+    .single();
+  if (!assessment) return { error: 'Evaluación no disponible.' };
+  const { data: manager, error: permissionError } = await db.rpc('can_manage_organization', {
+    org: assessment.organization_id,
+  });
+  if (permissionError || !manager)
+    return { error: 'No tiene permisos para eliminar esta evaluación.' };
+  const { data: result, error } = await db.functions.invoke('assessment-delete', {
+    body: { assessment: id.data, confirmation: assessmentDeletionConfirmation },
+  });
+  revalidatePath('/', 'layout');
+  if (error || result?.success !== true)
+    return {
+      error:
+        'No se completó la eliminación. La evaluación puede estar bloqueada para terminar el borrado. Revise sus permisos y reintente Eliminar.',
+    };
+  if (data.get('redirect_after_delete') === '1')
+    redirect(`/assessments?organization=${assessment.organization_id}`);
+  return { success: 'Evaluación y todos sus datos relacionados eliminados.' };
 }

@@ -35,6 +35,7 @@ export interface ControlSnapshot {
   sort_order: number;
 }
 export interface Assessment {
+  deletion_pending: boolean;
   id: string;
   organization_id: string;
   name: string;

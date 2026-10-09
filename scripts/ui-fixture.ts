@@ -1,3 +1,4 @@
+import { assessmentDeletionHandler } from '../supabase/functions/assessment-delete/handler';
 import { deletionHandler } from '../supabase/functions/admin-delete-organization/handler';
 import { mutationHandler } from '../supabase/functions/admin-manage-user/handler';
 import { accountHandler } from '../supabase/functions/admin-create-user/handler';
@@ -199,6 +200,62 @@ export async function startFixture(port = 54331) {
         return;
       }
       const url = new URL(request.url || '/', `http://localhost:${port}`);
+      if (url.pathname === '/functions/v1/assessment-delete') {
+        const data = await body(request);
+        const actor = uid(request);
+        const handler = assessmentDeletionHandler({
+          async authorize() {
+            await identity(db, actor);
+            return (
+              (await db.query<{ role: string }>('select role from profiles where id=$1', [actor]))
+                .rows[0] ?? null
+            );
+          },
+          async prepare(assessment) {
+            await identity(db, actor);
+            await db.query("select prepare_assessment_deletion($1,'ELIMINAR EVALUACION')", [
+              assessment,
+            ]);
+            return (
+              await db.query<{ organization_id: string }>(
+                'select organization_id from assessments where id=$1',
+                [assessment],
+              )
+            ).rows[0].organization_id;
+          },
+          async files(assessment) {
+            await identity(db, actor);
+            return (
+              await db.query<{ paths: string[] }>('select assessment_deletion_files($1) paths', [
+                assessment,
+              ])
+            ).rows[0].paths;
+          },
+          async remove(paths) {
+            // Isolated Storage API adapter: remove both bytes and metadata, as the real API does.
+            await db.exec('reset role');
+            for (const path of paths) {
+              await db.query("delete from storage.objects where bucket_id='evidence' and name=$1", [
+                path,
+              ]);
+              files.delete(path);
+            }
+          },
+          async finish(assessment) {
+            await identity(db, actor);
+            await db.query('select finish_assessment_deletion($1)', [assessment]);
+          },
+        });
+        const result = await handler(
+          new Request(url, {
+            method: 'POST',
+            headers: { Authorization: String(request.headers.authorization || '') },
+            body: JSON.stringify(data),
+          }),
+        );
+        json(response, result.status, await result.json());
+        return;
+      }
       if (url.pathname === '/functions/v1/admin-delete-organization') {
         const data = await body(request);
         const actor = uid(request);

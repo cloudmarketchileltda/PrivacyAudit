@@ -1,5 +1,7 @@
 import { pageRange } from '@/config/general';
 import Link from 'next/link';
+import { Pencil } from 'lucide-react';
+import { DeleteAssessmentButton } from '@/features/assessments/delete-assessment-button';
 import { requireUser } from '@/features/auth/queries';
 import { Button } from '@/components/ui/button';
 import { Pagination, pageNumber, searchTerm } from '@/components/table-tools';
@@ -26,10 +28,30 @@ export default async function Page({
   const [{ data, count, error }, { data: organizations, error: orgError }, responses] =
     await Promise.all([
       query.range(...pageRange(page)),
-      db.from('organizations').select('id,legal_name').order('legal_name'),
+      db.from('organizations').select('id,legal_name,status').order('legal_name'),
       allResponses(db),
     ]);
   if (error || orgError) throw error || orgError;
+  const manageable = new Set<string>();
+  if (profile.role !== 'CLIENT') {
+    const permissions = await Promise.all(
+      (data || []).map(async (assessment) => {
+        const { data: allowed, error } = await db.rpc('can_manage_organization', {
+          org: assessment.organization_id,
+        });
+        if (error) throw error;
+        return allowed &&
+          organizations?.some(
+            (org) => org.id === assessment.organization_id && org.status === 'ACTIVE',
+          )
+          ? assessment.id
+          : null;
+      }),
+    );
+    permissions.forEach((id) => {
+      if (id) manageable.add(id);
+    });
+  }
   return (
     <>
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -90,6 +112,7 @@ export default async function Page({
               <th>Estado</th>
               <th>Avance de evaluación</th>
               <th>Creación</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -111,7 +134,11 @@ export default async function Page({
                     {organizations?.find((o) => o.id === assessment.organization_id)?.legal_name}
                   </td>
                   <td>
-                    <span className="badge">{assessmentLabels[assessment.status]}</span>
+                    <span className="badge">
+                      {assessment.deletion_pending
+                        ? 'En eliminación'
+                        : assessmentLabels[assessment.status]}
+                    </span>
                   </td>
                   <td>
                     {metrics.progress}%{' '}
@@ -120,6 +147,26 @@ export default async function Page({
                     </span>
                   </td>
                   <td className="whitespace-nowrap">{formatDate(assessment.created_at)}</td>
+                  <td>
+                    {manageable.has(assessment.id) && (
+                      <div className="flex gap-2">
+                        {!assessment.deletion_pending && (
+                          <Button
+                            asChild
+                            variant="edit"
+                            size="icon"
+                            title="Modificar evaluación"
+                            aria-label={`Modificar evaluación: ${assessment.name}`}
+                          >
+                            <Link href={`/assessments/${assessment.id}?edit=1#edit-assessment`}>
+                              <Pencil size={18} aria-hidden="true" />
+                            </Link>
+                          </Button>
+                        )}
+                        <DeleteAssessmentButton id={assessment.id} name={assessment.name} />
+                      </div>
+                    )}
+                  </td>
                 </tr>
               );
             })}

@@ -90,6 +90,7 @@ export interface Database {
           consultant_id: string;
           created_at: string;
           updated_at: string;
+          deletion_pending: boolean;
         };
         Insert: {
           id?: string;
@@ -102,6 +103,7 @@ export interface Database {
           consultant_id: string;
           created_at?: string;
           updated_at?: string;
+          deletion_pending?: boolean;
         };
         Update: {
           id?: string;
@@ -114,6 +116,7 @@ export interface Database {
           consultant_id?: string;
           created_at?: string;
           updated_at?: string;
+          deletion_pending?: boolean;
         };
         Relationships: [];
       };
@@ -789,6 +792,7 @@ export interface Database {
         };
         Returns: Json;
       };
+      assessment_deletion_files: { Args: { assessment: string }; Returns: string[] };
       can_manage_organization: { Args: { org: string }; Returns: boolean };
       cancel_account_mutation: { Args: { reservation_id: string }; Returns: undefined };
       cancel_account_provisioning: { Args: { reservation_id: string }; Returns: undefined };
@@ -814,6 +818,7 @@ export interface Database {
       };
       finalize_evidence: { Args: { item: string }; Returns: undefined };
       finding_progress: { Args: { finding: string }; Returns: Json };
+      finish_assessment_deletion: { Args: { assessment: string }; Returns: undefined };
       finish_organization_deletion: { Args: { org: string }; Returns: undefined };
       invite_client: { Args: { org: string; target_email: string }; Returns: string };
       manage_member: {
@@ -826,6 +831,10 @@ export interface Database {
       };
       organization_deletion_files: { Args: { org: string }; Returns: string[] };
       password_reset_completed: { Args: { receipt: string }; Returns: boolean };
+      prepare_assessment_deletion: {
+        Args: { assessment: string; confirmation: string };
+        Returns: undefined;
+      };
       prepare_organization_deletion: {
         Args: { org: string; confirmation: string };
         Returns: undefined;

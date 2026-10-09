@@ -31,3 +31,5 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+Cambio de evaluaciones autorizado el 9 de octubre de 2026: SUPER_ADMIN y CONSULTANT con membresía CONSULTANT actual en la organización pueden modificar y eliminar evaluaciones en organizaciones activas. El borrado confirmado elimina TODOS los datos vinculados a esa evaluación (controles aplicados, hallazgos, tareas, evidencias y versiones/archivos, comentarios, notificaciones, informes e historial relacionado), con prioridad sobre sus reglas de conservación e inmutabilidad. Conservar otras evaluaciones y datos generales de la organización, cuentas y catálogo global. Borrar blobs mediante Storage API y permitir reintentar el borrado pendiente. ORG-04 conserva prioridad absoluta.
