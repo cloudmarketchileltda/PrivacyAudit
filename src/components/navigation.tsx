@@ -35,8 +35,8 @@ export function Navigation({ admin }: { admin: boolean }) {
           href={href}
           aria-current={path.startsWith(href) ? 'page' : undefined}
           className={cn(
-            'flex items-center gap-3 whitespace-nowrap rounded-md px-3 py-3 text-sm text-slate-300 hover:bg-white/10 hover:text-white',
-            path.startsWith(href) && 'bg-white/10 text-white',
+            'flex items-center gap-3 whitespace-nowrap rounded-lg px-3 py-3 text-sm text-slate-300 hover:bg-white/10 hover:text-white',
+            path.startsWith(href) && 'bg-blue-600 text-white shadow-lg shadow-blue-950/20',
           )}
         >
           <Icon size={18} />

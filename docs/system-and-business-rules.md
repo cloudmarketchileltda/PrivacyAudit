@@ -143,3 +143,7 @@ ORG-08 — Exportación: exclusiva de SUPER_ADMIN, organización archivada y sin
 ORG-09 — Respaldos: borrado confirmado garantiza limpieza de base activa y Storage según el flujo existente; no equivale a borrado instantáneo de copias de infraestructura. Plazo real de expiración no verificado: no ofrecer una cifra contractual ni recuperación garantizada. Procedimiento en docs/retention-and-closure.md: restauración aislada, exclusión de organizaciones eliminadas y revisión previa a reabrir acceso. La documentación del procedimiento no constituye una automatización ni una prueba de restauración realizada.
 
 Configuración/textos compartidos: generalConfig.retention. Implementación: migration organization_closure_retention_export, export-package.ts y API administrativa de exportación; páginas legales actualizadas con política versionada. Se conserva el maestro original y no se inicia el resto de fase 8.
+
+## Identidad visual
+
+UI-02 — Continuidad con CloudMarket autorizada el 9 de octubre de 2026: logo original, Inter/Space Grotesk locales, azul profundo y azul principal. Configuración pública de marca en `generalConfig.site.brand`. Mantener UI-01: azul para acciones generales/rol, verde edición y rojo eliminación; estados y permisos conservan su significado. El enlace a CloudMarket es navegación pública y no sustituye la autenticación de PrivacyAudit.

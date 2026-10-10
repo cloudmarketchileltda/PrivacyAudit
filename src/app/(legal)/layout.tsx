@@ -11,7 +11,7 @@ export default function LegalLayout({ children }: { children: React.ReactNode })
           aria-label="PrivacyAudit — Ir al inicio"
           className="inline-flex items-center gap-2 rounded-md text-xl font-semibold"
         >
-          <ShieldCheck aria-hidden="true" className="text-teal-800" />
+          <ShieldCheck aria-hidden="true" className="text-blue-700" />
           PrivacyAudit
         </Link>
       </header>
@@ -19,7 +19,7 @@ export default function LegalLayout({ children }: { children: React.ReactNode })
         {children}
         <Link
           href={generalConfig.site.homeHref}
-          className="inline-block rounded-sm text-sm font-medium text-teal-800 underline"
+          className="inline-block rounded-sm text-sm font-medium text-blue-700 underline"
         >
           Volver al inicio
         </Link>

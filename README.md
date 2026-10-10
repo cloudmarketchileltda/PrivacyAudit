@@ -341,3 +341,7 @@ El borrado elimina controles aplicados, hallazgos, tareas, evidencias y todas su
 Backend aplicado en PrivacyAudit `pbihajfbbcbbdvoqpggy`: migraciones `20261009045525_assessment_edit_delete.sql` y `20261009045727_assessment_pending_notifications.sql`; Function `assessment-delete` v1 ACTIVE. Los avisos omiten ramas congeladas y mantienen operativas las otras evaluaciones. No se eliminó ninguna evaluación real: verificación remota con datos temporales y rollback. **Frontend pendiente de redespliegue en Dokploy** desde `main`; Supabase ya está preparado. La clave privilegiada permanece exclusivamente en la Function para Storage.
 
 Verificación: 39 pruebas aprobadas, lint, TypeScript, build y `npm run test:ui:assessments` con adaptador aislado. Script remoto: `scripts/verify-assessment-deletion-remote.sql`. El recorrido local y la SQL remota no acreditan un flujo autenticado completo con Auth y Storage reales en producción; realizarlo tras el redespliegue con una evaluación de prueba expresamente destinada a eliminación.
+
+### Identidad CloudMarket
+
+PrivacyAudit comparte logo, paleta y tipografías con CloudMarket. Las fuentes Inter y Space Grotesk se sirven localmente con sus licencias OFL; la marca y enlace de retorno se configuran en `generalConfig.site.brand`. La interfaz conserva los colores de acción azul/verde/rojo. Publicar el frontend requiere redespliegue en Dokploy; no se modifican DNS ni el código del sitio comercial.

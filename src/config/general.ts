@@ -5,7 +5,7 @@
  */
 // Cada color se define una vez; las variantes semánticas lo reutilizan.
 const actionStyles = {
-  general: 'bg-blue-700 text-white hover:bg-blue-800',
+  general: 'brand-primary text-white',
   modify: 'bg-green-700 text-white hover:bg-green-800',
   remove: 'bg-red-700 text-white hover:bg-red-800',
 } as const;
@@ -33,6 +33,11 @@ export const generalConfig = {
     contactMaxLengths: { address: 300, phone: 40, city: 120, country: 120 },
   },
   site: {
+    brand: {
+      name: 'CloudMarket',
+      href: 'https://www.cloudmarket.cl',
+      logo: '/brand/cloudmarket.png',
+    },
     homeHref: '/',
     legalLinks: [
       { href: '/politicas-de-privacidad', label: 'Políticas de Privacidad' },

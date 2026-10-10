@@ -1,3 +1,4 @@
+import { BrandLogo } from '@/components/brand-logo';
 import { ShieldCheck, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { generalConfig } from '@/config/general';
@@ -14,16 +15,23 @@ export default async function Layout({ children }: { children: React.ReactNode }
   if (error) throw error;
   return (
     <div className="flex-1 lg:grid lg:grid-cols-[240px_minmax(0,1fr)]">
-      <aside className="bg-[#152f3c] text-white p-4 lg:p-5 lg:sticky lg:top-0 lg:h-screen flex flex-col">
+      <aside className="brand-sidebar text-white p-4 lg:p-5 lg:sticky lg:top-0 lg:h-screen flex flex-col">
         <Link
           href={generalConfig.site.homeHref}
           aria-label="PrivacyAudit — Ir al inicio"
           title="Ir al inicio"
           className="flex gap-2 items-center rounded-md text-xl font-semibold mb-5 lg:mb-10"
         >
-          <ShieldCheck aria-hidden="true" className="text-teal-300" />
+          <ShieldCheck aria-hidden="true" className="text-blue-300" />
           PrivacyAudit
         </Link>
+        <a
+          href={generalConfig.site.brand.href}
+          className="mb-5 inline-flex w-fit rounded-lg bg-white p-2"
+          aria-label="Ir a CloudMarket"
+        >
+          <BrandLogo />
+        </a>
         <Navigation admin={profile.role === 'SUPER_ADMIN'} />
         <div className="mt-5 lg:mt-auto text-xs text-slate-400 lg:pt-8">
           Gestión de protección de datos
@@ -34,7 +42,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
       <div className="min-w-0">
         <header className="bg-white border-b border-slate-200 px-5 md:px-9 py-4 flex justify-between items-center gap-4">
           <p className="hidden sm:block text-xs uppercase tracking-[.14em] text-slate-500">
-            Programa de privacidad
+            PrivacyAudit · CloudMarket
           </p>
           <div className="flex items-center gap-3 ml-auto">
             <NotificationBell key={count || 0} initialCount={count || 0} />
