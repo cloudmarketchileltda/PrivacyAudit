@@ -291,3 +291,8 @@ Verificación remota posterior a la aplicación: `reports` con RLS y SELECT auth
 - ESLint y TypeScript aprobados. `tests/workflow.test.ts`: 2/2 aprobadas (relaciones, aislamiento, asignación, revisión, cierre y validación). No se repitió la suite completa para este cambio de presentación.
 - Recorrido focalizado temporal con Playwright/adaptador local: login y menú sin imagen CloudMarket, guía accesible, Plan de acción a 360/1440 px sin desbordamiento y navegación Hallazgo → Nueva tarea con finding correcto. Captura móvil inspeccionada. Artefactos no versionados en `artifacts/action-plan-review/`; no equivale a Auth/Storage remotos.
 - Build de producción aprobado. Frontend pendiente de redespliegue en Dokploy desde main; no se modificó el backend remoto.
+
+## Ayuda modal del Plan de acción — 10 de octubre de 2026
+
+La explicación anterior se trasladó sin cambios a un modal nativo, invocado mediante botón de icono CircleHelp junto al título. Button compartido, aria-label/title, título accesible y cierre mediante X/Cerrar/Escape. Playwright con fixture local comprobó a 360/1440 px: contenido inicialmente oculto, apertura, tres pasos, ausencia de desbordamiento, cierre por las tres vías y retorno de foco al icono. Captura móvil inspeccionada; artefactos no versionados en `artifacts/action-plan-help/`. Sin cambios SQL, permisos ni creación de planes.
+ESLint, TypeScript y build de producción aprobados. No se repitieron pruebas SQL para este cambio de presentación. Pendiente redesplegar frontend en Dokploy.

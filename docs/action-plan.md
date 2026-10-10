@@ -30,4 +30,4 @@ El informe PDF publicado contiene el plan completo de la organización conforme 
 - `src/features/workflow/actions.ts` y `queries.ts`: guardados, alcance actual y permisos.
 - Migraciones de fase 4 y evidencias: FK, transiciones y `finding_progress`.
 
-La revisión detectó un problema de descubrimiento: el módulo no explicaba cómo incorporar acciones. Se añadió una guía dentro de Plan de acción usando las rutas existentes. No se agregó una entidad nueva ni se cambió SQL, RLS o permisos.
+La revisión detectó un problema de descubrimiento: el módulo no explicaba cómo incorporar acciones. Se añadió una guía dentro de Plan de acción usando las rutas existentes. Desde el 10 de octubre de 2026, se consulta en un modal mediante el botón de icono de ayuda junto al título; el contenido permanece idéntico. No se agregó una entidad nueva ni se cambió SQL, RLS o permisos.

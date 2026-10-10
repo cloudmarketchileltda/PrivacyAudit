@@ -1,3 +1,4 @@
+import { HelpDialog } from '@/components/help-dialog';
 import { pageRange } from '@/config/general';
 import { calendarDate } from '@/features/workflow/schemas';
 import Link from 'next/link';
@@ -68,13 +69,40 @@ export async function FindingList({
       <div className="flex flex-wrap justify-between items-center gap-4">
         <div>
           {plan && scope && <p className="muted">{scope.organization.legal_name}</p>}
-          <h1 className="page-title">
-            {plan
-              ? 'Plan de acción'
-              : scope
-                ? `Hallazgos ${scope.organization.legal_name}`
-                : 'Hallazgos'}
-          </h1>
+          <div className="flex items-center gap-3">
+            <h1 className="page-title">
+              {plan
+                ? 'Plan de acción'
+                : scope
+                  ? `Hallazgos ${scope.organization.legal_name}`
+                  : 'Hallazgos'}
+            </h1>
+            {plan && (
+              <HelpDialog title="Cómo construir el plan de acción">
+                <p className="muted">
+                  El plan se construye con los hallazgos y sus tareas correctivas; no requiere crear
+                  un registro separado.
+                </p>
+                <ol className="list-decimal space-y-2 pl-5 text-sm leading-6">
+                  <li>Seleccione la organización en el filtro y pulse Filtrar.</li>
+                  <li>
+                    Cree un hallazgo asociado a una evaluación, o abra uno existente desde esta
+                    grilla.
+                  </li>
+                  <li>
+                    En el detalle del hallazgo, vaya a Tareas correctivas → Nueva tarea para definir
+                    la acción, responsable, prioridad y fecha objetivo.
+                  </li>
+                </ol>
+                <p className="muted">
+                  El administrador o consultor asignado crea las acciones en organizaciones activas
+                  y hallazgos abiertos. El cliente ejecuta sus tareas asignadas y las envía a
+                  revisión; el gestor las aprueba o devuelve. El progreso corresponde a tareas
+                  aprobadas sobre el total del hallazgo.
+                </p>
+              </HelpDialog>
+            )}
+          </div>
           <p className="muted mt-2">
             {plan
               ? 'Acciones correctivas y progreso de tareas aprobadas.'
@@ -93,33 +121,6 @@ export async function FindingList({
           </Button>
         ) : null}
       </div>
-      {plan && (
-        <section className="panel space-y-3" aria-labelledby="plan-help-title">
-          <h2 id="plan-help-title" className="section-title mb-0">
-            Cómo construir el plan de acción
-          </h2>
-          <p className="muted">
-            El plan se construye con los hallazgos y sus tareas correctivas; no requiere crear un
-            registro separado.
-          </p>
-          <ol className="list-decimal space-y-2 pl-5 text-sm leading-6">
-            <li>Seleccione la organización en el filtro y pulse Filtrar.</li>
-            <li>
-              Cree un hallazgo asociado a una evaluación, o abra uno existente desde esta grilla.
-            </li>
-            <li>
-              En el detalle del hallazgo, vaya a Tareas correctivas → Nueva tarea para definir la
-              acción, responsable, prioridad y fecha objetivo.
-            </li>
-          </ol>
-          <p className="muted">
-            El administrador o consultor asignado crea las acciones en organizaciones activas y
-            hallazgos abiertos. El cliente ejecuta sus tareas asignadas y las envía a revisión; el
-            gestor las aprueba o devuelve. El progreso corresponde a tareas aprobadas sobre el total
-            del hallazgo.
-          </p>
-        </section>
-      )}
       {scope && <WorkflowNav org={scope.organization.id} />}
       <form className="flex flex-wrap items-end gap-3">
         <label className="form-label flex-1 min-w-40">
