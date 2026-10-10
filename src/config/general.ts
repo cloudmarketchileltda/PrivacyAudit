@@ -36,7 +36,6 @@ export const generalConfig = {
     brand: {
       name: 'CloudMarket',
       href: 'https://www.cloudmarket.cl',
-      logo: '/brand/cloudmarket.png',
     },
     homeHref: '/',
     legalLinks: [

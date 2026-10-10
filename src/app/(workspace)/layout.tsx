@@ -1,4 +1,3 @@
-import { BrandLogo } from '@/components/brand-logo';
 import { ShieldCheck, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { generalConfig } from '@/config/general';
@@ -25,13 +24,6 @@ export default async function Layout({ children }: { children: React.ReactNode }
           <ShieldCheck aria-hidden="true" className="text-blue-300" />
           PrivacyAudit
         </Link>
-        <a
-          href={generalConfig.site.brand.href}
-          className="mb-5 inline-flex w-fit rounded-lg bg-white p-2"
-          aria-label="Ir a CloudMarket"
-        >
-          <BrandLogo />
-        </a>
         <Navigation admin={profile.role === 'SUPER_ADMIN'} />
         <div className="mt-5 lg:mt-auto text-xs text-slate-400 lg:pt-8">
           Gestión de protección de datos

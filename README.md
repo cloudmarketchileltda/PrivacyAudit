@@ -344,4 +344,6 @@ Verificación: 39 pruebas aprobadas, lint, TypeScript, build y `npm run test:ui:
 
 ### Identidad CloudMarket
 
-PrivacyAudit comparte logo, paleta y tipografías con CloudMarket. Las fuentes Inter y Space Grotesk se sirven localmente con sus licencias OFL; la marca y enlace de retorno se configuran en `generalConfig.site.brand`. La interfaz conserva los colores de acción azul/verde/rojo. Publicar el frontend requiere redespliegue en Dokploy; no se modifican DNS ni el código del sitio comercial.
+PrivacyAudit comparte paleta y tipografías con CloudMarket; el logo gráfico fue retirado por solicitud del usuario. Las fuentes Inter y Space Grotesk se sirven localmente con sus licencias OFL; la marca y enlace de retorno se configuran en `generalConfig.site.brand`. La interfaz conserva los colores de acción azul/verde/rojo. Publicar el frontend requiere redespliegue en Dokploy; no se modifican DNS ni el código del sitio comercial.
+
+El Plan de acción se construye con hallazgos y tareas: [guía operativa](docs/action-plan.md). No requiere un registro de plan separado.

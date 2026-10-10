@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { ShieldCheck, ArrowLeft } from 'lucide-react';
-import { BrandLogo } from '@/components/brand-logo';
 import { isConfigured } from '@/lib/config';
 import { generalConfig } from '@/config/general';
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
@@ -8,13 +7,6 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
     <main className="auth-surface flex flex-1 items-center justify-center px-5 py-10 md:py-16">
       <div className="grid w-full max-w-5xl items-center gap-8 lg:grid-cols-2 lg:gap-20">
         <div className="auth-intro">
-          <a
-            href={generalConfig.site.brand.href}
-            aria-label="Ir a CloudMarket"
-            className="mb-7 inline-flex rounded-xl bg-white px-4 py-2"
-          >
-            <BrandLogo />
-          </a>
           <Link
             href={generalConfig.site.homeHref}
             className="brand-name mb-5 flex w-fit items-center gap-2 text-lg font-semibold"

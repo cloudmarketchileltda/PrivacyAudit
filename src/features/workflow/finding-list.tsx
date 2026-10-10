@@ -52,7 +52,9 @@ export async function FindingList({
       ? await db.from('assessments').select('id,name').in('id', assessmentIds)
       : { data: [], error: null };
   if (assessmentError) throw new Error('No se pudieron cargar las evaluaciones de los hallazgos.');
-  const assessmentNames = new Map(assessments.map((assessment) => [assessment.id, assessment.name]));
+  const assessmentNames = new Map(
+    assessments.map((assessment) => [assessment.id, assessment.name]),
+  );
   const rows = await Promise.all(
     data.map(async (row) => {
       const { data: progress, error } = await db.rpc('finding_progress', { finding: row.id });
@@ -91,6 +93,33 @@ export async function FindingList({
           </Button>
         ) : null}
       </div>
+      {plan && (
+        <section className="panel space-y-3" aria-labelledby="plan-help-title">
+          <h2 id="plan-help-title" className="section-title mb-0">
+            Cómo construir el plan de acción
+          </h2>
+          <p className="muted">
+            El plan se construye con los hallazgos y sus tareas correctivas; no requiere crear un
+            registro separado.
+          </p>
+          <ol className="list-decimal space-y-2 pl-5 text-sm leading-6">
+            <li>Seleccione la organización en el filtro y pulse Filtrar.</li>
+            <li>
+              Cree un hallazgo asociado a una evaluación, o abra uno existente desde esta grilla.
+            </li>
+            <li>
+              En el detalle del hallazgo, vaya a Tareas correctivas → Nueva tarea para definir la
+              acción, responsable, prioridad y fecha objetivo.
+            </li>
+          </ol>
+          <p className="muted">
+            El administrador o consultor asignado crea las acciones en organizaciones activas y
+            hallazgos abiertos. El cliente ejecuta sus tareas asignadas y las envía a revisión; el
+            gestor las aprueba o devuelve. El progreso corresponde a tareas aprobadas sobre el total
+            del hallazgo.
+          </p>
+        </section>
+      )}
       {scope && <WorkflowNav org={scope.organization.id} />}
       <form className="flex flex-wrap items-end gap-3">
         <label className="form-label flex-1 min-w-40">

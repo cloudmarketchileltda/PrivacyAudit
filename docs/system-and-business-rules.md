@@ -147,3 +147,7 @@ Configuración/textos compartidos: generalConfig.retention. Implementación: mig
 ## Identidad visual
 
 UI-02 — Continuidad con CloudMarket autorizada el 9 de octubre de 2026: logo original, Inter/Space Grotesk locales, azul profundo y azul principal. Configuración pública de marca en `generalConfig.site.brand`. Mantener UI-01: azul para acciones generales/rol, verde edición y rojo eliminación; estados y permisos conservan su significado. El enlace a CloudMarket es navegación pública y no sustituye la autenticación de PrivacyAudit.
+
+Actualización UI-02: por solicitud posterior del usuario se retira el logo gráfico; se mantienen colores, tipografía e identidad textual.
+
+FLU-06 — Plan de acción: vista derivada de hallazgos y sus tareas, sin entidad independiente (sección 13 del maestro). Crear acciones desde Tareas correctivas del hallazgo; asociación a evaluación mediante el hallazgo, con las restricciones FLU-01 a FLU-05. Guía operativa en `docs/action-plan.md`.

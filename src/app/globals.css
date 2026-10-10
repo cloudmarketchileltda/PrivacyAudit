@@ -158,12 +158,6 @@ h6,
   line-height: 1.1;
   letter-spacing: -0.04em;
 }
-.brand-logo {
-  display: block;
-  width: 160px;
-  height: 80px;
-  object-fit: cover;
-}
 /* Long references must wrap within cards on small screens. */
 .panel {
   min-width: 0;
