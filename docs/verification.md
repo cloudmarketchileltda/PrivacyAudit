@@ -296,3 +296,11 @@ Verificación remota posterior a la aplicación: `reports` con RLS y SELECT auth
 
 La explicación anterior se trasladó sin cambios a un modal nativo, invocado mediante botón de icono CircleHelp junto al título. Button compartido, aria-label/title, título accesible y cierre mediante X/Cerrar/Escape. Playwright con fixture local comprobó a 360/1440 px: contenido inicialmente oculto, apertura, tres pasos, ausencia de desbordamiento, cierre por las tres vías y retorno de foco al icono. Captura móvil inspeccionada; artefactos no versionados en `artifacts/action-plan-help/`. Sin cambios SQL, permisos ni creación de planes.
 ESLint, TypeScript y build de producción aprobados. No se repitieron pruebas SQL para este cambio de presentación. Pendiente redesplegar frontend en Dokploy.
+
+## Tratamientos: creación desde filtro y ayuda — 10 de octubre de 2026
+
+- ProcessingList resuelve el contexto autorizado tanto desde la ruta interna como desde el filtro general. Nuevo tratamiento usa siempre `/organizations/{id}/processing/new`; aparece solo con canEdit y organización activa. El módulo general sin selección indica cómo aplicar el filtro, en vez de enviar al dashboard. Ayuda modal explica propósito, datos, ingreso y pertenencia organizacional.
+- ESLint y TypeScript aprobados. Pruebas focalizadas `tests/processing.test.ts` (1/1) y `tests/database.test.ts` con patrón `Fase 3:` (1/1), con Node 24.19.0 y opción V8 `--no-wasm-code-gc`: formulario, validación SQL, identidad, archivo y aislamiento aprobados.
+- Playwright temporal con adaptador local: selección y envío real del filtro habilitan Nuevo tratamiento para consultor asignado, enlace/formulario conservan organización, cliente y consultor ajeno sin acción. Modal, Escape y ausencia de desbordamiento a 360/1440 px aprobados; captura móvil inspeccionada. El selector inicial de prueba por etiqueta exacta se ajustó al nombre del select por las opciones incluidas en la etiqueta. Artefactos no versionados en `artifacts/processing-filter/`. No acredita Auth/Storage reales.
+- No se modificaron SQL, RLS ni el backend remoto. Frontend requiere redespliegue en Dokploy desde main.
+- Build de producción aprobado; no se repitió la suite completa al no cambiar operaciones de guardado ni esquema.

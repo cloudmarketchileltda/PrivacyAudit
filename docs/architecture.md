@@ -188,3 +188,5 @@ Identidad tomada del proyecto local `cloudmarketWeb`: azul profundo, azul princi
 Ajuste posterior autorizado: se retira el logo gráfico de CloudMarket del acceso y menú; se conservan paleta, fuentes y enlaces de retorno. Operación del Plan de acción revisada contra sección 13 del maestro y documentada en [action-plan.md](action-plan.md); se añade guía en el módulo para localizar la creación desde hallazgos.
 
 10 de octubre de 2026: la guía del Plan de acción se presenta en un modal nativo invocado con icono de ayuda junto al título. Componente cliente HelpDialog con contenido del servidor; cierre por Escape/X/Cerrar y retorno nativo de foco, sin cambios operativos ni SQL.
+
+10 de octubre de 2026 — Tratamientos: el filtro de organización del módulo general resuelve el mismo contexto autorizado que la vista interna. Tras Filtrar, Nuevo tratamiento enlaza a la organización seleccionada si el actor puede gestionar y está activa. Se retira la derivación innecesaria al dashboard y se incorpora ayuda modal sobre inventario, creación y relación con evaluaciones. Sin cambios SQL/RLS; se reutiliza processingOrganization y la autorización del formulario/guardado.

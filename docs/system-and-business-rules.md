@@ -151,3 +151,5 @@ UI-02 — Continuidad con CloudMarket autorizada el 9 de octubre de 2026: logo o
 Actualización UI-02: por solicitud posterior del usuario se retira el logo gráfico; se mantienen colores, tipografía e identidad textual.
 
 FLU-06 — Plan de acción: vista derivada de hallazgos y sus tareas, sin entidad independiente (sección 13 del maestro). Crear acciones desde Tareas correctivas del hallazgo; asociación a evaluación mediante el hallazgo, con las restricciones FLU-01 a FLU-05. Guía operativa en `docs/action-plan.md`.
+
+TRA-02 — Navegación: seleccionar una organización en Tratamientos y aplicar el filtro permite acceder a Nuevo tratamiento solo con permisos actuales de gestión y organización activa. El formulario conserva la organización como contexto autorizado. La ayuda explica que el inventario pertenece a la organización, no a una evaluación individual, y no crea hallazgos automáticamente.

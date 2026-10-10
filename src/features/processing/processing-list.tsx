@@ -1,3 +1,4 @@
+import { HelpDialog } from '@/components/help-dialog';
 import { pageRange } from '@/config/general';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -16,9 +17,9 @@ export async function ProcessingList({
   params: Record<string, string | undefined>;
   organizationId?: string;
 }) {
-  const scope = organizationId ? await processingOrganization(organizationId) : null;
-  const session = scope || (await requireUser());
   const selectedOrg = organizationId || params.organization;
+  const scope = selectedOrg ? await processingOrganization(selectedOrg) : null;
+  const session = scope || (await requireUser());
   if (selectedOrg && !z.uuid().safeParse(selectedOrg).success) notFound();
   const page = pageNumber(params.page);
   const sort = params.sort === 'name' ? 'name' : 'updated_at';
@@ -47,22 +48,55 @@ export async function ProcessingList({
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           {scope && <p className="muted mb-1">{scope.organization.legal_name}</p>}
-          <h1 className="page-title">Tratamientos</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="page-title">Tratamientos</h1>
+            <HelpDialog title="Cómo registrar actividades de tratamiento">
+              <p className="muted">
+                Un tratamiento es una actividad en la que la organización utiliza datos personales,
+                como gestionar trabajadores, facturar a clientes o realizar campañas comerciales.
+              </p>
+              <p className="muted">
+                Este inventario describe qué datos se usan, de quiénes, con qué finalidad, quién es
+                responsable, en qué sistemas se almacenan, con quién se comparten y cuánto tiempo se
+                conservan.
+              </p>
+              <ol className="list-decimal space-y-2 pl-5 text-sm leading-6">
+                <li>Seleccione una organización en el filtro y pulse Filtrar.</li>
+                <li>
+                  Pulse Nuevo tratamiento. Esta acción está disponible para el administrador o
+                  consultor asignado en organizaciones activas.
+                </li>
+                <li>
+                  Complete el nombre, finalidad, categorías de titulares y datos, junto con la
+                  información disponible del proceso, y guarde el registro.
+                </li>
+              </ol>
+              <p className="muted">
+                Los tratamientos pertenecen a la organización. Sirven de contexto para el
+                diagnóstico y se incluyen en el informe; no se asocian directamente a una evaluación
+                ni generan hallazgos automáticamente. El cliente solo puede consultarlos. Una
+                organización archivada es de solo lectura.
+              </p>
+            </HelpDialog>
+          </div>
           <p className="muted mt-2">
             Registro de actividades, datos, finalidades y responsables por organización.
           </p>
         </div>
         {scope?.canEdit && (
           <Button asChild>
-            <Link href={`${path}/new`}>Nuevo tratamiento</Link>
-          </Button>
-        )}
-        {!scope && session.profile.role !== 'CLIENT' && (
-          <Button variant="outline" asChild>
-            <Link href="/dashboard">Elegir organización para registrar</Link>
+            <Link href={`/organizations/${scope.organization.id}/processing/new`}>
+              Nuevo tratamiento
+            </Link>
           </Button>
         )}
       </div>
+      {!scope && (
+        <p className="muted">
+          Seleccione una organización y pulse Filtrar para consultar sus tratamientos y, si tiene
+          permisos, registrar uno nuevo.
+        </p>
+      )}
       {organizationId && <ProcessingNav id={organizationId} />}
       {scope?.organization.status === 'ARCHIVED' && (
         <p className="muted">

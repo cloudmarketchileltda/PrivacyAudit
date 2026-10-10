@@ -347,3 +347,5 @@ Verificación: 39 pruebas aprobadas, lint, TypeScript, build y `npm run test:ui:
 PrivacyAudit comparte paleta y tipografías con CloudMarket; el logo gráfico fue retirado por solicitud del usuario. Las fuentes Inter y Space Grotesk se sirven localmente con sus licencias OFL; la marca y enlace de retorno se configuran en `generalConfig.site.brand`. La interfaz conserva los colores de acción azul/verde/rojo. Publicar el frontend requiere redespliegue en Dokploy; no se modifican DNS ni el código del sitio comercial.
 
 El Plan de acción se construye con hallazgos y tareas: [guía operativa](docs/action-plan.md). No requiere un registro de plan separado.
+
+Tratamientos: seleccione Organización y pulse Filtrar en el módulo general. Nuevo tratamiento aparece para el administrador/consultor asignado si la organización está activa. La ayuda junto al título explica el inventario y cómo ingresarlo; el cliente mantiene acceso de consulta.

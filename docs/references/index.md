@@ -52,3 +52,5 @@ Revisadas para conservación y cierre el 9 de octubre de 2026: maestro original,
 Continuidad visual CloudMarket: referencia autorizada `/Users/adelarivera/Documents/ChatGPT/cloudmarketWeb`, consultados index.css, tailwind.config.ts, Navbar.tsx y logo original. Guía local Next.js `01-app/01-getting-started/13-fonts.md`; fuentes variables y licencias OFL del repositorio google/fonts, carpetas ofl/inter y ofl/spacegrotesk. No se modificó el sitio comercial.
 
 Revisión operativa del Plan de acción y retiro de logo: sección 13 del maestro (sin entidad separada), páginas/acciones/queries de workflow, migración fase 4 y reglas FLU-01 a FLU-05. Guía local Next.js layouts-and-pages y habilidad Supabase consultadas; sin modificación SQL ni remota. Resultado en docs/action-plan.md.
+
+10 de octubre de 2026 — Corrección de acceso a creación en Tratamientos: revisados reglas, configuración, arquitectura, consultas processingOrganization y ProcessingList. Guía local Next.js Server and Client Components para composición con HelpDialog. Se reutilizan permisos existentes; sin SQL ni cambios remotos.
