@@ -4,6 +4,7 @@ import type { requireUser } from '@/features/auth/queries';
 import { assessmentLabels, controlLabels, controlStatuses } from '@/features/assessments/model';
 import { Button } from '@/components/ui/button';
 import { formatDate } from '@/lib/utils';
+import { DistributionChart } from './distribution-chart';
 
 export type ClientDashboardSummary = {
   organization: { id: string; name: string; status: string };
@@ -127,23 +128,31 @@ export async function ClientDashboard({ db }: Awaited<ReturnType<typeof requireU
             total={s.tasks.total}
             label="Tareas aprobadas del plan completo"
           />
-          <dl className="mt-4 grid grid-cols-2 gap-3">
-            {[
-              ['Pendientes', s.tasks.todo],
-              ['En ejecución', s.tasks.in_progress],
-              ['En revisión', s.tasks.waiting_review],
-              ['Aprobadas', s.tasks.done],
-            ].map(([label, value]) => (
-              <div key={label}>
-                <dt className="muted">{label}</dt>
-                <dd className="font-semibold">{value}</dd>
-              </div>
-            ))}
-          </dl>
           <Button asChild variant="outline" className="mt-5">
             <Link href={plan}>Consultar plan de acción</Link>
           </Button>
         </section>
+      </div>
+      <div className="grid gap-5 lg:grid-cols-2">
+        <DistributionChart
+          title="Estado de las tareas"
+          description="Cómo se distribuye el trabajo del plan de acción en todas las evaluaciones de su organización."
+          items={[
+            { label: 'Pendientes', value: s.tasks.todo, color: 'bg-slate-400' },
+            { label: 'En ejecución', value: s.tasks.in_progress, color: 'bg-blue-500' },
+            { label: 'En revisión', value: s.tasks.waiting_review, color: 'bg-amber-500' },
+            { label: 'Aprobadas', value: s.tasks.done, color: 'bg-emerald-500' },
+          ]}
+        />
+        <DistributionChart
+          title="Estado de los hallazgos"
+          description="Brechas abiertas, cerradas y riesgos aceptados de todas las evaluaciones de su organización. Un riesgo aceptado no equivale a una brecha corregida."
+          items={[
+            { label: 'Abiertos', value: s.findings.open, color: 'bg-amber-500' },
+            { label: 'Cerrados', value: s.findings.closed, color: 'bg-emerald-500' },
+            { label: 'Riesgos aceptados', value: s.findings.accepted_risk, color: 'bg-slate-400' },
+          ]}
+        />
       </div>
       <section>
         <h2 className="section-title">Requiere atención en la organización</h2>

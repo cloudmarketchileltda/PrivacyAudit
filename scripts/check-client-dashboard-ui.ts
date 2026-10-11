@@ -81,10 +81,30 @@ try {
       await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1),
       false,
     );
+    const taskChart = page.getByRole('figure', { name: 'Estado de las tareas', exact: true });
+    assert.equal(await taskChart.getByRole('listitem').count(), 4);
+    assert.match(await taskChart.innerText(), /Pendientes\s+3\s+\(100%\)/);
+    assert.match(await taskChart.innerText(), /Aprobadas\s+0\s+\(0%\)/);
+    const findingChart = page.getByRole('figure', { name: 'Estado de los hallazgos', exact: true });
+    assert.equal(await findingChart.getByRole('listitem').count(), 3);
+    assert.match(await findingChart.innerText(), /Abiertos\s+1\s+\(100%\)/);
     const global = page.getByRole('link').filter({ hasText: 'Tareas vencidas de la organización' });
     assert.ok((await global.innerText()).includes('2'));
     await page.screenshot({ path: `artifacts/client-dashboard-ui/${width}.png`, fullPage: true });
   }
+  await fixture.db.transaction(async (tx) => {
+    await tx.query("select set_config('request.jwt.claim.sub',$1,true)", [ids.a]);
+    await tx.exec('set local role authenticated');
+    await tx.query(
+      "update tasks set status='IN_PROGRESS' where organization_id=$1 and title='Título privado del consultor'",
+      [fixture.orgA],
+    );
+  });
+  await page.reload();
+  const mixedChart = page.getByRole('figure', { name: 'Estado de las tareas', exact: true });
+  assert.match(await mixedChart.innerText(), /Pendientes\s+2\s+\(67%\)/);
+  assert.match(await mixedChart.innerText(), /En ejecución\s+1\s+\(33%\)/);
+  assert.equal(await page.getByText('Título privado del consultor', { exact: true }).count(), 0);
   const pdfHref = await page
     .getByRole('link', { name: 'Descargar informe PDF', exact: true })
     .getAttribute('href');
