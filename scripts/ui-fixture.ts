@@ -45,6 +45,7 @@ const functions = new Set([
   'finding_progress',
   'finalize_evidence',
   'dashboard_summary',
+  'client_organization_dashboard',
   'read_notifications',
   'purge_audit_logs',
   'record_audit_export',

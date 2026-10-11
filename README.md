@@ -349,3 +349,9 @@ PrivacyAudit comparte paleta y tipografías con CloudMarket; el logo gráfico fu
 El Plan de acción se construye con hallazgos y tareas: [guía operativa](docs/action-plan.md). No requiere un registro de plan separado.
 
 Tratamientos: seleccione Organización y pulse Filtrar en el módulo general. Nuevo tratamiento aparece para el administrador/consultor asignado si la organización está activa. La ayuda junto al título explica el inventario y cómo ingresarlo; el cliente mantiene acceso de consulta.
+
+### Dashboard del cliente
+
+En `/dashboard`, CLIENT ve su organización actual: avance del diagnóstico sobre la última evaluación creada, avance del plan con todas las tareas de las evaluaciones disponibles, hallazgos prioritarios, vencimientos globales, evidencias, Mis tareas y último informe PDF. Los agregados incluyen otros responsables sin revelar sus tareas/archivos ni ampliar RLS. El consultor y administrador mantienen la visión de cartera. El horizonte de próximos vencimientos se configura en `generalConfig.dashboard.upcomingDays`, coordinado con SQL.
+
+Backend aplicado en PrivacyAudit `pbihajfbbcbbdvoqpggy`: `20261011123447_client_organization_dashboard.sql`. Frontend requiere redespliegue en Dokploy. Verificación SQL remota de solo lectura: `scripts/verify-client-dashboard-remote.sql`; recorrido local: `scripts/check-client-dashboard-ui.ts`.

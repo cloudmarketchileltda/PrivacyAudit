@@ -153,3 +153,11 @@ Actualización UI-02: por solicitud posterior del usuario se retira el logo grá
 FLU-06 — Plan de acción: vista derivada de hallazgos y sus tareas, sin entidad independiente (sección 13 del maestro). Crear acciones desde Tareas correctivas del hallazgo; asociación a evaluación mediante el hallazgo, con las restricciones FLU-01 a FLU-05. Guía operativa en `docs/action-plan.md`.
 
 TRA-02 — Navegación: seleccionar una organización en Tratamientos y aplicar el filtro permite acceder a Nuevo tratamiento solo con permisos actuales de gestión y organización activa. El formulario conserva la organización como contexto autorizado. La ayuda explica que el inventario pertenece a la organización, no a una evaluación individual, y no crea hallazgos automáticamente.
+
+## Dashboard del cliente — 11 de octubre de 2026
+
+DAS-01: CLIENT recibe en el mismo dashboard una visión de su única organización actual. RPC sin parámetro de organización, con comprobación de perfil CLIENT y membresía CLIENT actual. Sin membresía u organización en borrado devuelve sin organización disponible. CONSULTANT y SUPER_ADMIN conservan dashboard_summary y no pueden ejecutar la RPC de cliente.
+
+DAS-02: se autorizan exclusivamente agregados de tareas/evidencias de toda su organización, incluso de otros responsables; no se amplía SELECT de tareas, archivos o evidencias. Mis tareas cuenta solo assigned_to del actor. Los indicadores globales no contienen títulos, responsables ni identificadores de tareas/evidencias ajenas. La última evaluación y el último informe son de su organización y accesibles por membresía vigente.
+
+DAS-03: diagnóstico = controles evaluados/total de la última evaluación creada; plan = tareas DONE/total de todas las evaluaciones disponibles. Sin registros se muestra ausencia de datos, no un cumplimiento de 0 %. Vencidas y próximas a vencer omiten DONE y hallazgos CLOSED/ACCEPTED_RISK; próximas incluye hoy y los siete días siguientes, fecha America/Santiago. Evidencias cuentan última versión confirmada por cadena. Totales y último informe excluyen evaluaciones en eliminación. Las organizaciones archivadas permiten consulta y se identifican como tales. No es un score legal.

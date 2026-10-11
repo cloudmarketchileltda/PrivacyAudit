@@ -11,6 +11,8 @@ const actionStyles = {
 } as const;
 
 export const generalConfig = {
+  // Coordinado con client_organization_dashboard en SQL; cambiar exige migración.
+  dashboard: { upcomingDays: 7 },
   retention: {
     policyVersion: '2026-10-09',
     audit:

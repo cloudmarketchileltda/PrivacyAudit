@@ -1,3 +1,4 @@
+import { ClientDashboard } from '@/features/dashboard/client-dashboard';
 import Link from 'next/link';
 import { requireUser } from '@/features/auth/queries';
 import { assessmentLabels, controlLabels, controlStatuses } from '@/features/assessments/model';
@@ -32,7 +33,9 @@ export default async function Page({
 }) {
   const params = await searchParams;
   const page = pageNumber(params.page);
-  const { db, profile } = await requireUser();
+  const session = await requireUser();
+  const { db, profile } = session;
+  if (profile.role === 'CLIENT') return <ClientDashboard {...session} />;
   const { data, error } = await db.rpc('dashboard_summary', {
     search: searchTerm(params.q),
     org_status: ['ACTIVE', 'ARCHIVED'].includes(params.status || '') ? params.status : '',
@@ -68,11 +71,9 @@ export default async function Page({
             Evaluaciones, hallazgos, tareas y evidencias de las organizaciones accesibles.
           </p>
         </div>
-        {profile.role !== 'CLIENT' && (
-          <Button asChild>
-            <Link href="/assessments/new">Nueva evaluación</Link>
-          </Button>
-        )}
+        <Button asChild>
+          <Link href="/assessments/new">Nueva evaluación</Link>
+        </Button>
       </div>
       <form className="panel p-4 flex flex-wrap gap-3 items-end">
         <label className="form-label">

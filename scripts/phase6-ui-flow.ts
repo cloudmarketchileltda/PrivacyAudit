@@ -47,7 +47,7 @@ export async function checkPhase6Flow(
   await page.getByRole('link', { name: 'Notificaciones: 0 sin leer', exact: true }).waitFor();
   assert.equal((await page.request.get(base + '/api/notifications/unread')).status(), 200);
   await page.goto(base + '/dashboard?attention=overdue');
-  await page.getByRole('heading', { name: 'Dashboard de evaluación' }).waitFor();
+  await page.getByRole('heading', { name: 'Empresa Demo SpA', exact: true }).waitFor();
   assert.ok(await page.getByText('Empresa Demo SpA', { exact: true }).isVisible());
   assert.equal(await page.getByText('Segunda Empresa SpA', { exact: true }).count(), 0);
   await login('b');

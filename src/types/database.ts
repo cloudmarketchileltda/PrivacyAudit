@@ -797,6 +797,7 @@ export interface Database {
       cancel_account_mutation: { Args: { reservation_id: string }; Returns: undefined };
       cancel_account_provisioning: { Args: { reservation_id: string }; Returns: undefined };
       cancel_password_reset: { Args: { receipt: string }; Returns: undefined };
+      client_organization_dashboard: { Args: Record<string, never>; Returns: Json };
       create_assessment: {
         Args: { org: string; title: string; details?: string };
         Returns: string;

@@ -54,3 +54,5 @@ Continuidad visual CloudMarket: referencia autorizada `/Users/adelarivera/Docume
 Revisión operativa del Plan de acción y retiro de logo: sección 13 del maestro (sin entidad separada), páginas/acciones/queries de workflow, migración fase 4 y reglas FLU-01 a FLU-05. Guía local Next.js layouts-and-pages y habilidad Supabase consultadas; sin modificación SQL ni remota. Resultado en docs/action-plan.md.
 
 10 de octubre de 2026 — Corrección de acceso a creación en Tratamientos: revisados reglas, configuración, arquitectura, consultas processingOrganization y ProcessingList. Guía local Next.js Server and Client Components para composición con HelpDialog. Se reutilizan permisos existentes; sin SQL ni cambios remotos.
+
+Dashboard del cliente, 11 de octubre de 2026: maestro, reglas, configuración, arquitectura y habilidad Supabase y buenas prácticas PostgreSQL (security-privileges). Guía local Next.js layouts-and-pages. Changelog Supabase descargado y revisado sin cambios aplicables; documentación oficial de [funciones y permisos](https://supabase.com/docs/guides/database/functions). Agregación privada autorizada de mínimo alcance, sin ampliar políticas de detalle.
