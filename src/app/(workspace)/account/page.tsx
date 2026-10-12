@@ -1,6 +1,6 @@
 import { requireUser } from '@/features/auth/queries';
 import { ActionForm, Field } from '@/components/forms';
-import { saveAccountProfile, changeOwnPassword, changeOwnEmail } from '@/features/account/actions';
+import { saveAccountProfile, changeOwnPassword } from '@/features/account/actions';
 import { ContactFields } from '@/features/account/contact-fields';
 import { generalConfig } from '@/config/general';
 import Link from 'next/link';
@@ -33,32 +33,9 @@ export default async function Page() {
         </ActionForm>
       </section>
       <section className="panel max-w-xl">
-        <h2 className="section-title">Cambiar correo electrónico</h2>
-        <p className="muted mb-4">
-          Correo actual: {user.email}
-          {user.new_email ? ` · Cambio pendiente: ${user.new_email}` : ''}
-        </p>
-        <ActionForm action={changeOwnEmail} label="Solicitar cambio de correo">
-          <Field
-            label="Nuevo correo electrónico"
-            name="email"
-            type="email"
-            required
-            autoComplete="email"
-            maxLength={generalConfig.account.emailMaxLength}
-          />
-          <Field
-            label="Contraseña actual para cambiar el correo"
-            name="current_password"
-            type="password"
-            required
-            autoComplete="current-password"
-            maxLength={generalConfig.account.passwordMaxLength}
-          />
-          <p className="muted">
-            El cambio puede requerir confirmación en el correo actual y el nuevo.
-          </p>
-        </ActionForm>
+        <h2 className="section-title">Correo electrónico</h2>
+        <p className="muted mb-4">{user.email}</p>
+        <p className="muted">{generalConfig.account.emailManagementNotice}</p>
       </section>
       <section className="panel max-w-xl">
         <h2 className="section-title">Cambiar contraseña</h2>
@@ -89,7 +66,7 @@ export default async function Page() {
           />
         </ActionForm>
         <Link className="block underline text-sm mt-6" href="/recover">
-          ¿Olvidó su contraseña? Recuperar acceso por correo
+          ¿Olvidó su contraseña? Solicitar recuperación al administrador
         </Link>
       </section>
     </>

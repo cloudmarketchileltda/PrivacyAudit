@@ -26,10 +26,3 @@ export const changePasswordSchema = passwordSchema
   .refine((data) => data.current_password !== data.password, {
     message: 'La nueva contraseña debe ser diferente de la actual.',
   });
-export const emailSchema = z.object({
-  email: z
-    .email()
-    .max(limits.emailMaxLength)
-    .transform((value) => value.toLowerCase()),
-  current_password: z.string().min(1).max(limits.passwordMaxLength),
-});

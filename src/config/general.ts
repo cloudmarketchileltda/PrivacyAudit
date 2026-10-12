@@ -28,6 +28,8 @@ export const generalConfig = {
     timeZone: 'America/Santiago',
   },
   account: {
+    emailManagementNotice:
+      'Solo el administrador puede modificar su correo electrónico desde Administración.',
     fullNameMaxLength: 160,
     emailMaxLength: 254,
     passwordMinLength: 10,

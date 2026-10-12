@@ -91,15 +91,12 @@ try {
   await login('client@example.test', 'NewPassword123!');
   await page.goto(base + '/account');
   await page
-    .getByLabel('Nuevo correo electrónico', { exact: true })
-    .fill('client-new@example.test');
-  await page
-    .getByLabel('Contraseña actual para cambiar el correo', { exact: true })
-    .fill('NewPassword123!');
-  await page.getByRole('button', { name: 'Solicitar cambio de correo', exact: true }).click();
-  await page.getByText(/Cambio solicitado\. Revise el correo actual/).waitFor();
-  await page.reload();
-  assert.ok(await page.getByText(/Cambio pendiente: client-new@example.test/).isVisible());
+    .getByText(
+      'Solo el administrador puede modificar su correo electrónico desde Administración.',
+      { exact: true },
+    )
+    .waitFor();
+  assert.equal(await page.locator('input[type="email"]').count(), 0);
   for (const width of [360, 768, 1440]) {
     await page.setViewportSize({ width, height: 1000 });
     assert.equal(
@@ -143,7 +140,7 @@ try {
   await page.screenshot({ path: 'artifacts/ui/admin-account-contact.png', fullPage: true });
   assert.deepEqual(errors, []);
   console.log(
-    'Account UI passed: saved contact, current password verification, confirmation mismatch, password change and next login, pending email, administrative creation/edit and responsive layouts. Isolated Auth fixture; no real email delivery tested.',
+    'Account UI passed: saved contact, current password verification, confirmation mismatch, password change and next login, read-only email, administrative creation/edit and responsive layouts. Isolated Auth fixture; no real email delivery tested.',
   );
 } catch (error) {
   await writeFile('artifacts/ui/account-profile-server.log', logs);

@@ -186,3 +186,55 @@ test('Datos de cuenta: privacidad entre miembros, guardado atómico, alta y edic
     await db.close();
   }
 });
+
+test('Correo: Auth rechaza autoservicio de todos los roles y solicitudes pendientes', async () => {
+  const db = await database();
+  try {
+    await users(db);
+    await db.exec(
+      'create role supabase_auth_admin; grant usage on schema auth to supabase_auth_admin; grant select,update on auth.users to supabase_auth_admin;',
+    );
+    for (const id of [ids.client, ids.a, ids.admin]) {
+      await identity(db, id);
+      await db.exec('set role supabase_auth_admin');
+      await assert.rejects(
+        db.query('update auth.users set email_change=$2 where id=$1', [id, 'pending@example.test']),
+        /Solo el administrador/,
+      );
+      await assert.rejects(
+        db.query('update auth.users set email=$2 where id=$1', [id, 'direct@example.test']),
+        /Reserva administrativa/,
+      );
+      // Ordinary Auth updates (including passwords) remain available.
+      await db.query('update auth.users set encrypted_password=$2 where id=$1', [id, 'test-hash']);
+    }
+    await identity(db, ids.admin);
+    const reservation = (
+      await db.query<{ id: string }>(
+        "select public.reserve_account_mutation($1,'UPDATE',$2,$3) id",
+        [ids.client, 'admin-change@example.test', 'Cliente editado'],
+      )
+    ).rows[0].id;
+    await db.exec('set role supabase_auth_admin');
+    await assert.rejects(
+      db.query('update auth.users set email=$2 where id=$1', [ids.client, 'wrong@example.test']),
+      /Reserva administrativa/,
+    );
+    await db.query('update auth.users set email=$2,raw_user_meta_data=$3 where id=$1', [
+      ids.client,
+      'admin-change@example.test',
+      JSON.stringify({ full_name: 'Cliente editado' }),
+    ]);
+    await identity(db, ids.admin);
+    assert.equal(
+      (
+        await db.query<{ done: boolean }>('select public.account_mutation_completed($1) done', [
+          reservation,
+        ])
+      ).rows[0].done,
+      true,
+    );
+  } finally {
+    await db.close();
+  }
+});
