@@ -356,4 +356,4 @@ En `/dashboard`, CLIENT ve su organización actual: avance del diagnóstico sobr
 
 Backend aplicado en PrivacyAudit `pbihajfbbcbbdvoqpggy`: `20261011123447_client_organization_dashboard.sql`. Frontend requiere redespliegue en Dokploy. Verificación SQL remota de solo lectura: `scripts/verify-client-dashboard-remote.sql`; recorrido local: `scripts/check-client-dashboard-ui.ts`.
 
-El correo de acceso es de solo lectura en Mi cuenta para todos los roles; solo SUPER_ADMIN puede modificarlo desde Administración. El cambio requiere aplicar `20261012005349_admin_only_account_email.sql` y redesplegar el frontend; esta entrega no aplica cambios remotos.
+El correo de acceso es de solo lectura en Mi cuenta para todos los roles; solo SUPER_ADMIN puede modificarlo desde Administración. La migración `20261012012330_admin_only_account_email.sql` está aplicada en PrivacyAudit (`pbihajfbbcbbdvoqpggy`); frontend pendiente de despliegue.
