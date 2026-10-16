@@ -363,3 +363,9 @@ El correo de acceso es de solo lectura en Mi cuenta para todos los roles; solo S
 Menú Centro normativo (`/legal-library`) para clientes, consultores y administradores autenticados, incluso sin organización: visor/descarga del PDF de la Ley 21.719 y doce FAQ con búsqueda, categorías y referencias. Copia BCN versionada; orientación editorial pendiente de revisión jurídica. Se mantiene por repositorio y despliegue, sin CRUD desde Administración en esta entrega.
 
 No usa IA ni genera consumo de API de modelos. No requiere nuevas variables de entorno ni migraciones. PDF protegido por sesión y empaquetado con standalone. La integración RAG y sus límites de gasto quedan como propuesta independiente. Operación, actualización y alcance: [Centro normativo](docs/legal-library.md). Verificación UI local: `npm run test:ui:legal-library`.
+
+## Piloto IA normativo — implementación local
+
+Nueva autorización del usuario: asistente exclusivamente normativo, sin acceso a información de clientes, 20 consultas diarias/usuario y USD 10 totales de piloto (incluida indexación). Reemplaza la exclusión anterior de IA solo para este módulo. Inicio desactivado y limitado a SUPER_ADMIN; después puede habilitar clientes/consultores. No guarda conversaciones.
+
+Clave únicamente en archivo local ignorado `supabase/.env.legal-ai.local`, variable OPENAI_API_KEY; no usar `.env.local` de Next.js. Requiere migración legal_ai_pilot, conexión restringida de PostgreSQL y Function legal-assistant, secretos, indexación y despliegue. Proveedor reemplazable, límites configurables con sincronización SQL; biblioteca/FAQ siguen independientes. No se afirma activación remota ni calidad jurídica validada. Pasos, costos y límites: [Piloto IA](docs/legal-ai-pilot.md).

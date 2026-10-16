@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { LegalAiPanel, type LegalAiStatus } from '@/features/legal-library/ai-panel';
 import { BookOpen, Download, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,7 +12,8 @@ export default async function LegalLibraryPage({
 }: {
   searchParams: Promise<{ q?: string | string[]; category?: string | string[] }>;
 }) {
-  await requireUser();
+  const { db, profile } = await requireUser();
+  const { data: aiStatus, error: aiStatusError } = await db.rpc('legal_ai_status');
   const params = await searchParams;
   const query =
     typeof params.q === 'string' ? params.q.slice(0, generalConfig.search.maxLength) : '';
@@ -42,7 +44,14 @@ export default async function LegalLibraryPage({
         <Button asChild variant="outline">
           <a href="#preguntas">Preguntas frecuentes</a>
         </Button>
+        <Button asChild variant="outline">
+          <a href="#consultar-ia">Consultar con IA</a>
+        </Button>
       </nav>
+      <LegalAiPanel
+        status={aiStatusError ? null : (aiStatus as unknown as LegalAiStatus)}
+        admin={profile.role === 'SUPER_ADMIN'}
+      />
       <section
         id="ley"
         aria-labelledby="ley-title"
@@ -212,8 +221,8 @@ export default async function LegalLibraryPage({
         </div>
         <p className="text-sm text-slate-600">
           Para aplicar estas orientaciones a un caso concreto, contacte a su consultor por el medio
-          acordado. Este módulo ofrece búsqueda de contenido editorial; no genera respuestas con IA
-          ni envía consultas.
+          acordado. Las FAQ son contenido editorial. El asistente IA es un piloto independiente y no
+          envía consultas al consultor.
         </p>
       </section>
     </>

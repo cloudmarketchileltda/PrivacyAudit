@@ -112,3 +112,9 @@ Redesplegar el frontend desde `main` en Dokploy para mostrar los botones de edic
 ## Centro normativo sin IA — 16 de octubre de 2026
 
 Requiere redesplegar Next.js para publicar `/legal-library`. No necesita migraciones, Functions ni credenciales API de IA. `outputFileTracingIncludes` empaqueta el PDF privado en standalone; no moverlo a public ni depender de la ruta Downloads del equipo. Comprobar tras desplegar acceso con sesión, descarga y visor/alternativa Abrir PDF en navegador real. La edición de FAQ/documento se realiza por repositorio y nuevo despliegue; procedimiento en docs/legal-library.md. Esta entrega no ha sido desplegada.
+
+## Piloto IA normativo — preparación local
+
+Destino previsto PrivacyAudit `pbihajfbbcbbdvoqpggy`; confirmar enlace antes de aplicar la migración 20261016221137_legal_ai_pilot.sql. Guía completa en docs/legal-ai-pilot.md. Se requiere rol PostgreSQL restringido, conexión LEGAL_AI_DATABASE_URL solo en Functions, OPENAI_API_KEY y gate LEGAL_AI_ENABLED. Archivo local supabase/.env.legal-ai.local ignorado por Git y Docker. No usar credencial postgres ni service role para el asistente. No activar preguntas antes de indexar y validar como administrador. Esta entrega prepara código/migración y archivo vacío; no constituye aplicación de migración, publicación Function ni prueba remota.
+
+Actualización remota 16 de octubre de 2026: migraciones IA aplicadas en PrivacyAudit mediante MCP; versiones locales sincronizadas 20261016221137 y 20261016221147. No reaplicarlas. Corpus creado (112 fragmentos), todavía sin embeddings. Piloto desactivado, consumo cero. Conexión restringida y Function/Next.js pendientes.

@@ -1,3 +1,5 @@
+import { legalAiHandler } from '../supabase/functions/legal-assistant/handler';
+import type { AiConfig, LegalChunk } from '../supabase/functions/legal-assistant/model';
 import { assessmentDeletionHandler } from '../supabase/functions/assessment-delete/handler';
 import { deletionHandler } from '../supabase/functions/admin-delete-organization/handler';
 import { mutationHandler } from '../supabase/functions/admin-manage-user/handler';
@@ -26,6 +28,8 @@ const tables = new Set([
   'reports',
 ]);
 const functions = new Set([
+  'legal_ai_status',
+  'configure_legal_ai',
   'register_consultant',
   'create_organization',
   'invite_client',
@@ -203,6 +207,81 @@ export async function startFixture(port = 54331) {
         return;
       }
       const url = new URL(request.url || '/', `http://localhost:${port}`);
+      if (url.pathname === '/functions/v1/legal-assistant') {
+        const input = await body(request);
+        const actor = uid(request);
+        async function worker<T>(query: string, args: unknown[] = []): Promise<T> {
+          return db.transaction(async (tx) => {
+            await tx.exec('set local role legal_ai_worker');
+            return (await tx.query<{ result: T }>(query, args)).rows[0].result;
+          });
+        }
+        const vector = [1, ...Array(255).fill(0)];
+        const handler = legalAiHandler({
+          enabled: true,
+          async authorize() {
+            await identity(db, actor);
+            const profile = (
+              await db.query<{ role: string }>('select role from profiles where id=$1', [actor])
+            ).rows[0];
+            return profile ? { id: actor, role: profile.role } : null;
+          },
+          store: {
+            reserve: (id, kind) =>
+              worker<{ id: string; config: AiConfig }>('select legal_ai.reserve($1,$2) result', [
+                id,
+                kind,
+              ]),
+            nextChunk: () => worker<LegalChunk | null>('select legal_ai.next_chunk() result'),
+            async saveEmbedding(id, model, value) {
+              await worker('select legal_ai.save_embedding($1,$2,$3::double precision[]) result', [
+                id,
+                model,
+                `{${value.join(',')}}`,
+              ]);
+            },
+            search: (question, value) =>
+              worker<LegalChunk[]>('select legal_ai.search($1,$2::double precision[]) result', [
+                question,
+                `{${value.join(',')}}`,
+              ]),
+            async finish(id, cost, tokensIn, tokensOut, success) {
+              await worker('select legal_ai.finish($1,$2,$3,$4,$5) result', [
+                id,
+                cost,
+                tokensIn,
+                tokensOut,
+                success,
+              ]);
+            },
+          },
+          // Deterministic local provider: no API key, no external network, no quality claim.
+          provider: {
+            async embed() {
+              return { vector, usage: { input: 10, output: 0 } };
+            },
+            async answer(_question, chunks) {
+              return {
+                raw: {
+                  status: 'answered',
+                  answer: 'Respuesta simulada para verificar el flujo normativo y sus fuentes.',
+                  citations: [{ id: chunks[0].id, quote: chunks[0].content.slice(0, 100) }],
+                },
+                usage: { input: 100, output: 40 },
+              };
+            },
+          },
+        });
+        const result = await handler(
+          new Request(url, {
+            method: 'POST',
+            headers: { Authorization: String(request.headers.authorization || '') },
+            body: JSON.stringify(input),
+          }),
+        );
+        json(response, result.status, await result.json());
+        return;
+      }
       if (url.pathname === '/functions/v1/assessment-delete') {
         const data = await body(request);
         const actor = uid(request);

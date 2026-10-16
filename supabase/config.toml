@@ -427,3 +427,7 @@ verify_jwt = false
 [functions.assessment-delete]
 # getUser verifies identity; SQL revalidates current role/membership on every step.
 verify_jwt = false
+
+[functions.legal-assistant]
+# Auth getUser + current profile; restricted database login for corpus and usage only.
+verify_jwt = false

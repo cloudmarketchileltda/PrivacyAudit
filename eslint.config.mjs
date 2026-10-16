@@ -9,6 +9,7 @@ export default defineConfig([
     'next-env.d.ts',
     'node_modules/**',
     'artifacts/**',
+    'supabase/functions/legal-assistant/index.ts',
     'supabase/functions/admin-create-user/index.ts',
     'supabase/functions/admin-manage-user/index.ts',
   ]),

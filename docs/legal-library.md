@@ -42,3 +42,7 @@ Las tarifas por millón de tokens deben dividirse por un millón en esa fórmula
 Controles futuros: cuota por usuario, límite de longitud/contexto/respuesta, contador transaccional y reserva de costo antes de llamar al proveedor, máximo de llamadas concurrentes, bloqueo de nuevas llamadas al agotar el presupuesto y reintentos acotados. Las alertas del proveedor no deben asumirse como un corte estricto. Registrar consumo real sin guardar mensajes sensibles en logs. Validar respuestas con un conjunto de preguntas y casos sin fundamento antes de publicar. Secretos del proveedor exclusivamente en servidor; credencial administrativa Supabase exclusivamente en Functions según SYS-03.
 
 La implementación de IA y la administración editorial mediante pantallas requieren una ampliación posterior explícita del alcance y sus verificaciones; este documento describe opciones, no funciones operativas.
+
+## Ampliación posterior autorizada — piloto IA
+
+La separación sin IA anterior describe la entrega inicial. El usuario autorizó después el piloto normativo, sin datos de clientes, 20 consultas/día y USD 10 totales. Estado y procedimiento actual en [Piloto IA](legal-ai-pilot.md). Biblioteca y FAQ siguen independientes; las FAQ pendientes no se indexan automáticamente.

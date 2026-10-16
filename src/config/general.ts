@@ -4,6 +4,8 @@
  * Consulte docs/system-and-business-rules.md antes de modificarla.
  */
 // Cada color se define una vez; las variantes semánticas lo reutilizan.
+import { legalAiLimits } from '../../supabase/functions/legal-assistant/limits';
+
 const actionStyles = {
   general: 'brand-primary text-white',
   modify: 'bg-green-700 text-white hover:bg-green-800',
@@ -22,6 +24,7 @@ export const generalConfig = {
     export: { maxBytes: 512 * 1024 * 1024, maxSnapshotBytes: 64 * 1024 * 1024 },
   },
   legalLibrary: {
+    ai: legalAiLimits,
     title: 'Centro normativo',
     href: '/legal-library',
     pdfHref: '/api/legal-library/pdf',

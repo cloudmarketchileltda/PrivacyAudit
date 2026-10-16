@@ -204,3 +204,7 @@ Mi cuenta muestra el correo de solo lectura para todos los roles. Se retiran la 
 ## Centro normativo — 16 de octubre de 2026
 
 Ampliación autorizada: PDF de la Ley 21.719 y FAQ para todos los perfiles autenticados. Implementación independiente de IA, sin cambios SQL ni remotos: contenido versionado, Server Component y entrega PDF autenticada incluida en standalone. FAQ con búsqueda textual y categorías, referencias y estado editorial pendiente de revisión jurídica. Sin administración editorial desde pantallas en esta entrega. No inicia el resto de fase 8. Operación, límites y diseño futuro de RAG/costos en [Centro normativo](legal-library.md).
+
+## Piloto IA normativo autorizado — 16 de octubre de 2026
+
+El usuario autoriza implementar IA solo para consulta normativa, 20 consultas diarias por usuario y USD 10 totales de piloto. Biblioteca/FAQ independientes. Function legal-assistant con Auth y conexión restringida legal_ai_worker; corpus y presupuesto aislados del negocio. Búsqueda FTS + coseno exacto sobre arrays de embeddings PostgreSQL para el corpus pequeño; migrable a pgvector. Proveedor AiProvider reemplazable, OpenAI inicial con snapshot/tarifas fijados. Sin historial ni datos de clientes. Inicio desactivado/solo administrador. Alcance y despliegue en [Piloto IA](legal-ai-pilot.md). No inicia otros pendientes de fase 8.

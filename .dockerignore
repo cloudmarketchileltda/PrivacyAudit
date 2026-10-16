@@ -8,3 +8,5 @@ artifacts
 *.tsbuildinfo
 supabase/.temp
 supabase/.branches
+
+**/.env*

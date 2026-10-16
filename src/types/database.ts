@@ -798,6 +798,7 @@ export interface Database {
       cancel_account_provisioning: { Args: { reservation_id: string }; Returns: undefined };
       cancel_password_reset: { Args: { receipt: string }; Returns: undefined };
       client_organization_dashboard: { Args: Record<string, never>; Returns: Json };
+      configure_legal_ai: { Args: { active: boolean; everyone: boolean }; Returns: undefined };
       create_assessment: {
         Args: { org: string; title: string; details?: string };
         Returns: string;
@@ -822,6 +823,7 @@ export interface Database {
       finish_assessment_deletion: { Args: { assessment: string }; Returns: undefined };
       finish_organization_deletion: { Args: { org: string }; Returns: undefined };
       invite_client: { Args: { org: string; target_email: string }; Returns: string };
+      legal_ai_status: { Args: Record<string, never>; Returns: Json };
       manage_member: {
         Args: {
           org: string;

@@ -169,3 +169,13 @@ NOR-01: CLIENT, CONSULTANT y SUPER_ADMIN con sesión/perfil válidos consultan b
 NOR-02: conservar copia normativa versionada con fuente, fecha, modificación y vigencia; las FAQ citan artículos/páginas y se identifican como orientación editorial pendiente de revisión jurídica. La edición se realiza por repositorio/despliegue en esta entrega. Configuración compartida en generalConfig.legalLibrary.
 
 NOR-03: por decisión del usuario, PDF/FAQ se implementan separados de la IA. No implementar llamadas a proveedores, chat, embeddings ni integración RAG en esta entrega. Tampoco se amplía el resto de fase 8. Propuesta y controles de costos futuros en docs/legal-library.md; no constituyen integración activa. Implementación en src/features/legal-library y rutas legal-library.
+
+## Piloto IA normativo — 16 de octubre de 2026
+
+NOR-04: autorización posterior del usuario sustituye NOR-03 exclusivamente para el piloto normativo RAG. Sin acceso a datos de clientes, sin herramientas de negocio ni información de organizaciones. Corpus inicial limitado a la copia Ley 21.719; no indexar FAQ pendientes ni documentos de empresas. Rol legal_ai_worker con permisos limitados y secreto de proveedor solo en Supabase Functions. El resto de fase 8 no se amplía.
+
+NOR-05: 20 consultas por día/usuario (America/Santiago), presupuesto piloto total USD 10 incluida indexación, reservas atómicas antes de llamadas y conservación de reserva ante fallos. Sin recargas automáticas ni reintentos; no prometer tope de factura de proveedor. Defaults compartidos en limits.ts, configuración ejecutable en legal_ai.settings; sincronizar por migración nueva.
+
+NOR-06: sin historial persistente de preguntas/respuestas ni contexto de clientes. Solo metadatos de cuota/costo sin contenido, perfil mínimo para autorización, extractos citados comprobados y enlaces construidos por aplicación. Rechazar solicitudes ajenas y contexto extra; no certificar ni modificar estados. Filtros e instrucciones no aseguran clasificación jurídica perfecta. SUPER_ADMIN prepara corpus y habilita primero pruebas propias; apertura a clientes/consultores explícita y auditada. Guía en docs/legal-ai-pilot.md.
+
+Cambio autorizado de modelo: gpt-5-mini-2025-08-07, razonamiento minimal, tarifas de entrada/salida USD 0,25/2 por millón de tokens; configuración y migración legal_ai_response_model sincronizadas. Secretos OpenAI en Supabase Functions, no Next.js/Dokploy.
