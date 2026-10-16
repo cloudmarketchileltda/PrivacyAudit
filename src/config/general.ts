@@ -21,6 +21,26 @@ export const generalConfig = {
       'La eliminación se completa en la base activa y Storage. Pueden existir copias residuales de infraestructura; su plazo de expiración aún no está verificado y no se garantiza desaparición inmediata de los respaldos.',
     export: { maxBytes: 512 * 1024 * 1024, maxSnapshotBytes: 64 * 1024 * 1024 },
   },
+  legalLibrary: {
+    title: 'Centro normativo',
+    href: '/legal-library',
+    pdfHref: '/api/legal-library/pdf',
+    document: {
+      title: 'Ley 21.719',
+      filename: 'Ley-21719.pdf',
+      generatedLabel: '16 de octubre de 2026',
+      publicationLabel: '13 de diciembre de 2024',
+      effectiveFrom: '2026-12-01',
+      effectiveLabel: '1 de diciembre de 2026',
+      amendmentLabel: 'Ley 21.806 · 5 de febrero de 2026',
+      pageCount: 56,
+    },
+    faqUpdatedLabel: '16 de octubre de 2026',
+    editorialNotice:
+      'Orientación inicial pendiente de revisión jurídica profesional. Consulte los artículos completos y las condiciones de cada caso; estas respuestas no certifican cumplimiento.',
+    consolidatedLawHref: 'https://www.bcn.cl/leychile/navegar?idNorma=141599&idVersion=2026-12-01',
+    currentLawHref: 'https://www.bcn.cl/leychile/navegar?idNorma=141599',
+  },
   reports: {
     titleMaxLength: 200,
     textMinLength: 10,

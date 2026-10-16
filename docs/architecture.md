@@ -200,3 +200,7 @@ El dashboard del cliente incluye dos gráficos de barras horizontales: estado de
 ## Correo administrado — 11 de octubre de 2026
 
 Mi cuenta muestra el correo de solo lectura para todos los roles. Se retiran la Server Action y el esquema de autoservicio de correo; SUPER_ADMIN conserva la edición desde Administración. La migración `20261012012330_admin_only_account_email.sql` añade un trigger privado en Auth que rechaza solicitudes `email_change` y cambios efectivos sin reserva administrativa vigente con actor SUPER_ADMIN y datos coincidentes. También impide confirmar solicitudes anteriores sin reserva. No modifica el cambio propio de contraseña. Migración aplicada en PrivacyAudit (`pbihajfbbcbbdvoqpggy`) y verificada mediante transacción con rollback; frontend pendiente de despliegue.
+
+## Centro normativo — 16 de octubre de 2026
+
+Ampliación autorizada: PDF de la Ley 21.719 y FAQ para todos los perfiles autenticados. Implementación independiente de IA, sin cambios SQL ni remotos: contenido versionado, Server Component y entrega PDF autenticada incluida en standalone. FAQ con búsqueda textual y categorías, referencias y estado editorial pendiente de revisión jurídica. Sin administración editorial desde pantallas en esta entrega. No inicia el resto de fase 8. Operación, límites y diseño futuro de RAG/costos en [Centro normativo](legal-library.md).

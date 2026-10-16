@@ -23,7 +23,8 @@
     "test:ui:organizations": "tsx scripts/check-organizations-ui.ts",
     "test:ui:controls": "tsx scripts/check-controls-ui.ts",
     "test:ui:reports": "tsx scripts/check-reports-ui.ts",
-    "test:ui:assessments": "tsx scripts/check-assessment-management-ui.ts"
+    "test:ui:assessments": "tsx scripts/check-assessment-management-ui.ts",
+    "test:ui:legal-library": "tsx scripts/check-legal-library-ui.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "5.2.2",

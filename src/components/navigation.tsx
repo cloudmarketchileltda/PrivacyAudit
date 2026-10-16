@@ -8,7 +8,9 @@ import {
   FolderOpen,
   Users,
   UserRound,
+  BookOpen,
 } from 'lucide-react';
+import { generalConfig } from '@/config/general';
 import { cn } from '@/lib/utils';
 export function Navigation({ admin }: { admin: boolean }) {
   const path = usePathname();
@@ -22,6 +24,7 @@ export function Navigation({ admin }: { admin: boolean }) {
     ['/reports', 'Informes', ClipboardList],
     ['/action-plan', 'Plan de acción', ListChecks],
     ...(admin ? [['/administration', 'Administración', Users] as const] : []),
+    [generalConfig.legalLibrary.href, generalConfig.legalLibrary.title, BookOpen],
     ['/account', 'Mi cuenta', UserRound],
   ] as const;
   return (

@@ -161,3 +161,11 @@ DAS-01: CLIENT recibe en el mismo dashboard una visión de su única organizaci�
 DAS-02: se autorizan exclusivamente agregados de tareas/evidencias de toda su organización, incluso de otros responsables; no se amplía SELECT de tareas, archivos o evidencias. Mis tareas cuenta solo assigned_to del actor. Los indicadores globales no contienen títulos, responsables ni identificadores de tareas/evidencias ajenas. La última evaluación y el último informe son de su organización y accesibles por membresía vigente.
 
 DAS-03: diagnóstico = controles evaluados/total de la última evaluación creada; plan = tareas DONE/total de todas las evaluaciones disponibles. Sin registros se muestra ausencia de datos, no un cumplimiento de 0 %. Vencidas y próximas a vencer omiten DONE y hallazgos CLOSED/ACCEPTED_RISK; próximas incluye hoy y los siete días siguientes, fecha America/Santiago. Evidencias cuentan última versión confirmada por cadena. Totales y último informe excluyen evaluaciones en eliminación. Las organizaciones archivadas permiten consulta y se identifican como tales. No es un score legal.
+
+## Centro normativo — 16 de octubre de 2026
+
+NOR-01: CLIENT, CONSULTANT y SUPER_ADMIN con sesión/perfil válidos consultan biblioteca y FAQ comunes, aunque no tengan membresía. Comprobar sesión también al entregar el PDF; no publicar el archivo en public. No concede acceso a datos organizacionales.
+
+NOR-02: conservar copia normativa versionada con fuente, fecha, modificación y vigencia; las FAQ citan artículos/páginas y se identifican como orientación editorial pendiente de revisión jurídica. La edición se realiza por repositorio/despliegue en esta entrega. Configuración compartida en generalConfig.legalLibrary.
+
+NOR-03: por decisión del usuario, PDF/FAQ se implementan separados de la IA. No implementar llamadas a proveedores, chat, embeddings ni integración RAG en esta entrega. Tampoco se amplía el resto de fase 8. Propuesta y controles de costos futuros en docs/legal-library.md; no constituyen integración activa. Implementación en src/features/legal-library y rutas legal-library.
