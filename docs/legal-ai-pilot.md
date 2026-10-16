@@ -2,7 +2,7 @@
 
 ## Alcance autorizado
 
-Consultas únicamente sobre protección de datos personales en Chile, sin acceso a información de clientes. Veinte consultas diarias por usuario, día America/Santiago, y USD 10 de presupuesto piloto TOTAL (no mensual ni por usuario), incluida indexación. La biblioteca y FAQ siguen funcionando independientemente. La integración está implementada localmente; no asumir despliegue, indexación ni verificación con OpenAI real a partir de las pruebas con adaptadores.
+Consultas únicamente sobre protección de datos personales en Chile, sin acceso a información de clientes. Veinte consultas diarias por usuario, día America/Santiago, y USD 10 de presupuesto piloto TOTAL (no mensual ni por usuario), incluida indexación. La biblioteca y FAQ siguen funcionando independientemente. La integración tiene backend desplegado e indexado en Supabase; las verificaciones remotas se detallan al final. Las pruebas con adaptadores por sí solas no acreditan ejecución real. El frontend sigue pendiente del redespliegue que realiza el usuario en Dokploy.
 
 La primera fuente es la copia del PDF Ley 21.719 ya aportada, generada el 16-10-2026. Son 112 fragmentos de sus 56 páginas, con vínculo a la página y hash del original en `src/features/legal-library/corpus.json`. El seed está en la migración `20261016221137_legal_ai_pilot.sql`. No se indexan FAQ pendientes de aprobación, documentos de clientes ni el texto consolidado externo que todavía no se ha incorporado al corpus. Por ello las respuestas sobre régimen anterior o materias no fundamentadas deben indicar insuficiencia. No se afirma que toda la normativa vigente esté cubierta.
 
@@ -12,7 +12,7 @@ Archivo local creado con permisos 0600:
 
 `supabase/.env.legal-ai.local`
 
-Completar únicamente `OPENAI_API_KEY=` con la clave. No agregar comillas innecesarias, no pegarla en el chat, no copiarla a `.env.local` de Next.js. Git ignora este archivo y Docker excluye archivos `.env` también en subdirectorios. No se imprime ni se versiona. `LEGAL_AI_DATABASE_URL` lo completa el responsable del despliegue con una credencial RESTRINGIDA; jamás la URL administrativa de PostgreSQL. `LEGAL_AI_ENABLED=false` permanece así hasta preparar el entorno. La clave no activa el piloto por sí sola.
+Completar únicamente `OPENAI_API_KEY=` con la clave. No agregar comillas innecesarias, no pegarla en el chat, no copiarla a `.env.local` de Next.js. Git ignora este archivo y Docker excluye archivos `.env` también en subdirectorios. No se imprime ni se versiona. `LEGAL_AI_DATABASE_URL` puede quedar vacío: se utiliza el bootstrap restringido desde Vault. Nunca colocar allí la URL administrativa. `LEGAL_AI_ENABLED` ya está habilitado en Supabase tras la preparación del entorno. La clave por sí sola no configura el resto del módulo.
 
 Ejemplo sin secretos para recrear el archivo en otro equipo:
 
@@ -49,17 +49,15 @@ El tope es el control ESTIMADO de este módulo, no un tope contractual de la fac
 
 ## Instalación y activación
 
-Destino previsto: PrivacyAudit, proyecto `pbihajfbbcbbdvoqpggy`. Confirmar siempre ese destino y las reglas/configuración antes de operaciones remotas. No ejecutar estos pasos en otro proyecto por inferencia.
+Destino: PrivacyAudit `pbihajfbbcbbdvoqpggy`. Confirmar siempre el destino antes de operaciones remotas. Las migraciones 20261016221137 (corpus/política), 20261016221147 (modelo) y 20261016221816 (bootstrap Vault) están aplicadas: no reaplicarlas.
 
-1. Ejecutar verificaciones locales. Aplicar la migración versionada al proyecto identificado por el flujo normal del repositorio (`supabase db push` después de confirmar enlace y lista de migraciones pendientes). No reaplicar SQL ni inventar entradas de historial.
-2. Obtener la URL del pooler del proyecto para un usuario PostgreSQL personalizado. Preparar una plantilla SIN contraseña con usuario `legal_ai_worker.pbihajfbbcbbdvoqpggy` (pooler) o `legal_ai_worker` (conexión directa) y el host real mostrado por Supabase. No adivinar región/host.
-3. Con CLI autenticado y enlazado exactamente al proyecto, ejecutar `npx tsx scripts/prepare-legal-ai-worker.ts 'URL_SIN_CONTRASEÑA'`. El script cambia únicamente la contraseña del rol ya creado por migración, usando un SQL temporal con permisos restringidos, y guarda la URL restringida en el archivo local. No imprime la contraseña. No es una migración de negocio; las credenciales no se versionan. No ejecutar en cada despliegue: rota la contraseña e invalida la conexión anterior hasta actualizar secretos.
-4. Completar OPENAI_API_KEY en el archivo local. Cambiar LEGAL_AI_ENABLED a true SOLO cuando se vaya a preparar la biblioteca y hacer pruebas. El gate de base sigue desactivado para preguntas.
-5. Cargar secretos: `supabase secrets set --project-ref pbihajfbbcbbdvoqpggy --env-file supabase/.env.legal-ai.local`. No usar `--debug` ni mostrar contenido del archivo.
-6. Publicar solo la Function: `supabase functions deploy legal-assistant --project-ref pbihajfbbcbbdvoqpggy --use-api`. `verify_jwt=false` usa autenticación propia comprobada; no significa acceso anónimo permitido.
-7. Desplegar Next.js. Ingresar como SUPER_ADMIN → Centro normativo → Administrar piloto IA → Preparar biblioteca para IA. Procesa un fragmento por llamada, secuencialmente; consume API y permite reanudar. Inicialmente 0/112, requiere llegar a 112/112. Evitar dos administradores indexando a la vez: puede repetir cómputo, aunque cada llamada reserva presupuesto.
-8. Habilitar piloto dejando desmarcado Permitir clientes y consultores. Probar preguntas y comprobar consumo/citas, ausencia de respuestas fuera de tema y permisos del rol en destino. Después habilitar todos los perfiles mediante la opción explícita.
-9. Si hay fallos de modelo/acceso/proveedor, deshabilitar en el módulo o poner LEGAL_AI_ENABLED=false en secretos. Biblioteca y FAQ permanecen disponibles. Verificar después de despliegue real, no confundir fixture local con aceptación remota.
+La contraseña del rol restringido se genera dentro de PostgreSQL y permanece cifrada en Vault. El bootstrap RPC `legal_ai_runtime_password` solo permite ejecución con service_role, desde la Function; usuarios anon/authenticated no pueden recuperarla. La credencial administrativa reservada de Supabase se usa exclusivamente para ese RPC, nunca para consultar datos de negocio. La Function toma el host de SUPABASE_DB_URL y sustituye usuario/contraseña antes de abrir la conexión restringida, comprobando current_user. No se requiere configurar LEGAL_AI_DATABASE_URL manualmente. Ese secreto permanece como override opcional para instalaciones alternativas; no poner una conexión administrativa allí.
+
+En un entorno nuevo con Vault: aplicar las migraciones versionadas, cargar OPENAI_API_KEY y LEGAL_AI_ENABLED=true como secretos de Functions y desplegar legal-assistant. No copiar claves al frontend ni a Dokploy. Indexar desde Administrar piloto IA (un fragmento por llamada, reanudable y con presupuesto). Habilitar primero para administrador; después de pruebas, abrir clientes/consultores. La configuración de esta entrega ya se realizó remotamente y el corpus quedó indexado.
+
+GET de la Function comprueba conexión restringida y responde 204 sin datos de configuración; POST anónimo devuelve 401. Los métodos de consulta requieren Auth getUser y perfil actual. El frontend requiere el redespliegue de Dokploy que realiza el usuario: no se ha operado Dokploy.
+
+Para detener preguntas, deshabilitar piloto desde el módulo; para detener también indexación/cualquier uso, poner LEGAL_AI_ENABLED=false en los secretos. Biblioteca y FAQ permanecen disponibles. Rotaciones futuras deben actualizar contraseña del rol y Vault en una misma operación administrativa controlada; no usar scripts de contraseña que dejen Vault desincronizado.
 
 ## Cambio futuro y conservación
 
@@ -84,3 +82,11 @@ La variable se llama OPENAI_API_KEY, pero debe configurarse en Supabase → Edge
 ## Estado remoto verificado tras autorización de migraciones
 
 Ambas migraciones ya están aplicadas en PrivacyAudit: 20261016221137 y 20261016221147. Se sincronizaron sus nombres locales con el historial MCP. No reaplicar el SQL. Confirmados 112 fragmentos, 0 embeddings, cuotas/modelo/presupuesto configurados, cero consumo y piloto desactivado. Worker sin contraseña y sin SELECT en tablas public/auth/storage. Falta provisionar conexión restringida, desplegar Function/frontend e indexar; no hubo llamada de generación real en esta operación.
+
+## Estado operativo remoto — 16 de octubre de 2026
+
+Vault provisionado sin mostrar ni versionar la contraseña; Function legal-assistant activa (versión 3), GET 204 con conexión restringida y POST anónimo 401. OPENAI_API_KEY coincide con la clave local verificada por digest sin mostrar su valor; LEGAL_AI_ENABLED=true guardado. 112/112 fragmentos indexados con text-embedding-3-small. Configuración enabled/all_users=true, 20 consultas/día, presupuesto total USD 10. Consumo estimado más reservas conservadas USD 0,019908 al finalizar las comprobaciones iniciales.
+
+Indexación inicial ejecutada mediante mantenimiento autorizado, con reservas previas por fragmento y embeddings reales en lotes, sin datos de clientes. Una consulta real de consentimiento recuperó cinco fragmentos; la primera respuesta se rechazó por cita inválida y conservó su reserva. Se precisaron las instrucciones de extractos literales y la segunda respuesta pasó la validación con tres citas de página 12. Una pregunta mixta de receta/privacidad fue rechazada por GPT-5 Mini. Las pruebas de generación usaron el adaptador real con búsqueda/cuota/contabilidad remotas mediante mantenimiento; no se afirma que se haya probado una sesión real de cliente contra la Function. Las reservas/costos de las pruebas quedaron contabilizados.
+
+El módulo está habilitado para los tres perfiles y preparado para que el usuario redespliegue el frontend desde GitHub en Dokploy. No se realizó despliegue ni modificación de Dokploy. Mantener revisión profesional y probar el recorrido autenticado tras ese redespliegue.

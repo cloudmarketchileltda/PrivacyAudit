@@ -43,6 +43,7 @@ test('IA SQL: corpus íntegro, aislamiento del worker, roles, 20 consultas/día,
     await identity(db, ids.client);
     await assert.rejects(db.query('select * from legal_ai.chunks'));
     await assert.rejects(db.query('select * from legal_ai.calls'));
+    await assert.rejects(db.query('select public.legal_ai_runtime_password()'));
     await assert.rejects(db.query('select public.configure_legal_ai(true,true)'));
     await identity(db, ids.admin);
     await assert.rejects(db.query('select public.configure_legal_ai(true,false)'), /not_indexed/);

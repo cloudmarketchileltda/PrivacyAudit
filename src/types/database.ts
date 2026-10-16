@@ -823,6 +823,7 @@ export interface Database {
       finish_assessment_deletion: { Args: { assessment: string }; Returns: undefined };
       finish_organization_deletion: { Args: { org: string }; Returns: undefined };
       invite_client: { Args: { org: string; target_email: string }; Returns: string };
+      legal_ai_runtime_password: { Args: Record<string, never>; Returns: string };
       legal_ai_status: { Args: Record<string, never>; Returns: Json };
       manage_member: {
         Args: {

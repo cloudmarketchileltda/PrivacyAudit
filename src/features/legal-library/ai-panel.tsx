@@ -43,6 +43,11 @@ export function LegalAiPanel({ status, admin }: { status: LegalAiStatus | null; 
         conversaciones en PrivacyAudit; cada consulta es independiente. El proveedor aplica su
         propia política de tratamiento.
       </p>
+      <p className="muted">
+        El corpus de este piloto es la reforma Ley 21.719, con vigencia del régimen reformado desde{' '}
+        {generalConfig.legalLibrary.document.effectiveLabel}. No cubre por sí solo el régimen
+        anterior.
+      </p>
       <p role="status" className="text-sm text-slate-600">
         {!status
           ? 'Piloto pendiente de instalación. Biblioteca y FAQ siguen disponibles.'
