@@ -1,3 +1,4 @@
+import { generalConfig } from '@/config/general';
 // Utilidades de entorno y URL. La configuración pública compartida está en src/config/general.ts.
 export function isConfigured() {
   return Boolean(
@@ -15,5 +16,5 @@ export function safeNext(value: string | null | undefined) {
       (character) => character.charCodeAt(0) <= 32 || character.charCodeAt(0) === 127,
     )
     ? value
-    : '/dashboard';
+    : generalConfig.site.workspaceHomeHref;
 }

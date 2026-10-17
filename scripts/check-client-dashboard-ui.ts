@@ -57,11 +57,24 @@ try {
     await page.getByLabel('Email', { exact: true }).fill(`${name}@example.test`);
     await page.getByLabel('Contraseña', { exact: true }).fill('FixturePassword123');
     await page.getByRole('button', { name: 'Entrar', exact: true }).click();
-    await page.waitForURL('**/dashboard');
+    await page.waitForURL('**/home');
+    await page.goto(`${base}/dashboard`);
   }
   await login('client');
   for (const width of [360, 768, 1440]) {
     await page.setViewportSize({ width, height: 1000 });
+    await page.goto(`${base}/home`);
+    await page.getByRole('heading', { name: /Bienvenido/ }).waitFor();
+    assert.equal(await page.getByText('Título privado del consultor', { exact: true }).count(), 0);
+    assert.equal(await page.getByText('Segunda Empresa SpA', { exact: true }).count(), 0);
+    assert.equal(
+      await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1),
+      false,
+    );
+    await page.screenshot({
+      path: `artifacts/client-dashboard-ui/home-${width}.png`,
+      fullPage: true,
+    });
     await page.goto(`${base}/dashboard?attention=overdue&q=Otra`);
     await page.getByRole('heading', { name: 'Empresa Demo SpA', exact: true }).waitFor();
     for (const name of [
@@ -121,6 +134,9 @@ try {
   await page.getByRole('heading', { name: 'Dashboard de evaluación', exact: true }).waitFor();
   await login('other');
   await page.getByRole('heading', { name: 'Mi organización', exact: true }).waitFor();
+  await page.goto(`${base}/home`);
+  await page.getByText('No tiene una organización disponible.', { exact: false }).waitFor();
+  assert.equal(await page.getByRole('heading', { name: 'Su resumen de atención' }).count(), 0);
   assert.deepEqual(errors, []);
   console.log(
     'Dashboard cliente UI: visión global/personal, privacidad, PDF, sin organización, roles y 360/768/1440 aprobados.',

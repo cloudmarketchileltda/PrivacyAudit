@@ -103,15 +103,26 @@ export default async function Page({
         </Link>
       </form>
       <section
-        className="grid grid-cols-2 xl:grid-cols-4 gap-3 md:gap-5"
+        className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 md:gap-5"
         aria-label="Indicadores de evaluación"
       >
-        {indicators.map(([label, value]) => (
+        {indicators.slice(0, 6).map(([label, value]) => (
           <div className="panel p-4 md:p-5" key={label}>
             <p className="text-xs md:text-sm text-slate-500">{label}</p>
             <p className="text-3xl font-semibold mt-4">{value}</p>
           </div>
         ))}
+      </section>
+      <section className="panel" aria-label="Indicadores complementarios">
+        <h2 className="section-title">Resumen del trabajo registrado</h2>
+        <dl className="grid grid-cols-2 gap-5 xl:grid-cols-5">
+          {indicators.slice(6).map(([label, value]) => (
+            <div key={label}>
+              <dt className="muted">{label}</dt>
+              <dd className="mt-2 text-2xl font-semibold">{value}</dd>
+            </div>
+          ))}
+        </dl>
       </section>
       <div className="grid md:grid-cols-2 gap-5">
         <section className="panel p-5">
@@ -154,7 +165,7 @@ export default async function Page({
       <section>
         <h2 className="section-title">Organizaciones y última evaluación</h2>
         <div className="table-wrap">
-          <table className="data-table">
+          <table className="data-table mobile-summary-table">
             <thead>
               <tr>
                 <th>Organización</th>
@@ -170,7 +181,7 @@ export default async function Page({
             <tbody>
               {s.rows.map((o) => (
                 <tr key={o.id}>
-                  <td>
+                  <td data-label="Organización">
                     <Link
                       className="font-semibold text-teal-800 hover:underline"
                       href={`/assessments?organization=${o.id}`}
@@ -179,7 +190,7 @@ export default async function Page({
                     </Link>
                     <p className="muted">{o.rut}</p>
                   </td>
-                  <td>
+                  <td data-label="Última evaluación">
                     {o.assessment_id ? (
                       <Link className="hover:underline" href={`/assessments/${o.assessment_id}`}>
                         {o.assessment_name}
@@ -188,7 +199,7 @@ export default async function Page({
                       'Sin evaluación'
                     )}
                   </td>
-                  <td>
+                  <td data-label="Estado">
                     <span className="badge">
                       {o.assessment_status
                         ? assessmentLabels[o.assessment_status]
@@ -197,7 +208,7 @@ export default async function Page({
                           : 'Archivada'}
                     </span>
                   </td>
-                  <td className="min-w-44">
+                  <td data-label="Avance de evaluación" className="min-w-44">
                     {o.assessment_id ? (
                       <>
                         <div className="flex justify-between text-xs mb-2">
@@ -222,10 +233,12 @@ export default async function Page({
                       '—'
                     )}
                   </td>
-                  <td>{o.open_findings}</td>
-                  <td>{o.high_findings}</td>
-                  <td>{o.overdue_tasks}</td>
-                  <td className="whitespace-nowrap">{formatDate(o.last_activity)}</td>
+                  <td data-label="Hallazgos abiertos">{o.open_findings}</td>
+                  <td data-label="Alta prioridad">{o.high_findings}</td>
+                  <td data-label="Tareas vencidas">{o.overdue_tasks}</td>
+                  <td data-label="Última actividad" className="whitespace-nowrap">
+                    {formatDate(o.last_activity)}
+                  </td>
                 </tr>
               ))}
             </tbody>

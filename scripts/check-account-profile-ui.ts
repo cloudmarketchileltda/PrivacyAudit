@@ -42,7 +42,8 @@ try {
     await page.getByLabel('Email', { exact: true }).fill(email);
     await page.getByLabel('Contraseña', { exact: true }).fill(password);
     await page.getByRole('button', { name: 'Entrar', exact: true }).click();
-    await page.waitForURL('**/dashboard');
+    await page.waitForURL('**/home');
+    await page.goto(`${base}/dashboard`);
   };
   await login('client@example.test');
   await page.goto(base + '/account');

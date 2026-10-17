@@ -15,7 +15,8 @@ export async function checkPhase6Flow(
     await page.getByLabel('Email', { exact: true }).fill(name + '@example.test');
     await page.getByLabel('Contraseña', { exact: true }).fill('FixturePassword123');
     await page.getByRole('button', { name: 'Entrar', exact: true }).click();
-    await page.waitForURL('**/dashboard');
+    await page.waitForURL('**/home');
+    await page.goto(`${base}/dashboard`);
   }
   // Create isolated live SQL events without depending on the status left by previous workflows.
   const task = await fixture.db.transaction(async (tx) => {
@@ -59,6 +60,7 @@ export async function checkPhase6Flow(
   await page.getByRole('heading', { name: 'Log auditable', exact: true }).waitFor();
   await page.getByLabel('Acción', { exact: true }).selectOption('AUTH_LOGIN');
   await page.getByRole('button', { name: 'Filtrar', exact: true }).click();
+  await page.locator('tbody tr').first().waitFor();
   assert.ok((await page.locator('tbody tr').count()) > 0);
   const filtered = await page.request.get(
     base + '/api/administration/audit/export?action=AUTH_LOGIN',

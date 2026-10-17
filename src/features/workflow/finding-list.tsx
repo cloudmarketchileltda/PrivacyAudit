@@ -214,7 +214,7 @@ export async function FindingList({
         </Link>
       </form>
       <div className="table-wrap">
-        <table className="data-table">
+        <table className="data-table mobile-summary-table">
           <thead>
             <tr>
               <th>Hallazgo</th>
@@ -230,7 +230,7 @@ export async function FindingList({
           <tbody>
             {rows.map((row) => (
               <tr key={row.id}>
-                <td className="min-w-48 max-w-sm break-words">
+                <td data-label="Hallazgo" className="min-w-48 max-w-sm break-words">
                   <Link
                     className="font-semibold text-teal-800 hover:underline"
                     href={`/findings/${row.id}`}
@@ -239,25 +239,27 @@ export async function FindingList({
                   </Link>
                   <p className="muted">{row.area}</p>
                 </td>
-                <td className="min-w-36">
+                <td data-label="Organización" className="min-w-36">
                   {orgs.find((o) => o.id === row.organization_id)?.legal_name}
                 </td>
                 {!plan && (
-                  <td className="min-w-48 max-w-sm break-words">
+                  <td data-label="Evaluación" className="min-w-48 max-w-sm break-words">
                     {assessmentNames.get(row.assessment_id) || 'Evaluación no disponible'}
                   </td>
                 )}
-                <td>{severityLabels[row.severity]}</td>
-                <td className="max-w-48 break-words">
+                <td data-label="Severidad">{severityLabels[row.severity]}</td>
+                <td data-label="Responsable" className="max-w-48 break-words">
                   {row.assigned_to
                     ? members.find((m) => m.id === row.assigned_to)?.full_name || 'Miembro asignado'
                     : 'Sin asignar'}
                 </td>
-                <td className="whitespace-nowrap">{calendarDate(row.due_date)}</td>
-                <td>
+                <td data-label="Fecha objetivo" className="whitespace-nowrap">
+                  {calendarDate(row.due_date)}
+                </td>
+                <td data-label="Estado">
                   <span className="badge">{findingLabels[row.status]}</span>
                 </td>
-                <td className="whitespace-nowrap">
+                <td data-label="Progreso" className="whitespace-nowrap">
                   {row.progress.done}/{row.progress.total} aprobadas
                   {row.progress.total > 0
                     ? ` · ${Math.round((row.progress.done * 100) / row.progress.total)}%`

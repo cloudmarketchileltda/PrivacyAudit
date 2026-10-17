@@ -66,3 +66,5 @@ Correo administrado, 11 de octubre de 2026: maestro, reglas, configuración, arq
 Cambio autorizado de modelo: gpt-5-mini-2025-08-07, razonamiento minimal, tarifas de entrada/salida USD 0,25/2 por millón de tokens; configuración y migración legal_ai_response_model sincronizadas. Secretos OpenAI en Supabase Functions, no Next.js/Dokploy.
 
 16 de octubre de 2026 — Puesta en operación IA: documentación oficial Supabase Vault y conexión PostgreSQL consultada. Vault existente y firmas create_secret/update_secret verificadas en destino antes de generar migración. Bootstrap reservado a service_role dentro de Functions; worker restringido sin datos de negocio. Función, indexación y proveedor reales verificados; Dokploy no operado. Detalles y límites en verification.md y legal-ai-pilot.md.
+
+16 de octubre de 2026 — Renovación visual: releídos maestro, reglas/configuración, arquitectura y guía local Next.js layouts-and-pages. Inicio interno, carrusel de recursos existentes, navegación móvil y listados adaptables; sin dependencias nuevas, SQL o cambios remotos. Se mantiene identidad CloudMarket y semántica de acciones.

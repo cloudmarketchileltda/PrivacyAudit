@@ -65,6 +65,7 @@ export const generalConfig = {
       href: 'https://www.cloudmarket.cl',
     },
     homeHref: '/',
+    workspaceHomeHref: '/home',
     legalLinks: [
       { href: '/politicas-de-privacidad', label: 'Políticas de Privacidad' },
       { href: '/terminos-y-condiciones', label: 'Términos y condiciones' },

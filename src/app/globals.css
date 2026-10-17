@@ -163,3 +163,129 @@ h6,
   min-width: 0;
   overflow-wrap: anywhere;
 }
+
+/* Shared workspace surfaces and touch navigation. */
+.workspace-header {
+  background: rgb(255 255 255 / 95%);
+  backdrop-filter: blur(12px);
+}
+.mobile-menu {
+  width: min(21rem, calc(100vw - 2rem));
+  height: 100dvh;
+  max-height: 100dvh;
+  max-width: none;
+  margin: 0;
+  padding: 1.25rem;
+  border: 0;
+  border-radius: 0 1.25rem 1.25rem 0;
+  overflow-y: auto;
+}
+.mobile-menu::backdrop {
+  background: #0b172b99;
+}
+.panel {
+  border-color: #e4e9f1;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px #15294704;
+}
+.page-title {
+  letter-spacing: -0.035em;
+}
+.home-hero {
+  background:
+    radial-gradient(ellipse at 95% 0%, #3b82f64d, transparent 60%),
+    linear-gradient(125deg, #102b46, #172c4c);
+}
+.resource-card {
+  transition:
+    border-color 160ms,
+    box-shadow 160ms;
+}
+.resource-card:hover {
+  border-color: #93b8f7;
+  box-shadow: 0 6px 24px #2563eb0b;
+}
+.data-table th {
+  font-size: 0.65rem;
+  letter-spacing: 0.07em;
+}
+.data-table td {
+  line-height: 1.6;
+}
+@media (max-width: 639px) {
+  .panel {
+    padding: 1rem;
+  }
+  .field {
+    min-width: 0;
+    font-size: 1rem;
+  }
+  main form.flex > label {
+    width: 100%;
+    min-width: 0;
+  }
+  main form.flex > div {
+    max-width: 100%;
+  }
+  .account-dialog {
+    max-height: calc(100dvh - 2rem);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}
+.eyebrow {
+  margin-bottom: 0.4rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #64748b;
+}
+@media (max-width: 639px) {
+  .mobile-summary-table,
+  .mobile-summary-table tbody {
+    display: block;
+  }
+  .mobile-summary-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .mobile-summary-table tr {
+    display: block;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .mobile-summary-table td {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+    min-width: 0;
+    border: 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  .mobile-summary-table td::before {
+    content: attr(data-label);
+    font-size: 0.75rem;
+    color: #64748b;
+  }
+  .mobile-summary-table td > * {
+    min-width: 0;
+  }
+  .mobile-summary-table td p,
+  .mobile-summary-table td progress {
+    grid-column: 2;
+  }
+}

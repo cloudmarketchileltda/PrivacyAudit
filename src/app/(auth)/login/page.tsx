@@ -1,3 +1,4 @@
+import { generalConfig } from '@/config/general';
 import Link from 'next/link';
 import { ActionForm, Field } from '@/components/forms';
 import { login } from '@/features/auth/actions';
@@ -19,7 +20,11 @@ export default async function Page({
         </p>
       )}
       <ActionForm action={login} label="Entrar" variant="default">
-        <input type="hidden" name="next" value={params.next || '/dashboard'} />
+        <input
+          type="hidden"
+          name="next"
+          value={params.next || generalConfig.site.workspaceHomeHref}
+        />
         <Field label="Email" name="email" type="email" required />
         <Field label="Contraseña" name="password" type="password" required />
       </ActionForm>

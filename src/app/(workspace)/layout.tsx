@@ -1,9 +1,11 @@
+import { Breadcrumbs } from '@/components/breadcrumbs';
 import { ShieldCheck, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { generalConfig } from '@/config/general';
 import { requireUser } from '@/features/auth/queries';
 import { logout } from '@/features/auth/actions';
 import { NotificationBell } from '@/features/notifications/bell';
+import { MobileNavigation } from '@/components/mobile-navigation';
 import { Navigation } from '@/components/navigation';
 export default async function Layout({ children }: { children: React.ReactNode }) {
   const { profile, user, db } = await requireUser();
@@ -13,10 +15,10 @@ export default async function Layout({ children }: { children: React.ReactNode }
     .is('read_at', null);
   if (error) throw error;
   return (
-    <div className="flex-1 lg:grid lg:grid-cols-[240px_minmax(0,1fr)]">
-      <aside className="brand-sidebar text-white p-4 lg:p-5 lg:sticky lg:top-0 lg:h-screen flex flex-col">
+    <div className="flex-1 lg:grid lg:grid-cols-[248px_minmax(0,1fr)]">
+      <aside className="brand-sidebar hidden text-white p-5 lg:sticky lg:top-0 lg:h-dvh lg:flex flex-col overflow-y-auto">
         <Link
-          href={generalConfig.site.homeHref}
+          href={generalConfig.site.workspaceHomeHref}
           aria-label="PrivacyAudit — Ir al inicio"
           title="Ir al inicio"
           className="flex gap-2 items-center rounded-md text-xl font-semibold mb-5 lg:mb-10"
@@ -32,7 +34,8 @@ export default async function Layout({ children }: { children: React.ReactNode }
         </div>
       </aside>
       <div className="min-w-0">
-        <header className="bg-white border-b border-slate-200 px-5 md:px-9 py-4 flex justify-between items-center gap-4">
+        <header className="workspace-header sticky top-0 z-20 border-b border-slate-200/80 px-4 md:px-9 py-3 flex justify-between items-center gap-2">
+          <MobileNavigation admin={profile.role === 'SUPER_ADMIN'} />
           <p className="hidden sm:block text-xs uppercase tracking-[.14em] text-slate-500">
             PrivacyAudit · CloudMarket
           </p>
@@ -61,7 +64,8 @@ export default async function Layout({ children }: { children: React.ReactNode }
             </form>
           </div>
         </header>
-        <main id="main-content" className="px-5 py-7 md:p-9 max-w-[1600px] mx-auto space-y-7">
+        <main id="main-content" className="px-4 py-6 md:p-9 max-w-[1600px] mx-auto space-y-7">
+          <Breadcrumbs />
           {children}
         </main>
       </div>

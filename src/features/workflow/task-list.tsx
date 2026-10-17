@@ -53,7 +53,9 @@ export async function TaskList({ params }: { params: Record<string, string | und
   const findingNames = new Map(
     findings.map((finding) => [finding.id, `${findingCode(finding.code)} · ${finding.title}`]),
   );
-  const assessmentNames = new Map(assessments.map((assessment) => [assessment.id, assessment.name]));
+  const assessmentNames = new Map(
+    assessments.map((assessment) => [assessment.id, assessment.name]),
+  );
   return (
     <>
       <div>
@@ -152,7 +154,7 @@ export async function TaskList({ params }: { params: Record<string, string | und
         </Link>
       </form>
       <div className="table-wrap">
-        <table className="data-table">
+        <table className="data-table mobile-summary-table">
           <thead>
             <tr>
               <th>Tarea</th>
@@ -168,7 +170,7 @@ export async function TaskList({ params }: { params: Record<string, string | und
           <tbody>
             {data.map((t) => (
               <tr key={t.id}>
-                <td className="min-w-48 max-w-sm break-words">
+                <td data-label="Tarea" className="min-w-48 max-w-sm break-words">
                   <Link
                     className="font-semibold text-teal-800 hover:underline"
                     href={`/tasks/${t.id}`}
@@ -176,26 +178,28 @@ export async function TaskList({ params }: { params: Record<string, string | und
                     {t.title}
                   </Link>
                 </td>
-                <td className="min-w-36">
+                <td data-label="Organización" className="min-w-36">
                   {orgs.find((o) => o.id === t.organization_id)?.legal_name}
                 </td>
-                <td className="min-w-48 max-w-sm break-words">
+                <td data-label="Evaluación" className="min-w-48 max-w-sm break-words">
                   {assessmentNames.get(findingsById.get(t.finding_id)?.assessment_id || '') ||
                     'Evaluación no disponible'}
                 </td>
-                <td className="min-w-48 max-w-sm break-words">
+                <td data-label="Hallazgo" className="min-w-48 max-w-sm break-words">
                   {findingNames.get(t.finding_id) || 'Hallazgo no disponible'}
                 </td>
-                <td>{severityLabels[t.priority]}</td>
-                <td>
+                <td data-label="Prioridad">{severityLabels[t.priority]}</td>
+                <td data-label="Responsable">
                   {t.assigned_to === profile.id
                     ? 'Usted'
                     : t.assigned_to
                       ? members.find((m) => m.id === t.assigned_to)?.full_name || 'Miembro asignado'
                       : 'Sin asignar'}
                 </td>
-                <td className="whitespace-nowrap">{calendarDate(t.due_date)}</td>
-                <td>
+                <td data-label="Fecha objetivo" className="whitespace-nowrap">
+                  {calendarDate(t.due_date)}
+                </td>
+                <td data-label="Estado">
                   <span className="badge">{taskLabels[t.status]}</span>
                 </td>
               </tr>

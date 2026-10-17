@@ -37,9 +37,9 @@ test('RUT con módulo 11 y rechazo de entradas inválidas', () => {
   assert.equal(organizationSchema.shape.rut.parse('76.123.456-0'), '76123456-0');
 });
 test('Redirecciones aceptan solo destinos relativos seguros', () => {
-  assert.equal(safeNext('https://evil.test'), '/dashboard');
-  assert.equal(safeNext('//evil.test'), '/dashboard');
-  assert.equal(safeNext('/\t/evil.test'), '/dashboard');
-  assert.equal(safeNext('/\\evil.test'), '/dashboard');
+  assert.equal(safeNext('https://evil.test'), '/home');
+  assert.equal(safeNext('//evil.test'), '/home');
+  assert.equal(safeNext('/\t/evil.test'), '/home');
+  assert.equal(safeNext('/\\evil.test'), '/home');
   assert.equal(safeNext('/invite?token=abc'), '/invite?token=abc');
 });

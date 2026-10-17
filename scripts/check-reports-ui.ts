@@ -41,7 +41,8 @@ try {
     await page.getByLabel('Email', { exact: true }).fill(email);
     await page.getByLabel('Contraseña', { exact: true }).fill('FixturePassword123');
     await page.getByRole('button', { name: 'Entrar', exact: true }).click();
-    await page.waitForURL('**/dashboard');
+    await page.waitForURL('**/home');
+    await page.goto(`${base}/dashboard`);
   }
   await login('a@example.test');
   await page.goto(`${base}/assessments/${fixture.assessment}`);

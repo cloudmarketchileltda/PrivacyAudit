@@ -65,11 +65,13 @@ try {
   await page.getByLabel('Email', { exact: true }).fill('a@example.test');
   await page.getByLabel('Contraseña', { exact: true }).fill('FixturePassword123');
   await page.getByRole('button', { name: 'Entrar', exact: true }).click();
-  await page.waitForURL('**/dashboard');
+  await page.waitForURL('**/home');
+  await page.goto(`${base}/dashboard`);
   await page.getByRole('heading', { name: 'Dashboard de evaluación' }).waitFor();
   assert.ok(await page.getByText('Empresa Demo SpA', { exact: true }).isVisible());
   assert.equal(await page.getByText('Segunda Empresa SpA', { exact: true }).count(), 0);
   const paths = [
+    '/home',
     '/dashboard',
     '/assessments',
     '/assessments/new',
@@ -130,13 +132,38 @@ try {
         });
     }
   }
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(`${base}/home`);
+  await page.getByRole('button', { name: 'Abrir menú', exact: true }).click();
+  await page.getByRole('dialog', { name: 'PrivacyAudit', exact: true }).waitFor();
+  await page.keyboard.press('Escape');
+  assert.ok(
+    await page
+      .getByRole('button', { name: 'Abrir menú', exact: true })
+      .evaluate((el) => el === document.activeElement),
+  );
+  await page.getByRole('button', { name: 'Abrir menú', exact: true }).click();
+  await page.getByRole('dialog').getByRole('link', { name: 'Dashboard', exact: true }).click();
+  await page.waitForURL('**/dashboard');
+  assert.equal(await page.getByRole('dialog').count(), 0);
+  await page.goto(`${base}/home`);
+  await page.getByRole('button', { name: 'Siguiente destacado', exact: true }).click();
+  await page.getByText('Destacado 2 de 3', { exact: false }).waitFor();
+  await page.getByRole('button', { name: 'Destacado anterior', exact: true }).click();
+  await page.getByText('Destacado 1 de 3', { exact: false }).waitFor();
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: 'artifacts/ui/home-mobile.png', fullPage: true });
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: 'artifacts/ui/home-desktop.png', fullPage: true });
   // Real Next.js Server Actions through browser, with SQL RLS from the fixture database.
   await context.clearCookies();
   await page.goto(`${base}/login`);
   await page.getByLabel('Email', { exact: true }).fill('admin@example.test');
   await page.getByLabel('Contraseña', { exact: true }).fill('FixturePassword123');
   await page.getByRole('button', { name: 'Entrar', exact: true }).click();
-  await page.waitForURL('**/dashboard');
+  await page.waitForURL('**/home');
+  await page.goto(`${base}/dashboard`);
   await page.goto(`${base}/administration/organizations/new`);
   await page.getByLabel('Razón social', { exact: true }).fill('Empresa UI SpA');
   await page.getByLabel('RUT', { exact: true }).fill('76345678-1');
@@ -156,7 +183,8 @@ try {
   await page.getByLabel('Email', { exact: true }).fill('a@example.test');
   await page.getByLabel('Contraseña', { exact: true }).fill('FixturePassword123');
   await page.getByRole('button', { name: 'Entrar', exact: true }).click();
-  await page.waitForURL('**/dashboard');
+  await page.waitForURL('**/home');
+  await page.goto(`${base}/dashboard`);
   await page.goto(`${base}/assessments/new?organization=${newOrg}`);
   await page
     .getByLabel('Nombre de la evaluación', { exact: true })
@@ -293,7 +321,8 @@ try {
   await page.getByLabel('Email', { exact: true }).fill('client@example.test');
   await page.getByLabel('Contraseña', { exact: true }).fill('FixturePassword123');
   await page.getByRole('button', { name: 'Entrar', exact: true }).click();
-  await page.waitForURL('**/dashboard');
+  await page.waitForURL('**/home');
+  await page.goto(`${base}/dashboard`);
   await page.goto(`${base}/tasks`);
   assert.equal(
     await page.getByRole('link', { name: 'Revisión privada del consultor', exact: true }).count(),
@@ -336,7 +365,8 @@ try {
   await page.getByLabel('Email', { exact: true }).fill('admin@example.test');
   await page.getByLabel('Contraseña', { exact: true }).fill('FixturePassword123');
   await page.getByRole('button', { name: 'Entrar', exact: true }).click();
-  await page.waitForURL('**/dashboard');
+  await page.waitForURL('**/home');
+  await page.goto(`${base}/dashboard`);
   // Consultant return, client resubmission, approval and finding closure.
   await page.goto(`${base}/tasks/${uiTask}/edit`);
   await page.getByLabel('Estado', { exact: true }).selectOption('TODO');
@@ -352,7 +382,8 @@ try {
   await page.getByLabel('Email', { exact: true }).fill('client@example.test');
   await page.getByLabel('Contraseña', { exact: true }).fill('FixturePassword123');
   await page.getByRole('button', { name: 'Entrar', exact: true }).click();
-  await page.waitForURL('**/dashboard');
+  await page.waitForURL('**/home');
+  await page.goto(`${base}/dashboard`);
   await page.goto(`${base}/tasks/${uiTask}`);
   await page.getByRole('button', { name: 'Actualizar mi tarea', exact: true }).click();
   await page.getByRole('status').filter({ hasText: 'Tarea enviada a revisión' }).waitFor();
@@ -361,7 +392,8 @@ try {
   await page.getByLabel('Email', { exact: true }).fill('admin@example.test');
   await page.getByLabel('Contraseña', { exact: true }).fill('FixturePassword123');
   await page.getByRole('button', { name: 'Entrar', exact: true }).click();
-  await page.waitForURL('**/dashboard');
+  await page.waitForURL('**/home');
+  await page.goto(`${base}/dashboard`);
   await page.goto(`${base}/tasks/${uiTask}/edit`);
   await page.getByLabel('Estado', { exact: true }).selectOption('DONE');
   await page.getByRole('button', { name: 'Guardar tarea', exact: true }).click();

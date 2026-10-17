@@ -104,7 +104,7 @@ export default async function Page({
         <Button variant="outline">Filtrar</Button>
       </form>
       <div className="table-wrap">
-        <table className="data-table">
+        <table className="data-table mobile-summary-table">
           <thead>
             <tr>
               <th>Evaluación</th>
@@ -122,7 +122,7 @@ export default async function Page({
               );
               return (
                 <tr key={assessment.id}>
-                  <td>
+                  <td data-label="Evaluación">
                     <Link
                       className="text-teal-800 font-semibold hover:underline"
                       href={`/assessments/${assessment.id}`}
@@ -130,24 +130,26 @@ export default async function Page({
                       {assessment.name}
                     </Link>
                   </td>
-                  <td>
+                  <td data-label="Organización">
                     {organizations?.find((o) => o.id === assessment.organization_id)?.legal_name}
                   </td>
-                  <td>
+                  <td data-label="Estado">
                     <span className="badge">
                       {assessment.deletion_pending
                         ? 'En eliminación'
                         : assessmentLabels[assessment.status]}
                     </span>
                   </td>
-                  <td>
+                  <td data-label="Avance de evaluación">
                     {metrics.progress}%{' '}
                     <span className="muted">
                       · {metrics.evaluated}/{metrics.total}
                     </span>
                   </td>
-                  <td className="whitespace-nowrap">{formatDate(assessment.created_at)}</td>
-                  <td>
+                  <td data-label="Creación" className="whitespace-nowrap">
+                    {formatDate(assessment.created_at)}
+                  </td>
+                  <td data-label="Acciones">
                     {manageable.has(assessment.id) && (
                       <div className="flex gap-2">
                         {!assessment.deletion_pending && (

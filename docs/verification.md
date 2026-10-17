@@ -359,3 +359,13 @@ Indexados 112/112 fragmentos con embeddings reales en lotes mediante mantenimien
 Estado final: enabled/all_users=true, daily_limit=20, presupuesto USD 10, consumo estimado más reservas conservadas USD 0,019908, pending_calls=0. Sin historial de preguntas/respuestas. El importe es contabilidad conservadora del módulo, no factura del proveedor. No se tocaron datos de clientes ni se enviaron al modelo.
 
 Verificación local posterior: lint, typecheck, suite 47/47, build producción y Deno check aprobados. PGlite ejecuta las migraciones reales pero omite el aprovisionamiento Vault cuando la extensión no existe; Vault/conexión se verificaron por separado en destino. Tipos regenerados. La operación del frontend requiere el redespliegue del usuario desde GitHub; verificar su sesión real al terminar ese paso. Revisión jurídica profesional y precisión semántica siguen siendo límites del asistente.
+
+## Renovación visual — 16 de octubre de 2026
+
+- Cambio local autorizado: Inicio autenticado con datos de las RPC existentes, carrusel manual de recursos, navegación agrupada, menú modal móvil, rutas de navegación y listados adaptables. No se cambian SQL, permisos ni servicios externos.
+- `npm run lint`, `npm run typecheck` y `npm run build`: aprobados. Build de producción con Node 24.19.0.
+- `npm test`: 47/47 aprobadas, incluidas migraciones reales en PostgreSQL embebido; no son pruebas contra el proyecto remoto.
+- `npm run test:ui`: 216 comprobaciones de pantalla/tamaño y flujos críticos aprobados con fixture local y Node 24.19.0. Anchos 360, 390, 560, 768, 1024, 1280 y 1440; sin desbordamiento del documento en las pantallas recorridas. Menú móvil: apertura, Escape/retorno de foco y cierre al navegar. Carrusel: avance y retroceso. Se corrige espera del script de auditoría para comprobar las filas después de su carga.
+- `npm run test:ui:client-dashboard`: aprobado con Node 24.19.0; Inicio y dashboard CLIENT en 360/768/1440, aislamiento, ausencia de títulos privados, roles y usuario sin organización.
+- Capturas revisadas en `artifacts/ui/home-desktop.png`, `artifacts/ui/home-mobile.png` y `artifacts/client-dashboard-ui/home-1440.png`; resultados generales en `artifacts/ui/results.json` (archivos locales ignorados por Git).
+- Pruebas de navegador en Chromium con fixture, sin comprobar Safari/iOS ni todos los dispositivos reales. No afirmar compatibilidad universal. Sin despliegue ni modificación de datos remotos.

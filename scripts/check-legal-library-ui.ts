@@ -53,7 +53,8 @@ try {
     await page.getByLabel('Email', { exact: true }).fill(`${name}@example.test`);
     await page.getByLabel('Contraseña', { exact: true }).fill('FixturePassword123');
     await page.getByRole('button', { name: 'Entrar', exact: true }).click();
-    await page.waitForURL('**/dashboard');
+    await page.waitForURL('**/home');
+    await page.goto(`${base}/dashboard`);
     await page.getByRole('link', { name: 'Centro normativo', exact: true }).click();
     await page.getByRole('heading', { name: 'Centro normativo', exact: true }).waitFor();
     assert.equal(await page.locator('details[id^=faq-]').count(), 12);
